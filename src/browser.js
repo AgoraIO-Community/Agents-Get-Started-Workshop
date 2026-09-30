@@ -1,3 +1,5 @@
+import { eventEntryMode, eventUrl } from "./event-code.js";
+import { eventRequest, setupHostEvents } from "./saved-events.js";
 import {
   createWorkshopArchive,
   loadWorkshopArchive,
@@ -29,9 +31,25 @@ let sessionStarted = false;
 let archiveOpen = false;
 let hostBroadcasting = true;
 const activeSessionId = resolveSessionId(location.search);
+const entry = eventEntryMode(location.search);
+const savedEventMode = isAudience && entry.mode === "saved";
+const joinChoices = document.getElementById("audienceJoinChoices");
+const joinActiveButton = document.getElementById("joinActiveButton");
+const codeError = document.getElementById("eventCodeError");
+let hostEvents;
+let authenticatedHostKey = "";
+
+function waiting(title, message) {
+  document.getElementById("audienceWaitingTitle").textContent = title;
+  document.getElementById("audienceWaitingMessage").textContent = message;
+}
 
 function setStatus(value, error) {
   controls.dataset.connection = value;
+  if (savedEventMode) {
+    status.textContent = archiveOpen ? `Saved event · ${entry.code}` : (value === "error" ? "Event unavailable" : "Loading saved event…");
+    return;
+  }
   if (isAudience && archiveOpen) {
     status.textContent = sessionStarted ? "Live session available" : "Viewing saved workshop";
     return;
@@ -53,6 +71,13 @@ const signaling = new WorkshopSignaling({ presentation, onStatus: setStatus });
 
 function renderHostBroadcastControl() {
   if (isAudience) return;
+  if (!signaling.connected) {
+    status.textContent = "Session not started";
+    status.title = "Live audience sync is not connected.";
+    status.setAttribute("aria-label", status.title);
+    status.setAttribute("aria-pressed", "false");
+    return;
+  }
   status.textContent = hostBroadcasting ? `Live · ${activeSessionId}` : `Paused · ${activeSessionId}`;
   status.title = hostBroadcasting
     ? "Live audience sync is on. Click to pause broadcasting."
@@ -92,14 +117,35 @@ async function connectHost(hostKey) {
   hostAuthButton.textContent = "Connecting…";
   hostAuthError.textContent = "";
   try {
-    await signaling.connect({
-      sessionId: activeSessionId,
-      role: "host",
-      hostKey
-    });
+    await eventRequest("?auth=1", { hostKey });
+    authenticatedHostKey = hostKey;
     sessionStorage.setItem("workshop-host-key", hostKey);
     document.body.classList.add("host-authenticated");
     hostPasswordInput.value = "";
+    hostEvents ||= setupHostEvents({
+      presentation,
+      getHostKey: () => authenticatedHostKey,
+      pauseLive: async () => {
+        hostBroadcasting = false;
+        signaling.setBroadcasting(false);
+        await signaling.disconnect();
+        status.textContent = "Editing saved event";
+        status.title = "Live sharing is paused. Use settings live to reconnect.";
+        status.setAttribute("aria-label", status.title);
+        status.setAttribute("aria-pressed", "false");
+      },
+      goLive: async () => {
+        await signaling.connect({ sessionId: activeSessionId, role: "host", hostKey: authenticatedHostKey });
+        hostBroadcasting = true;
+        renderHostBroadcastControl();
+      }
+    });
+    await hostEvents.initialize();
+    if (!new URLSearchParams(location.search).has("code")) {
+      try {
+        await signaling.connect({ sessionId: activeSessionId, role: "host", hostKey });
+      } catch (error) { setStatus("error", error); }
+    }
   } catch (error) {
     if (error.status === 401) {
       sessionStorage.removeItem("workshop-host-key");
@@ -115,6 +161,7 @@ async function connectHost(hostKey) {
 }
 
 async function connectAudience() {
+  if (savedEventMode) return;
   if (!activeSessionId) return setStatus("error", new Error("Invalid channel override"));
   try {
     await signaling.connect({ sessionId: activeSessionId, role: "audience", userId: audienceUserId });
@@ -124,7 +171,12 @@ async function connectAudience() {
 }
 
 followButton.addEventListener("click", () => {
+  if (savedEventMode) return;
   if (archiveOpen) {
+    if (!signaling.connected) {
+      joinActiveButton.click();
+      return;
+    }
     archiveOpen = false;
     following = true;
     document.body.classList.remove("archive-open", "audience-browsing");
@@ -162,6 +214,7 @@ viewLastWorkshopButton.addEventListener("click", () => {
 });
 
 window.addEventListener("workshop:remotesnapshot", (event) => {
+  if (savedEventMode) return;
   lastRemoteSnapshot = event.detail;
   sessionStarted = true;
   document.body.classList.add("session-started");
@@ -201,14 +254,64 @@ hostAuthForm.addEventListener("submit", (event) => {
   void connectHost(hostPasswordInput.value);
 });
 
-if (isAudience) {
-  lastWorkshopArchive = loadWorkshopArchive(localStorage);
-  renderLastWorkshop(lastWorkshopArchive);
-  if (!activeSessionId) {
-    document.getElementById("audienceWaitingTitle").textContent = "This workshop link is invalid.";
-    document.getElementById("audienceWaitingMessage").textContent = "Open the main workshop URL, or ask the host for the correct link.";
+document.getElementById("eventCodeForm").addEventListener("submit", event => {
+  event.preventDefault();
+  try { location.assign(eventUrl(location.href, document.getElementById("eventCodeInput").value)); }
+  catch (error) { codeError.textContent = error.message; }
+});
+joinActiveButton.addEventListener("click", () => {
+  const url = new URL(location.href);
+  url.searchParams.delete("code");
+  url.searchParams.set("join", "active");
+  url.hash = "";
+  location.assign(url.href);
+});
+
+async function loadSavedEvent() {
+  followButton.hidden = true;
+  lastWorkshopPanel.hidden = true;
+  joinChoices.hidden = true;
+  waiting("Loading your workshop…", "Fetching the saved settings for this event.");
+  setStatus("connecting");
+  try {
+    if (!entry.code) throw new Error("Enter a six-digit event code, such as 482-193.");
+    const { event } = await eventRequest(`?code=${entry.code}`);
+    const slideHash = decodeURIComponent(location.hash.replace(/^#slide-/, ""));
+    presentation.setAudienceHashEnabled(true);
+    if (!presentation.loadSavedEvent(event.snapshot)) throw new Error("This saved event could not be loaded.");
+    if (slideHash) presentation.goToSlideId(slideHash);
+    archiveOpen = true;
+    following = false;
+    document.body.classList.add("archive-open", "audience-browsing");
+    document.title = `${event.name} · Agora Workshop`;
+    setStatus("connected");
+  } catch (error) {
+    waiting("We couldn’t open this event", "Check the code below, or join the active workshop.");
+    codeError.textContent = error.message;
+    document.getElementById("eventCodeInput").value = entry.code || "";
+    joinChoices.hidden = false;
+    setStatus("error", error);
   }
-  void connectAudience();
+}
+
+if (isAudience) {
+  followButton.hidden = true;
+  if (savedEventMode) {
+    void loadSavedEvent();
+  } else {
+    lastWorkshopArchive = loadWorkshopArchive(localStorage);
+    renderLastWorkshop(lastWorkshopArchive);
+    if (entry.mode === "live") {
+      waiting("The session hasn’t started yet.", "Keep this page open. The workshop will appear when the host connects.");
+      joinActiveButton.hidden = true;
+      if (!activeSessionId) {
+        waiting("This workshop link is invalid.", "Open the main workshop URL, or ask the host for the correct link.");
+      }
+      void connectAudience();
+    } else {
+      status.textContent = "Choose a workshop";
+    }
+  }
 } else {
   followButton.hidden = true;
   status.setAttribute("role", "button");

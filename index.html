@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f3f4">
-  <meta name="description" content="Agora Voice AI workshop presentation: one workshop, two ways to build, three agents to run.">
+  <meta name="description" content="Agora Voice AI workshop presentation: Build two voice AI agents with Agora CLI and Skills.">
   <title>Build Voice AI Agents in Minutes · Agora Workshop</title>
   <style>
     :root,
@@ -160,8 +160,8 @@
       position: absolute;
       inset: 0 0 42px;
       display: grid;
-      align-content: center;
-      gap: clamp(18px, 2.5vh, 32px);
+      align-content: safe center;
+      gap: clamp(18px, 2.5vh, 28px);
       padding: clamp(28px, 4.2vw, 64px) max(clamp(28px, 4.2vw, 64px), calc((100vw - 1200px) / 2));
       overflow: auto;
       opacity: 0;
@@ -294,12 +294,28 @@
     .front-wifi-item span { color: rgba(255, 255, 255, .72); font-size: 11px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
     .front-wifi-item strong { overflow-wrap: anywhere; color: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: clamp(17px, 1.55vw, 22px); line-height: 1.2; }
 
+    .slide.platform-slide {
+      gap: clamp(16px, 2.5vh, 26px);
+      padding-block: clamp(48px, 6vh, 64px) clamp(24px, 4vh, 40px);
+    }
+    .platform-heading { display: grid; gap: 14px; }
+    .platform-heading h2 { max-width: 1050px; font-size: clamp(32px, 3.5vw, 50px); }
+    .platform-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+      align-items: center;
+      gap: clamp(28px, 4vw, 64px);
+    }
+    .platform-capabilities { display: grid; gap: clamp(14px, 2.5vh, 24px); }
+    .platform-capability { padding-left: 18px; border-left: 2px solid var(--line); }
+    .platform-capability .card-number { display: block; margin-bottom: 7px; }
+    .platform-capability h3 { margin-bottom: 6px; font-size: clamp(18px, 1.7vw, 24px); }
+    .platform-capability p { margin: 0; color: var(--muted); font-size: clamp(14px, 1.15vw, 17px); line-height: 1.45; }
+    .platform-media { display: grid; gap: 18px; margin: 0; min-width: 0; width: min(100%, 72vh); justify-self: end; }
     .platform-video {
       position: relative;
-      width: min(680px, 100%);
-      height: auto;
+      width: 100%;
       aspect-ratio: 16 / 9;
-      margin: 0 auto;
       overflow: hidden;
       border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
       border-radius: 14px;
@@ -314,15 +330,23 @@
       border: 0;
       pointer-events: none;
     }
-    .platform-proof {
-      width: min(680px, 100%);
-      margin: -10px auto 0;
-      color: var(--muted);
-      font-size: clamp(15px, 1.45vw, 21px);
-      font-weight: 650;
-      text-align: center;
+    .platform-proof { margin: 0; color: var(--muted); font-size: clamp(14px, 1.2vw, 18px); line-height: 1.4; }
+    .platform-proof strong { display: block; margin-bottom: 4px; color: var(--accent); font-size: clamp(28px, 3vw, 42px); line-height: 1.1; font-weight: 900; letter-spacing: -.035em; }
+    .platform-slide > .lede { max-width: none; padding-top: 16px; border-top: 1px solid var(--line); font-size: clamp(16px, 1.6vw, 22px); }
+    @media (max-width: 760px) {
+      .slide.platform-slide { align-content: start; }
+      .platform-layout { grid-template-columns: 1fr; gap: 24px; }
+      .platform-media { grid-row: 1; }
+      .platform-heading h2 { font-size: clamp(30px, 5.8vw, 42px); }
     }
-    .platform-proof strong { color: var(--accent); font-weight: 900; }
+    @media (min-width: 761px) and (max-height: 650px) {
+      .slide.platform-slide { align-content: start; gap: 14px; }
+      .platform-heading { gap: 8px; }
+      .platform-heading h2 { font-size: 34px; }
+      .platform-capabilities { gap: 12px; }
+      .platform-media { width: min(100%, 70vh); justify-self: end; gap: 12px; }
+      .platform-proof strong { font-size: 28px; }
+    }
     .eyebrow {
       margin: 0;
       color: var(--accent);
@@ -385,8 +409,8 @@
     h2 {
       max-width: 1090px;
       margin-bottom: 0;
-      font-size: clamp(36px, 4.7vw, 66px);
-      line-height: 1.02;
+      font-size: clamp(32px, 3.8vw, 54px);
+      line-height: 1.08;
       letter-spacing: -.04em;
       text-wrap: balance;
     }
@@ -426,7 +450,7 @@
     .grid.seven { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .card {
       min-width: 0;
-      padding: clamp(18px, 2vw, 26px);
+      padding: clamp(18px, 1.8vw, 24px);
       border: 1px solid var(--line);
       border-radius: 12px;
       background: var(--card-glass);
@@ -888,7 +912,7 @@
     .cascade-connector-line { position: relative; width: 100%; height: 2px; background: currentColor; box-shadow: 0 0 12px color-mix(in srgb, currentColor 72%, transparent); }
     .cascade-connector-line::before { content: ""; position: absolute; right: -1px; top: 50%; width: 9px; height: 9px; border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: translateY(-50%) rotate(45deg); }
     .cascade-connector-line::after { content: ""; position: absolute; top: -3px; left: 0; width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 13px currentColor; }
-    .slide.active .cascade-connector-line::after { animation: cascade-forward 2.4s ease-in-out infinite; }
+    .slide.active .cascade-connector-line::after { animation: cascade-forward var(--flow-duration) linear var(--flow-delay) infinite both; }
     .cascade-connector-label { position: absolute; top: calc(50% - 30px); width: 100%; color: currentColor; font-size: 9px; font-weight: 850; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
     .cascade-return {
       position: relative;
@@ -908,13 +932,76 @@
     .cascade-return strong { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
     .cascade-return span:last-child { color: rgba(231, 243, 252, .66); font-size: 11px; }
     .cascade-return::after { content: ""; position: absolute; right: 16px; width: 8px; height: 8px; border-radius: 50%; background: var(--cascade-audio); box-shadow: 0 0 13px var(--cascade-audio); }
-    .slide.active .cascade-return::after { animation: cascade-return 3.1s ease-in-out infinite; }
+    .slide.active .cascade-return::after { animation: cascade-return var(--flow-duration) linear calc(var(--flow-step) * 7) infinite both; }
     .cascade-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
     .cascade-legend span { display: inline-flex; align-items: center; gap: 7px; color: rgba(231, 243, 252, .62); font-size: 10px; font-weight: 750; }
     .cascade-legend span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cascade-text); }
     .cascade-legend span:first-child::before { background: var(--cascade-audio); }
-    @keyframes cascade-forward { 0% { left: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { left: calc(100% - 8px); opacity: 0; } }
-    @keyframes cascade-return { 0% { right: 16px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { right: calc(100% - 24px); opacity: 0; } }
+    @keyframes cascade-forward { 0% { left: 0; opacity: 0; } 1%, 9% { opacity: 1; } 10%, 100% { left: calc(100% - 24px); opacity: 0; } }
+    @keyframes cascade-return { 0% { right: 16px; opacity: 0; } 1%, 19% { opacity: 1; } 20%, 100% { right: calc(100% - 40px); opacity: 0; } }
+
+    .voice-pipeline { display: grid; grid-template-columns: 1fr 1.2fr 1fr; align-items: stretch; gap: 24px; }
+    .voice-paths { display: grid; align-content: center; gap: 30px; color: var(--cascade-audio); }
+    .voice-path { display: grid; gap: 10px; text-align: center; font-size: 12px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .voice-path-line { position: relative; height: 2px; background: currentColor; box-shadow: 0 0 12px rgba(20, 201, 238, .4); }
+    .voice-path-line::after { content: ""; position: absolute; right: 0; top: -4px; width: 8px; height: 8px; border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: rotate(45deg); }
+    .voice-path.return .voice-path-line::after { right: auto; left: 0; transform: rotate(-135deg); }
+    .voice-channel { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 24px; padding: 18px 22px; border: 1px solid var(--cascade-audio); border-radius: 12px; background: rgba(20, 201, 238, .1); }
+    .voice-channel span { color: rgba(231, 243, 252, .68); font-size: 13px; }
+    @media (max-width: 600px) {
+      .voice-pipeline { grid-template-columns: 1fr; gap: 16px; }
+      .voice-paths { gap: 18px; padding: 0 20px; }
+      .voice-channel { align-items: flex-start; flex-direction: column; }
+    }
+
+    /* Illustrative realtime flow: 120 ms per stage, with every delay on the same clock. */
+    .cascade-slide { --flow-duration: 1200ms; --flow-step: 120ms; }
+    .cascade-node { --flow-color: var(--cascade-audio); --flow-delay: 0s; }
+    .cascade-node.asr { --flow-delay: calc(var(--flow-step) * 2); }
+    .cascade-node.llm { --flow-color: var(--cascade-text); --flow-delay: calc(var(--flow-step) * 4); }
+    .cascade-node.tts { --flow-delay: calc(var(--flow-step) * 6); }
+    .cascade-node::before { content: ""; position: absolute; left: 14px; right: 14px; bottom: 0; height: 3px; border-radius: 3px; background: var(--flow-color); transform: scaleX(0); transform-origin: left; }
+    .slide.active .cascade-node { animation: cascade-stage var(--flow-duration) linear var(--flow-delay) infinite both; }
+    .slide.active .cascade-node::before { animation: cascade-progress var(--flow-duration) linear var(--flow-delay) infinite both; }
+    .slide.active .cascade-node.device { animation-name: cascade-device; }
+    .cascade-connector:nth-child(2) { --flow-delay: calc(var(--flow-step) * 1); }
+    .cascade-connector:nth-child(4) { --flow-delay: calc(var(--flow-step) * 3); }
+    .cascade-connector:nth-child(6) { --flow-delay: calc(var(--flow-step) * 5); }
+    .cascade-connector-line { background: color-mix(in srgb, currentColor 30%, transparent); box-shadow: none; }
+    .cascade-connector-line::after { width: 24px; border-radius: 6px; opacity: 0; }
+    .slide.active .cascade-connector-label { animation: cascade-label var(--flow-duration) linear var(--flow-delay) infinite both; }
+    .cascade-return::after { width: 24px; height: 4px; bottom: 2px; border-radius: 6px; opacity: 0; }
+    .voice-pipeline .cascade-node.llm { --flow-delay: calc(var(--flow-step) * 3); }
+    .slide.active .voice-pipeline .cascade-node.llm { animation-name: voice-stage; }
+    .slide.active .voice-pipeline .cascade-node.llm::before { animation-name: voice-progress; }
+    .voice-path { --flow-delay: calc(var(--flow-step) * 1); }
+    .voice-path.return { --flow-delay: calc(var(--flow-step) * 5); }
+    .voice-path-line { background: rgba(20, 201, 238, .3); box-shadow: none; }
+    .voice-path-line::before { content: ""; position: absolute; left: 0; top: -3px; width: 24px; height: 8px; border-radius: 6px; background: currentColor; box-shadow: 0 0 16px currentColor; opacity: 0; }
+    .slide.active .voice-path-line::before { animation: voice-forward var(--flow-duration) linear var(--flow-delay) infinite both; }
+    .slide.active .voice-path.return .voice-path-line::before { animation-name: voice-return; }
+    .slide.active .voice-path.return > span:first-child { animation: voice-return-label var(--flow-duration) linear var(--flow-delay) infinite both; }
+    .slide.active .voice-path > span:first-child { animation: voice-label var(--flow-duration) linear var(--flow-delay) infinite both; }
+    @keyframes cascade-stage {
+      0%, 10%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
+      2%, 8% { border-color: var(--flow-color); box-shadow: inset 0 0 24px color-mix(in srgb, var(--flow-color) 15%, transparent), 0 0 22px color-mix(in srgb, var(--flow-color) 35%, transparent); }
+    }
+    @keyframes cascade-device {
+      0%, 10%, 89%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
+      2%, 8%, 92%, 97% { border-color: var(--flow-color); box-shadow: inset 0 0 24px color-mix(in srgb, var(--flow-color) 15%, transparent), 0 0 22px color-mix(in srgb, var(--flow-color) 35%, transparent); }
+    }
+    @keyframes cascade-progress { 0% { transform: scaleX(0); opacity: 1; } 9% { transform: scaleX(1); opacity: 1; } 10%, 100% { transform: scaleX(1); opacity: 0; } }
+    @keyframes cascade-label { 0%, 10%, 100% { opacity: .65; } 1%, 9% { opacity: 1; } }
+    @keyframes voice-label { 0%, 20%, 100% { opacity: .65; } 1%, 19% { opacity: 1; } }
+    @keyframes voice-stage {
+      0%, 20%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
+      2%, 18% { border-color: var(--flow-color); box-shadow: inset 0 0 24px color-mix(in srgb, var(--flow-color) 15%, transparent), 0 0 22px color-mix(in srgb, var(--flow-color) 35%, transparent); }
+    }
+    @keyframes voice-progress { 0% { transform: scaleX(0); opacity: 1; } 19% { transform: scaleX(1); opacity: 1; } 20%, 100% { transform: scaleX(1); opacity: 0; } }
+    @keyframes voice-forward { 0% { left: 0; opacity: 0; } 1%, 19% { opacity: 1; } 20%, 100% { left: calc(100% - 24px); opacity: 0; } }
+    @keyframes voice-return { 0% { left: calc(100% - 24px); opacity: 0; } 1%, 39% { opacity: 1; } 40%, 100% { left: 0; opacity: 0; } }
+
+    @keyframes voice-return-label { 0%, 40%, 100% { opacity: .65; } 1%, 39% { opacity: 1; } }
 
     .connection-graphic {
       position: relative;
@@ -1062,95 +1149,6 @@
     tbody tr:last-child td { border-bottom: 0; }
     th { background: color-mix(in srgb, var(--panel-soft) 75%, transparent); color: var(--accent); font-family: ui-monospace, monospace; font-size: 12px; }
     td { color: var(--muted); }
-
-    .telephony-form {
-      width: min(920px, 100%);
-      padding: clamp(22px, 3vw, 30px);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--card-glass);
-      box-shadow: var(--shadow-float);
-    }
-    .telephony-form-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
-    .telephony-form-head strong { font-size: 18px; }
-    .telephony-assignment { color: var(--accent); font-family: ui-monospace, monospace; font-size: 13px; font-weight: 850; }
-    .telephony-source { color: var(--muted); font-size: 10px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
-    .telephony-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 11px 14px; margin-top: 16px; }
-    .telephony-field { display: grid; gap: 7px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-align: left; text-transform: uppercase; }
-    .telephony-field input {
-      width: 100%;
-      min-height: 46px;
-      padding: 10px 12px;
-      border: 1px solid var(--input);
-      border-radius: 10px;
-      background: color-mix(in srgb, var(--panel) 82%, var(--bg-soft));
-      color: var(--ink);
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 14px;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-    .telephony-claim-button,
-    .telephony-claim-unavailable {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      min-height: 46px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 850;
-      letter-spacing: 0;
-      text-align: center;
-      text-transform: none;
-    }
-    .telephony-claim-button { border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); text-decoration: none; }
-    .telephony-claim-button:hover { filter: brightness(1.04); }
-    .telephony-claim-button:disabled { cursor: progress; opacity: .68; }
-    .telephony-claim-button[hidden] { display: none; }
-    .telephony-claim-unavailable { border: 1px dashed var(--input); background: color-mix(in srgb, var(--panel) 82%, var(--bg-soft)); color: var(--muted); }
-    .telephony-claim-unavailable[hidden] { display: none; }
-    .telephony-field-wide { grid-column: 1 / -1; }
-    .telephony-shared-label { display: flex; align-items: center; gap: 9px; grid-column: 1 / -1; margin-top: 2px; color: var(--accent); font-size: 10px; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
-    .telephony-shared-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-    .telephony-password-wrap { position: relative; }
-    .telephony-protocols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .telephony-protocol {
-      display: grid;
-      min-height: 42px;
-      place-items: center;
-      border: 1px solid var(--input);
-      border-radius: 10px;
-      background: color-mix(in srgb, var(--panel) 82%, var(--bg-soft));
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 850;
-      letter-spacing: .04em;
-    }
-    .telephony-protocol.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-    .telephony-form-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 18px; }
-    [data-slide-id="add-telephone-number"] { gap: 6px; }
-    [data-slide-id="add-telephone-number"] h2 { max-width: 920px; font-size: clamp(30px, 3.5vw, 48px); }
-    [data-slide-id="add-telephone-number"] .microcopy { font-size: 12px; line-height: 1.4; }
-    [data-slide-id="add-telephone-number"] .telephony-form { padding: 12px 16px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-head { padding-bottom: 6px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-head strong { font-size: 16px; }
-    [data-slide-id="add-telephone-number"] .telephony-fields { gap: 5px 12px; margin-top: 8px; }
-    [data-slide-id="add-telephone-number"] .telephony-field { gap: 3px; font-size: 10px; }
-    [data-slide-id="add-telephone-number"] .telephony-field input,
-    [data-slide-id="add-telephone-number"] .telephony-claim-button,
-    [data-slide-id="add-telephone-number"] .telephony-claim-unavailable { min-height: 32px; padding: 5px 9px; font-size: 12px; }
-    [data-slide-id="add-telephone-number"] .telephony-protocol { min-height: 30px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-footer { margin-top: 8px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-footer .status-chip { min-height: 26px; padding: 3px 8px; font-size: 10px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-footer .primary-button { min-height: 32px; padding-block: 5px; }
-    [data-slide-id="add-telephone-number"] input[readonly],
-    [data-slide-id="add-telephone-number"] .telephony-protocols { cursor: copy; }
-    [data-slide-id="add-telephone-number"] input[readonly]:hover,
-    [data-slide-id="add-telephone-number"] input[readonly]:focus-visible,
-    [data-slide-id="add-telephone-number"] .telephony-protocols:hover .telephony-protocol.active,
-    [data-slide-id="add-telephone-number"] .telephony-protocols:focus-visible .telephony-protocol.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 
     .campaign-ui {
       display: grid;
@@ -1312,7 +1310,7 @@
     .workspace-launch-slide::before { content: ">_"; }
     .command-highlight-slide::before { content: ">"; }
     .workspace-launch-copy { width: min(1120px, 100%); }
-    .workspace-launch-copy h2 { max-width: none; margin-bottom: clamp(24px, 5vh, 54px); font-size: clamp(58px, 8.5vw, 128px); line-height: .88; letter-spacing: -.06em; }
+    .workspace-launch-copy h2 { max-width: none; margin-bottom: clamp(24px, 5vh, 54px); font-size: clamp(36px, 5vw, 72px); line-height: 1.04; letter-spacing: -.04em; }
     .workspace-terminal { width: min(1120px, 100%); border-color: color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.18)); box-shadow: 0 32px 90px rgba(0,0,0,.4), 0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent); }
     .workspace-terminal .terminal-bar { min-height: 46px; }
     .workspace-terminal .terminal-title { color: #b8c6ce; font-size: 12px; letter-spacing: .04em; }
@@ -1377,17 +1375,18 @@
 
     .file-tree {
       display: grid;
-      grid-template-columns: minmax(360px, .80fr) 1.35fr;
-      min-height: 430px;
+      grid-template-columns: minmax(260px, .55fr) 1.45fr;
+      height: clamp(300px, 58vh, 520px);
+      min-height: 0;
       overflow: hidden;
       border: 1px solid var(--line);
       border-radius: 13px;
       background: var(--card-glass);
       box-shadow: var(--shadow);
     }
-    .tree { padding: 22px; overflow: auto; border-right: 1px solid var(--line); font-family: ui-monospace, monospace; font-size: 12px; line-height: 1.72; white-space: pre; }
+    .tree { min-height: 0; padding: 22px; overflow: auto; border-right: 1px solid var(--line); font-family: ui-monospace, monospace; font-size: 12px; line-height: 1.72; white-space: pre; }
     .tree .active { display: block; margin-inline: -8px; padding-inline: 8px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
-    .code-panel { padding: 24px; overflow: auto; background: var(--code-bg); color: var(--code-ink); }
+    .code-panel { min-width: 0; min-height: 0; padding: 24px; overflow: auto; background: var(--code-bg); color: var(--code-ink); }
     .code-panel pre { font-family: ui-monospace, monospace; font-size: clamp(12px, 1.15vw, 16px); line-height: 1.65; white-space: pre-wrap; }
     .agent-code-line { display: block; position: relative; min-height: 1.65em; margin-inline: -10px; padding: 0 10px 0 48px; border-left: 2px solid transparent; }
     .agent-code-line::before { content: attr(data-line); position: absolute; left: 11px; width: 24px; color: #597181; font-size: .76em; text-align: right; }
@@ -1405,10 +1404,12 @@
     .acceptance-item::before { content: "✓"; margin-right: 8px; color: var(--success); font-weight: 900; }
     .build-prompt-slide { align-content: start; padding-top: clamp(88px, 11vh, 112px); }
     .build-prompt-slide .prompt-layout { grid-template-columns: minmax(0, 1fr) minmax(230px, 280px); gap: 14px; align-items: start; }
-    .build-prompt-slide .prompt-card { height: min(390px, 48vh); min-height: 320px; padding: 18px; }
-    .build-prompt-slide .prompt-card pre { padding-right: 58px; font-size: clamp(11px, .95vw, 14px); line-height: 1.45; }
+    .build-prompt-slide .prompt-card { height: auto; min-height: 0; padding: 60px 24px 24px; }
+    .build-prompt-slide .prompt-card pre { padding: 0; font-size: clamp(15px, 1.3vw, 19px); line-height: 1.55; overflow-wrap: anywhere; }
     .build-prompt-slide .acceptance { grid-auto-rows: max-content; align-content: start; justify-items: start; gap: 8px; }
-    .build-prompt-slide .acceptance-item { width: fit-content; max-width: 100%; padding: 9px 11px; font-size: 12px; line-height: 1.25; }
+    .build-prompt-slide .acceptance-item { width: 100%; padding: 10px 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: none; font-size: 14px; line-height: 1.4; }
+    .build-prompt-slide .acceptance p { margin: 0 0 10px; color: var(--muted); font-size: 16px; line-height: 1.5; }
+    .build-prompt-slide .acceptance .card-number { margin-bottom: 0; }
     .build-prompt-slide .acceptance .secondary-button { min-height: 36px; padding: 7px 12px; }
 
     .agent-screen {
@@ -1442,7 +1443,7 @@
     .summary-row span { display: block; margin-bottom: 5px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
     .summary-row strong { font-size: 15px; }
 
-    .ship-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; }
+    .ship-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
     .ship-card { position: relative; display: flex; min-height: 190px; flex-direction: column; justify-content: space-between; padding: 22px; border: 1px solid var(--line); border-radius: 12px; background: var(--card-glass); box-shadow: var(--shadow); }
     .ship-card h3 { font-size: 21px; }
     .ship-card p { color: var(--muted); line-height: 1.45; }
@@ -1450,6 +1451,7 @@
     .ship-link { align-self: flex-start; padding: 8px 12px; border-radius: 7px; background: var(--accent); color: var(--accent-ink); font-size: 13px; font-weight: 800; text-decoration: none; }
 
     .qr-layout { display: grid; grid-template-columns: 1fr minmax(280px, 390px); gap: clamp(30px, 6vw, 84px); align-items: center; }
+    .qr-layout h2 { margin: 14px 0 20px; }
     .qr-card { padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: #fff; box-shadow: var(--shadow-float); }
     .qr-card img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; image-rendering: pixelated; }
 
@@ -1660,27 +1662,6 @@
       color: var(--ink);
       -webkit-text-fill-color: var(--ink);
     }
-    .host-sip-config {
-      display: grid;
-      grid-template-columns: .9fr .85fr 1.25fr .85fr .72fr .76fr 1fr .58fr .82fr 1fr;
-      gap: 10px;
-      align-items: end;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--line);
-    }
-    .host-sip-intro { align-self: center; min-width: 0; }
-    .host-sip-intro strong { display: block; margin-bottom: 3px; font-size: 13px; }
-    .host-sip-intro span { display: block; color: var(--muted); font-size: 11px; line-height: 1.35; }
-    .host-sip-config[data-sip-mode="manual"] [data-sip-claim-only],
-    .host-sip-config[data-sip-mode="claim"] [data-sip-manual-only] { display: none; }
-    .host-sip-config[data-sip-mode="claim"] {
-      grid-template-columns: minmax(170px, .8fr) minmax(190px, .9fr) minmax(210px, 1fr) minmax(260px, 1.25fr);
-    }
-    #sipModeInput,
-    #sipClaimHostEmailInput { min-width: 0; }
-    .host-network-config,
-    .host-campaign-config,
     .host-model-config {
       margin-top: 12px;
       padding-top: 12px;
@@ -1802,15 +1783,6 @@
       box-shadow: var(--shadow-float);
     }
     dialog::backdrop { background: rgba(0,0,0,.48); backdrop-filter: blur(4px); }
-    .sip-claim-dialog { width: min(500px, 92vw); padding: 0; }
-    .sip-claim-form { display: grid; gap: 18px; padding: 24px; }
-    .sip-claim-form .drawer-header { margin-bottom: 0; }
-    .sip-claim-copy { margin: -8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
-    .sip-claim-form label { display: grid; gap: 7px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-    .sip-claim-form input { min-height: 46px; padding: 10px 12px; border: 1px solid var(--input); border-radius: 10px; background: var(--panel-soft); color: var(--ink); font-size: 15px; }
-    .sip-claim-error { min-height: 18px; margin: -6px 0 0; color: var(--danger); font-size: 12px; }
-    .sip-claim-actions { display: flex; justify-content: flex-end; gap: 9px; }
-    .sip-claim-privacy { margin: -8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
     .help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
     .help-grid p { display: flex; justify-content: space-between; margin: 0; padding: 10px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
     kbd { min-width: 28px; padding: 3px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; background: var(--panel-soft); color: var(--ink); text-align: center; }
@@ -1858,6 +1830,22 @@
     .host-auth-form input { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--input); color: var(--ink); }
     .host-auth-form button { min-height: 42px; border: 0; border-radius: 9px; background: var(--accent); color: var(--accent-ink); font-weight: 850; }
     .host-auth-error { min-height: 18px; margin: 2px 0 0; color: var(--danger); font-size: 12px; }
+    #audienceJoinChoices[hidden], #joinActiveButton[hidden], #followHostButton[hidden], #moreEventsButton[hidden] { display: none; }
+    .event-join-choices { display: grid; gap: 22px; margin: 26px auto 0; max-width: 490px; }
+    .event-code-form { display: grid; gap: 8px; text-align: left; }
+    .event-code-form label { font-size: 14px; font-weight: 800; }
+    .event-code-row { display: flex; gap: 10px; }
+    .event-code-row input { width: 150px; min-width: 0; flex: 1; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); padding: 12px; font: inherit; letter-spacing: .1em; }
+    .event-code-row button { white-space: nowrap; }
+    .audience-waiting .event-error { margin: 0; color: var(--danger); font-size: 14px; }
+    .saved-event-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 16px 0 8px; }
+    .event-button-row { display: flex; gap: 8px; align-items: end; flex-wrap: wrap; }
+    .saved-event-share { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+    .saved-event-share[hidden] { display: none; }
+    .saved-event-share a { color: var(--accent); overflow-wrap: anywhere; }
+    #savedEventStatus[data-error="true"] { color: var(--danger); }
+    @media (max-width: 600px) { .saved-event-grid { grid-template-columns: 1fr; } .event-code-row { flex-wrap: wrap; } }
+
     .audience-waiting { display: none; }
     body.view-audience:not(.session-started):not(.archive-open) .audience-waiting {
       position: fixed;
@@ -1895,13 +1883,10 @@
       .cascade-connector { min-height: 44px; }
       .cascade-connector-line { width: 2px; height: 100%; }
       .cascade-connector-line::before { right: auto; top: auto; bottom: -1px; left: 50%; transform: translateX(-50%) rotate(135deg); }
-      .cascade-connector-line::after { top: 0; left: -3px; }
-      .slide.active .cascade-connector-line::after { animation: cascade-forward-vertical 2.4s ease-in-out infinite; }
+      .cascade-connector-line::after { top: 0; left: -3px; width: 8px; height: 16px; }
+      .slide.active .cascade-connector-line::after { animation-name: cascade-forward-vertical; }
       .cascade-connector-label { top: 50%; left: calc(50% + 14px); width: auto; transform: translateY(-50%); white-space: nowrap; }
       .host-control-grid { grid-template-columns: 2fr 1fr; }
-      .host-sip-config { grid-template-columns: 1fr 1fr 1fr; }
-      .host-sip-config[data-sip-mode="claim"] { grid-template-columns: 1fr 1fr; }
-      .host-sip-intro { grid-column: 1 / -1; }
       .host-campaign-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .host-model-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .host-toggle-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -1917,16 +1902,11 @@
       .slide { padding: 24px 18px; }
       .grid, .grid.two, .grid.four, .grid.seven, .template-picker, .ship-grid { grid-template-columns: 1fr; }
       .number-line { grid-template-columns: 62px 1fr; gap: 14px; }
-      .telephony-fields { grid-template-columns: 1fr; }
-      .telephony-form-footer { align-items: stretch; flex-direction: column; }
       .help-grid { grid-template-columns: 1fr; }
       .footer-title { display: none; }
       .session-status { display: none; }
       .connection-annotations { top: 8px; right: 8px; bottom: auto; left: auto; justify-content: flex-end; }
       .host-control-grid { grid-template-columns: 1fr 1fr; }
-      .host-sip-config,
-      .host-sip-config[data-sip-mode="claim"] { grid-template-columns: 1fr; }
-      .host-sip-intro { grid-column: auto; }
       .host-network-grid { grid-template-columns: 1fr; }
       .host-campaign-grid { grid-template-columns: 1fr 1fr; }
       .host-model-grid { grid-template-columns: 1fr; }
@@ -1950,8 +1930,32 @@
       .workspace-terminal pre { font-size: clamp(16px, 4.8vw, 24px); }
     }
 
+    [data-slide-id="discover-recipes"] .terminal-body { min-height: 96px; }
+    .overview-slide > .grid { gap: 28px; }
+    .overview-slide .card { padding: 20px 0 0; border: 0; border-top: 2px solid var(--line); border-radius: 0; background: none; box-shadow: none; }
+    .overview-slide .card-number { margin-bottom: 12px; }
+    .overview-slide .grid.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .slide:not(.front-slide) { padding-top: max(64px, 6vh); padding-bottom: 28px; }
+    .slide > .lede { text-wrap: pretty; }
+    @media (max-width: 900px) {
+      .slide:not(.front-slide) { align-content: start; }
+      .build-prompt-slide .prompt-layout { grid-template-columns: 1fr; }
+      .file-tree { height: auto; }
+      .code-panel { max-height: 50vh; }
+    }
+    @media (max-width: 640px) {
+      .overview-slide .grid.four { grid-template-columns: 1fr; }
+      .platform-media { width: 100%; }
+      .platform-capabilities { gap: 22px; }
+      .build-prompt-slide .prompt-card { min-height: 280px; }
+      .build-prompt-slide .prompt-card pre { padding-right: 0; padding-top: 34px; }
+      .agent-screen { min-height: 0; }
+      .agent-hero { gap: 28px; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+      .cascade-slide *, .cascade-slide *::before, .cascade-slide *::after { animation: none !important; }
       .number-story.auto-reveal .number-line { opacity: 1; transform: none; }
       .slide.active .lifecycle-flow .flow-step { animation: none; }
       .slide.active .lifecycle-flow .flow-step::after { animation: none; }
@@ -1961,7 +1965,7 @@
       .quickstart-command.is-swapping { animation: none; }
     }
 
-    @keyframes cascade-forward-vertical { 0% { top: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { top: calc(100% - 8px); opacity: 0; } }
+    @keyframes cascade-forward-vertical { 0% { top: 0; opacity: 0; } 1%, 9% { opacity: 1; } 10%, 100% { top: calc(100% - 16px); opacity: 0; } }
 
     @media print {
       body { overflow: visible; background: #fff; }
@@ -1981,8 +1985,16 @@
     <div class="audience-waiting-card">
       <img class="audience-waiting-logo" src="assets/agora-logo-rgb-blue.svg" alt="Agora">
       <p class="eyebrow">Workshop audience</p>
-      <h1 id="audienceWaitingTitle">The session hasn’t started yet.</h1>
-      <p id="audienceWaitingMessage">You’re in the right place. Keep this page open and the workshop will appear automatically when the host connects.</p>
+      <h1 id="audienceWaitingTitle">Join a workshop</h1>
+      <p id="audienceWaitingMessage">Follow the live host or enter an event code to work through a saved workshop at your own pace.</p>
+      <div id="audienceJoinChoices" class="event-join-choices">
+        <button id="joinActiveButton" class="primary-button" type="button">Join active</button>
+        <form id="eventCodeForm" class="event-code-form">
+          <label for="eventCodeInput">Event code</label>
+          <div class="event-code-row"><input id="eventCodeInput" name="code" type="text" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="482-193" pattern="[0-9]{3}-?[0-9]{3}" required aria-describedby="eventCodeError"><button class="secondary-button" type="submit">Open workshop</button></div>
+          <p id="eventCodeError" class="event-error" role="alert"></p>
+        </form>
+      </div>
       <div id="lastWorkshopPanel" class="audience-last-workshop" hidden>
         <span class="audience-last-workshop-label">Your last workshop</span>
         <strong id="lastWorkshopSummary" class="audience-last-workshop-summary"></strong>
@@ -2019,12 +2031,12 @@
           <h1 class="front-city" data-city-field="heroCity">San Francisco</h1>
         </div>
         <div class="front-meta">
-          <span data-city-field="date">Wednesday · August 12, 2026</span>
+          <span data-event-field="date">Wednesday · August 12, 2026</span>
           <span class="front-divider" aria-hidden="true">◆</span>
-          <span>Doors 5:30 · Workshop 5:45</span>
+          <span>Doors <span data-event-field="doorsTime">5:30 PM</span> · Workshop <span data-event-field="workshopTime">5:45 PM</span></span>
         </div>
         <div class="front-access" data-host-only>
-          <a class="front-join-link" href="https://bit.ly/4xxH6Uf" target="_blank" rel="noreferrer">Join the workshop <span>bit.ly/4xxH6Uf</span></a>
+          <a id="frontJoinLink" class="front-join-link" href="https://bit.ly/4xxH6Uf" target="_blank" rel="noreferrer">Join the workshop <span data-event-field="joinLink">bit.ly/4xxH6Uf</span></a>
           <div id="frontWifiDetails" class="front-wifi" hidden>
             <div class="front-wifi-item"><span>Venue Wi-Fi</span><strong id="frontWifiName"></strong></div>
             <div class="front-wifi-item"><span>Password</span><strong id="frontWifiPassword"></strong></div>
@@ -2033,51 +2045,43 @@
         <p class="front-hold">Get connected. We’ll begin shortly.</p>
       </div>
       <div class="speaker-notes">
-        <p>Leave this slide up as doors open at 5:30. Support staff help attendees connect to Wi-Fi and confirm they have a laptop, headphones, and a modern browser.</p>
+        <p>Leave this slide up as doors open at <span data-event-field="doorsTime">5:30 PM</span>. Support staff help attendees connect to Wi-Fi and confirm they have a laptop, headphones, and a modern browser.</p>
         <p>Before doors open, press <strong>H</strong>, expand <strong>Venue Wi-Fi</strong>, and confirm the projected network name and password.</p>
-        <p>Direct attendees to <strong>bit.ly/4xxH6Uf</strong> to open the audience view.</p>
+        <p>Direct attendees to <strong data-event-field="joinLink">bit.ly/4xxH6Uf</strong> to open the audience view.</p>
         <p>Encourage attendees to finish Agora account verification now if they did not complete it from the reminder email.</p>
       </div>
     </section>
 
-    <section class="slide centered" data-slide-id="one-two-three" data-title="One, two, three" data-section="Welcome" data-cue="5:47">
-      <p class="eyebrow">Your build promise</p>
-      <div class="number-story auto-reveal">
-        <div class="number-line"><strong>1</strong><span>One workshop.</span></div>
-        <div class="number-line"><strong>2</strong><span>Two ways to build: visual and code.</span></div>
-        <div class="number-line"><strong>3</strong><span>Three agents you’ll run.</span></div>
-      </div>
-      <div class="speaker-notes">
-        <p>Reveal these lines one at a time. Keep the opening under two minutes.</p>
-        <p>Say: “Tonight is a three-for-one: a Studio agent that calls you, a basic voice agent in code, and a custom website SDR that can help you book appointments while you sleep.”</p>
-      </div>
-    </section>
-
-    <section class="slide" data-slide-id="three-agents" data-title="Three agents" data-section="Welcome" data-cue="5:49">
-      <p class="eyebrow">A build-first master class</p>
-      <h2>From nothing to a <span class="accent">custom voice agent.</span></h2>
-      <div class="grid">
-        <article class="card"><span class="card-number">Agent 01 · visual</span><h3>A no-code agent that calls you</h3><p>Start with a Studio template, personalize it with contact data, and launch a campaign.</p></article>
-        <article class="card"><span class="card-number">Agent 02 · code</span><h3>A basic voice agent from the CLI</h3><p>Run the official quickstart unchanged, then understand the agent file it generated.</p></article>
-        <article class="card"><span class="card-number">Agent 03 · Skills</span><h3>A website SDR that works while you sleep</h3><p>Give an AI coding agent the Agora Skills and a concise product brief.</p></article>
+    <section class="slide overview-slide" data-slide-id="three-agents" data-title="CLI and Skills" data-section="Welcome" data-cue="5:49">
+      <p class="eyebrow">Tonight’s workshop</p>
+      <h2>Build two <span class="accent">voice agents</span></h2>
+      <div class="grid two">
+        <article class="card"><span class="card-number">Agent 01 · CLI</span><h3>A basic voice agent from the CLI</h3><p>Run the official quickstart unchanged, then understand the agent file it generated.</p></article>
+        <article class="card"><span class="card-number">Agent 02 · Skills</span><h3>Your own voice agent</h3><p>Describe a use case and let the coding agent use Agora Skills and Recipes as references.</p></article>
       </div>
       <div class="speaker-notes">
         <p>This is the contract for the evening. Do not turn it into a detailed agenda.</p>
-        <p>Make clear that everyone follows one Studio template and one language track selected by the host.</p>
+        <p>Introduce the CLI quickstart, recipe discovery, and a custom Skills build. Use the host-selected language for the quickstart; participants describe their own use case for the Skills section.</p>
       </div>
     </section>
 
-    <section class="slide" data-slide-id="what-is-agora" data-title="What is Agora?" data-section="How Agora works" data-cue="5:51">
-      <p class="eyebrow">What is Agora?</p>
-      <h2>The realtime platform connecting <span class="accent">people, devices, and AI.</span></h2>
-      <div class="grid">
-        <article class="card"><span class="card-number">Realtime media</span><h3>Voice, video, and live streaming</h3><p>Agora Channels create the shared live space where participants can hear, see, and respond to one another.</p></article>
-        <article class="card"><span class="card-number">Global delivery</span><h3>Built for conversations that feel immediate</h3><p>Agora’s software-defined realtime network routes live media for quality, reliability, and scale.</p></article>
-        <article class="card"><span class="card-number">Conversational AI</span><h3>Agents become realtime participants</h3><p>Agora orchestrates voice agents that can join a Channel, listen, reason, speak, and respond on demand.</p></article>
-      </div>
-      <p class="platform-proof">Powering <strong>1 Trillion minutes</strong> of live voice and video streams per year.</p>
-      <div class="platform-video">
-        <iframe title="Discover unrivaled reliability and quality with Agora’s Real-Time Network" loading="lazy" src="https://player.vimeo.com/video/988623383?background=1" width="100%" height="120%" frameborder="0" allow="autoplay; fullscreen" allowfullscreen data-cookiecategory="7"></iframe>
+    <section class="slide platform-slide" data-slide-id="what-is-agora" data-title="What is Agora?" data-section="How Agora works" data-cue="5:51">
+      <header class="platform-heading">
+        <p class="eyebrow">What is Agora?</p>
+        <h2>The realtime platform connecting <span class="accent">people, devices, and AI.</span></h2>
+      </header>
+      <div class="platform-layout">
+        <div class="platform-capabilities">
+          <article class="platform-capability"><span class="card-number">Realtime media</span><h3>Voice, video, and live streaming</h3><p>Agora Channels give participants a shared live space to hear, see, and respond to one another.</p></article>
+          <article class="platform-capability"><span class="card-number">Global delivery</span><h3>Conversations that feel immediate</h3><p>A software-defined realtime network routes live media for quality, reliability, and scale.</p></article>
+          <article class="platform-capability"><span class="card-number">Conversational AI</span><h3>Agents join the conversation</h3><p>Orchestrate voice agents that join a Channel to listen, reason, speak, and respond.</p></article>
+        </div>
+        <figure class="platform-media">
+          <div class="platform-video">
+            <iframe title="Discover unrivaled reliability and quality with Agora’s Real-Time Network" loading="lazy" src="https://player.vimeo.com/video/988623383?background=1" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen data-cookiecategory="7"></iframe>
+          </div>
+          <figcaption class="platform-proof"><strong>1 trillion minutes</strong>of live voice and video powered every year.</figcaption>
+        </figure>
       </div>
       <p class="lede">You build the experience. <span class="accent">Agora carries the live conversation.</span></p>
       <div class="speaker-notes">
@@ -2094,7 +2098,7 @@
           <span class="active" data-step="01">Channel</span><span data-step="02">Agent</span><span data-step="03">Lifecycle</span>
         </div>
       </div>
-      <h2>A Channel is where <span class="accent">people, devices, and agents meet.</span></h2>
+      <h2>Channels connect <span class="accent">people and agents</span></h2>
       <div class="architecture">
         <article class="arch-node"><span class="card-number">Participant</span><h3>You</h3><p>Microphone in, agent audio out.</p></article>
         <article class="arch-node primary"><span class="card-number">Agora Channel</span><h3>Audio · video · live streaming</h3><p>A shared realtime session with identity, media, and event state.</p></article>
@@ -2122,7 +2126,7 @@
 
     <section class="slide compact cascade-slide" data-slide-id="conversational-ai-pipeline" data-title="The cascading voice pipeline" data-section="How Agora works" data-cue="5:57">
       <p class="eyebrow">Agora Conversational AI Engine</p>
-      <h2>Speech becomes intelligence—and returns as <span class="accent">realtime voice.</span></h2>
+      <h2>The <span class="accent">cascading voice pipeline</span></h2>
       <div class="cascade-shell" role="img" aria-label="Cascading voice AI pipeline on Agora SDRTN. A user device sends an audio stream to ASR. ASR sends transcript text to the LLM. The LLM sends response text to TTS. TTS publishes a synthesized audio stream back to the user.">
         <div class="cascade-shell-header">
           <strong class="cascade-sdrtn-label">Agora SDRTN®</strong>
@@ -2139,12 +2143,12 @@
           <article class="cascade-node asr">
             <span class="cascade-node-type">Speech recognition</span>
             <strong>ASR</strong>
-            <p>Understands the incoming speech as it arrives.</p>
+            <p>Transcribes incoming speech into text.</p>
             <span class="cascade-node-result">AUDIO → TEXT</span>
           </article>
           <div class="cascade-connector"><span class="cascade-connector-label">Transcript text</span><span class="cascade-connector-line"></span></div>
           <article class="cascade-node llm">
-            <span class="cascade-node-type">Language intelligence</span>
+            <span class="cascade-node-type">Language model</span>
             <strong>LLM</strong>
             <p>Reasons over context and generates the response.</p>
             <span class="cascade-node-result">UNDERSTAND → RESPOND</span>
@@ -2160,7 +2164,7 @@
         <div class="cascade-return" aria-hidden="true"><span class="cascade-return-arrow">←</span><strong>Synthesized audio stream</strong><span>TTS publishes speech back through the Agora Channel to the user.</span></div>
         <div class="cascade-legend" aria-hidden="true"><span>Realtime audio on SDRTN</span><span>Text handoff inside the cascade</span></div>
       </div>
-      <p class="lede">The engine subscribes, transcribes, reasons, synthesizes, and publishes—while Agora keeps the conversation moving in realtime.</p>
+      <p class="lede">Agora carries the audio; ASR, LLM, and TTS handle transcription, response generation, and speech.</p>
       <div class="speaker-notes">
         <p>Follow the top row from left to right: the user publishes microphone audio to the Channel; the Conversational AI Engine subscribes to it; ASR produces transcript text; the LLM produces response text; and TTS synthesizes the response.</p>
         <p>Then follow the cyan return path from right to left: the agent publishes synthesized audio back into the same Agora Channel, and the user hears it on their device.</p>
@@ -2168,18 +2172,56 @@
       </div>
     </section>
 
-    <section class="slide" data-slide-id="agents" data-title="Mental model: Agents" data-section="How Agora works" data-cue="5:58">
+    <section class="slide compact cascade-slide" data-slide-id="conversational-ai-voice-to-voice" data-title="The voice-to-voice path" data-section="How Agora works" data-cue="5:57">
+      <p class="eyebrow">Agora Conversational AI Engine</p>
+      <h2>Voice to voice with a <span class="accent">multimodal model</span></h2>
+      <div class="cascade-shell" role="img" aria-label="Voice-to-voice path above the Agora Channel. The user device sends audio to the MLLM, a multimodal large language model, and receives audio back. The shared Agora Channel carries realtime audio over Agora SDRTN.">
+        <div class="cascade-shell-header">
+          <strong class="cascade-sdrtn-label">Voice-to-voice path</strong>
+          <small>Audio in, audio out</small>
+        </div>
+        <div class="voice-pipeline" aria-hidden="true">
+          <article class="cascade-node device">
+            <span class="cascade-node-type">Realtime participant</span>
+            <strong>User device</strong>
+            <p>Publishes microphone audio and plays the model’s voice response.</p>
+            <span class="cascade-node-result">MIC IN · SPEAKER OUT</span>
+          </article>
+          <div class="voice-paths">
+            <div class="voice-path"><span>Audio in</span><span class="voice-path-line"></span></div>
+            <div class="voice-path return"><span>Audio out</span><span class="voice-path-line"></span></div>
+          </div>
+          <article class="cascade-node llm">
+            <span class="cascade-node-type">Multimodal large language model</span>
+            <strong>MLLM</strong>
+            <p>Understands speech and generates a spoken response.</p>
+            <span class="cascade-node-result">AUDIO → AUDIO</span>
+          </article>
+        </div>
+        <div class="voice-channel" aria-hidden="true">
+          <strong class="cascade-sdrtn-label">Agora Channel</strong>
+          <span>Shared realtime audio transport on Agora SDRTN®</span>
+        </div>
+      </div>
+      <p class="lede">The device and MLLM exchange voice through the Agora Channel.</p>
+      <div class="speaker-notes">
+        <p>Follow the top arrow from the user device to the MLLM: microphone audio reaches the multimodal model. Follow the lower arrow back to the device: the model returns a spoken response.</p>
+        <p>The Agora Channel sits beneath the voice-to-voice path as the shared realtime audio transport. This diagram shows the logical conversation path, with the Conversational AI Engine connecting the Channel to the model.</p>
+      </div>
+    </section>
+
+    <section class="slide overview-slide" data-slide-id="agents" data-title="Mental model: Agents" data-section="How Agora works" data-cue="5:58">
       <div class="concept-banner">
         <p class="eyebrow">Developer mental model</p>
         <div class="concept-sequence" aria-label="Three-part developer mental model">
           <span data-step="01">Channel</span><span class="active" data-step="02">Agent</span><span data-step="03">Lifecycle</span>
         </div>
       </div>
-      <h2>You define the behavior. <span class="accent">Agora runs the realtime session.</span></h2>
+      <h2>Configure your <span class="accent">voice agent</span></h2>
       <div class="grid four">
         <article class="card"><span class="card-number">01</span><h3>Behavior</h3><p>System prompt, greeting, boundaries, and conversation style.</p></article>
-        <article class="card"><span class="card-number">02</span><h3>Models</h3><p>Speech recognition, language intelligence, and voice synthesis.</p></article>
-        <article class="card"><span class="card-number">03</span><h3>Media</h3><p>Channel, telephony, voice activity, and noise handling.</p></article>
+        <article class="card"><span class="card-number">02</span><h3>Models</h3><p>Speech recognition, language models, and speech synthesis.</p></article>
+        <article class="card"><span class="card-number">03</span><h3>Media</h3><p>Channel, voice activity, and noise handling.</p></article>
         <article class="card"><span class="card-number">04</span><h3>Lifecycle</h3><p>Start on demand, observe events, and stop when the session is done.</p></article>
       </div>
       <div class="speaker-notes">
@@ -2194,7 +2236,7 @@
           <span data-step="01">Channel</span><span data-step="02">Agent</span><span class="active" data-step="03">Lifecycle</span>
         </div>
       </div>
-      <h2>Start it. Watch it. <span class="accent">Stop it.</span></h2>
+      <h2>The <span class="accent">agent lifecycle</span></h2>
       <div class="flow lifecycle-flow">
         <article class="flow-step"><span class="step-index">1</span><b>Agent definition</b><p>Saved configuration or application code.</p></article>
         <article class="flow-step"><span class="step-index">2</span><b>Start command</b><p>Request a live agent session when it is needed.</p></article>
@@ -2202,17 +2244,17 @@
         <article class="flow-step"><span class="step-index">4</span><b>Webhooks</b><p>Receive lifecycle and conversation events.</p></article>
         <article class="flow-step"><span class="step-index">5</span><b>Stop command</b><p>End the agent session cleanly.</p></article>
       </div>
-      <p class="lede concept-handoff">Mental model complete. Next, we’ll use it to <span class="accent">build the first agent in Studio.</span></p>
+      <p class="lede concept-handoff">Next: <span class="accent">build an agent with the CLI.</span></p>
       <div class="speaker-notes">
         <p>Webhooks provide insight into what is happening; they are not the audio transport.</p>
-        <p>Keep this to two minutes. Close the three-part mental model explicitly, then tell the room it is time to open their laptops and build in Studio.</p>
+        <p>Keep this to two minutes. Close the three-part mental model explicitly, then tell the room it is time to open their laptops and build with the CLI.</p>
       </div>
     </section>
 
     <section class="slide centered" data-slide-id="open-agora" data-title="Open Agora" data-section="Hands-on setup" data-cue="6:00">
       <p class="eyebrow">Hands-on starts now</p>
-      <h2>Create your account—or <span class="accent">sign in.</span></h2>
-      <p class="lede">Use your individual Agora account for everything you build tonight. Keep the Console tab open when you arrive.</p>
+      <h2>Create an account or <span class="accent">sign in</span></h2>
+      <p class="lede">Use your own Agora account and keep the Console tab open.</p>
       <div class="grid two account-kickoff-grid">
         <article class="card account-path">
           <span class="card-number">New to Agora</span>
@@ -2243,263 +2285,50 @@
       </div>
     </section>
 
-    <section class="slide centered" data-slide-id="studio-hands-on" data-title="Hands-on begins" data-section="Agent Studio" data-cue="6:03">
-      <p class="eyebrow">One method · every Studio scenario</p>
-      <h2>The voice AI scenario changes. <span class="accent">The build path stays the same.</span></h2>
-      <div id="workshopJourney" class="workshop-journey" data-stage="1">
-        <nav class="workshop-stage-rail" aria-label="Agent Studio workshop steps">
-          <button class="workshop-stage-card active" type="button" data-workshop-stage="1" aria-current="step">
-            <span class="workshop-stage-number">01</span>
-            <span><strong>Choose template</strong><small>Start with a proven scenario</small></span>
-          </button>
-          <button class="workshop-stage-card" type="button" data-workshop-stage="2">
-            <span class="workshop-stage-number">02</span>
-            <span><strong>Customize prompt</strong><small>Add variables to personalize</small></span>
-          </button>
-          <button class="workshop-stage-card" type="button" data-workshop-stage="3">
-            <span class="workshop-stage-number">03</span>
-            <span><strong>Add a telephone number</strong><small>Connect workshop telephony</small></span>
-          </button>
-          <button class="workshop-stage-card" type="button" data-workshop-stage="4">
-            <span class="workshop-stage-number">04</span>
-            <span><strong>Create a campaign</strong><small>Agent + number + contacts</small></span>
-          </button>
-          <button class="workshop-stage-card" type="button" data-workshop-stage="5">
-            <span class="workshop-stage-number">05</span>
-            <span><strong>Make the call</strong><small>Hear your data come alive</small></span>
-          </button>
-        </nav>
-      </div>
-      <div class="speaker-notes">
-        <p>Name the five reusable Studio steps, then click <strong>Choose template</strong>. The same cards move into the upper-right menu and track the room through the Studio build.</p>
-      </div>
-    </section>
-
-    <section class="slide" data-slide-id="choose-template" data-title="Choose a template" data-section="Agent Studio" data-cue="6:05" data-studio-controls="true">
-      <p class="eyebrow">Step 1 · Choose a template</p>
-      <h2>Start with a working pattern. <span class="accent">Make it yours.</span></h2>
-      <div class="template-picker" role="list" aria-label="Agent Studio templates">
-        <button class="template-button" type="button" data-template-choice="blank"><strong>Blank Template</strong>Minimal starting configuration</button>
-        <button class="template-button" type="button" data-template-choice="appointment"><strong>Appointment Reminder</strong>Confirm or reschedule</button>
-        <button class="template-button" type="button" data-template-choice="nps"><strong>NPS Survey</strong>Score plus feedback</button>
-        <button class="template-button" type="button" data-template-choice="payment"><strong>Payment Reminder</strong>Helpful next steps</button>
-        <button class="template-button" type="button" data-template-choice="ivr"><strong>Voice IVR</strong>Information and routing</button>
-        <button class="template-button" type="button" data-template-choice="ecommerce"><strong>E-commerce Service</strong>Order help</button>
-        <button class="template-button" type="button" data-template-choice="sales"><strong>Sales Qualification</strong>Needs and objections</button>
-      </div>
-      <p class="lede">Tonight’s selected path: <strong class="accent" data-template-field="name"></strong></p>
-      <div class="speaker-notes">
-        <p>The host selects one template for the entire room. Make the selection before the workshop in the <strong>H</strong> panel or click a template here.</p>
-        <p>Do not make attendees choose independently. The deck will update its prompt, CSV, call goal, and notes for the active template.</p>
-        <p>The five-step Studio method now lives on the previous slide and in the upper-right menu. Do not stop for a second process explanation; move directly into configuring the selected template.</p>
-      </div>
-    </section>
-
-    <section class="slide compact" data-slide-id="customize-prompt" data-title="Customize the prompt" data-section="Agent Studio" data-cue="6:12" data-studio-controls="true">
-      <p class="eyebrow">Step 2 · Customize and personalize</p>
-      <h2>Write the prompt once. <span class="accent">Fill the details per contact.</span></h2>
-      <div class="grid two">
-        <article class="card selected">
-          <span class="card-number">Selected scenario</span>
-          <h3 data-template-field="callTitle"></h3>
-          <p data-template-field="callGoal"></p>
-          <div id="variableChips" class="meta-row"></div>
-        </article>
-        <article class="card">
-          <span class="field-label">System prompt · variable syntax</span>
-          <pre id="studioPrompt" class="prompt-box" style="min-height:230px"></pre>
-          <div class="meta-row" style="margin-top:16px;"><span class="status-chip success">Generic greeting first</span><span class="status-chip">Confirm identity in prompt</span><span class="status-chip">Managed keys · default</span></div>
-        </article>
-      </div>
-      <div class="speaker-notes">
-        <p>Build this hands-on in Agent Studio. Start by grounding the room in the selected scenario on the left, then customize its system prompt on the right.</p>
-        <p>The opening greeting is configured separately and cannot use Contacts List variables. Keep it generic. The system prompt tells the agent who it is trying to reach, and the agent asks for that person only after the callee responds.</p>
-        <p>Ask attendees to add only the variables used by the selected template path. Variable names must match the Contacts CSV columns exactly.</p>
-        <p>Use managed keys so no attendee needs a third-party model account. Briefly show where BYOK credentials attach, but never project a secret.</p>
-        <p>Pause for individualized Studio support before moving to telephony.</p>
-      </div>
-    </section>
-
-    <section class="slide compact" data-slide-id="add-telephone-number" data-title="Add your telephone number" data-section="Agent Studio" data-cue="6:29" data-studio-controls="true">
-      <p class="eyebrow">Step 3 · Add a telephone number</p>
-      <h2>Add your assigned number to the <span class="accent">shared event SIP trunk.</span></h2>
-      <p class="microcopy">Claim one temporary number, then add it to the shared SIP trunk for inbound and outbound call routing.</p>
-      <div class="telephony-form">
-        <div class="telephony-form-head"><div><span class="field-label">Agent Studio · Phone Number Details</span><strong>Add Phone Number</strong></div></div>
-        <div class="telephony-fields">
-          <div class="telephony-field">Phone Number <span class="telephony-source">One per attendee</span><input id="slideSipPhone" type="text" readonly aria-label="Assigned phone number" title="Click to copy" hidden><button id="slideSipClaimButton" class="telephony-claim-button" type="button" hidden>Claim your phone number</button><span id="slideSipClaimUnavailable" class="telephony-claim-unavailable">Waiting for the host’s claim event</span></div>
-          <label class="telephony-field">Vendor<input id="slideSipProvider" type="text" readonly aria-label="Event SIP trunk provider" title="Click to copy"></label>
-          <label class="telephony-field">Display Name<input id="slideSipDisplayName" type="text" readonly aria-label="Event SIP display name" title="Click to copy"></label>
-          <label class="telephony-field">SIP Trunk Address<input id="slideSipServer" type="text" readonly aria-label="Event SIP trunk address" title="Click to copy"></label>
-          <label class="telephony-field telephony-field-wide">Transport Protocol<span id="slideSipTransport" class="telephony-protocols" role="button" tabindex="0" aria-label="Copy selected SIP transport protocol" title="Click to copy"><span class="telephony-protocol" data-sip-transport="tcp">TCP</span><span class="telephony-protocol" data-sip-transport="udp">UDP</span><span class="telephony-protocol" data-sip-transport="tls">TLS</span></span></label>
-          <label class="telephony-field">SIP Trunk Username<input id="slideSipUsername" type="text" readonly aria-label="Event SIP trunk username" title="Click to copy"></label>
-          <label class="telephony-field">SIP Trunk Password<div class="telephony-password-wrap"><input id="slideSipPassword" type="password" readonly aria-label="Event SIP trunk password" title="Click to reveal and copy"></div></label>
-        </div>
-        <div class="telephony-form-footer">
-          <div class="meta-row"><span id="sipConfigStatus" class="status-chip warning">Demo trunk details</span><span class="status-chip">Unique phone number</span><span class="status-chip">Revoked after event</span></div>
-          <button class="primary-button" type="button">Add telephone number</button>
-        </div>
-      </div>
-      <div class="speaker-notes">
-        <p>Before the session, press <strong>H</strong> and choose either <strong>Email claim API</strong> with the workshop event name or <strong>Manual details</strong> with a phone number and SIP vendor fields. Live values are excluded from saved audience decks.</p>
-        <p>In claim mode, each attendee selects <strong>Claim your phone number</strong> and enters their own email. The returned number and SIP credentials appear only in that attendee’s current tab. In Agent Studio, they open <strong>Phone numbers</strong>, choose <strong>Add a telephone number</strong>, then copy the values shown here.</p>
-        <p>Click the password field to reveal and copy it. It automatically masks again when the webpage or tab loses focus.</p>
-        <p>Keep the allocator limited to the event pool. Plan for 50 registered numbers: 40 attendees, replacements, and presenter/support reserves. Disable claims and revoke the number pool and shared trunk credentials after the event.</p>
-      </div>
-    </section>
-
-    <section class="slide" data-slide-id="prepare-contact-list" data-title="Prepare the contact list" data-section="Agent Studio" data-cue="6:36" data-studio-controls="true">
-      <p class="eyebrow">Step 4A · Create Contacts List</p>
-      <h2>One CSV row becomes one <span class="accent">personalized call.</span></h2>
-      <div class="csv-workshop-layout">
-        <article class="campaign-panel csv-focus-panel">
-          <span class="card-number">Workshop CSV · Active template</span>
-          <h3 data-template-field="campaignName"></h3>
-          <p class="microcopy">The first column must be <strong class="mono">phone_number</strong>. Every prompt variable needs a matching column.</p>
-          <div class="table-wrap campaign-contacts">
-            <table aria-label="Contacts List CSV example">
-              <thead><tr id="csvHeader"><th>phone_number</th></tr></thead>
-              <tbody><tr id="csvValues"><td>+14155550199</td></tr></tbody>
-            </table>
-          </div>
-          <div class="campaign-download"><small>Studio provides a blank template. This version is already filled for tonight’s selected scenario.</small><button id="downloadCampaignCsvButton" class="secondary-button" type="button">Download workshop CSV</button></div>
-        </article>
-        <aside class="csv-steps" aria-label="CSV preparation steps">
-          <div class="csv-step"><strong>01 · Download</strong><p>Use Studio’s blank template or download the workshop-ready CSV.</p></div>
-          <div class="csv-step"><strong>02 · Personalize</strong><p>Replace the example number with your own mobile number in E.164 format.</p></div>
-          <div class="csv-step"><strong>03 · Upload</strong><p>Create a Contacts List in Studio and confirm that it contains exactly one row.</p></div>
-        </aside>
-      </div>
-      <div class="speaker-notes">
-        <p>In Studio, attendees can download the blank campaign CSV template. The deck’s <strong>Download workshop CSV</strong> button follows the attached Agora sample structure and pre-fills one row for the active workshop template.</p>
-        <p>Have attendees replace the example <strong>phone_number</strong> with their own mobile number before uploading. Support staff check E.164 formatting, confirm the first header is <strong>phone_number</strong>, and verify every prompt variable has a matching column.</p>
-        <p>Stop here for a short support checkpoint. Everyone should have a one-row Contacts List before moving to campaign configuration.</p>
-      </div>
-    </section>
-
-    <section class="slide compact" data-slide-id="configure-campaign" data-title="Configure the campaign" data-section="Agent Studio" data-cue="6:40" data-studio-controls="true">
-      <p class="eyebrow">Step 4B · Create New Campaign</p>
-      <h2>Connect the agent, source number, timing, and <span class="accent">call safeguards.</span></h2>
-      <div class="campaign-builder">
-        <div class="campaign-builder-header"><div><h3>Create New Campaign</h3><p>Set up your outbound calling campaign in one place</p></div><span class="status-chip">1 contact ready</span></div>
-        <div class="campaign-builder-grid">
-          <div class="campaign-builder-column">
-            <section class="campaign-builder-section">
-              <h4>Campaign Details</h4>
-              <div class="campaign-builder-fields">
-                <div class="campaign-builder-field wide"><label>Campaign name</label><div id="slideCampaignName" class="campaign-builder-value"></div></div>
-                <div class="campaign-builder-field wide"><label>AI agent</label><div id="slideCampaignAgent" class="campaign-builder-value"></div><div class="campaign-builder-helper">If empty: “No deployed agent option is available yet.” Deploy your agent first.</div></div>
-                <div class="campaign-builder-field wide"><label>Phone number</label><div id="slideCampaignPhone" class="campaign-builder-value"></div></div>
-              </div>
-            </section>
-            <section class="campaign-builder-section">
-              <h4>Launch Timing</h4>
-              <div class="campaign-builder-fields">
-                <div class="campaign-builder-field"><label>Launch</label><div class="campaign-choice-row"><span id="slideCampaignLaunch" class="campaign-choice active"></span></div></div>
-                <div class="campaign-builder-field"><label>Timezone</label><div id="slideCampaignTimezone" class="campaign-builder-value"></div></div>
-                <div class="campaign-builder-field wide"><label>Call window</label><div id="slideCampaignCallWindow" class="campaign-builder-value"></div></div>
-              </div>
-            </section>
-          </div>
-          <div class="campaign-builder-column">
-            <section class="campaign-builder-section">
-              <h4>Pacing &amp; Call Settings</h4>
-              <div class="campaign-builder-fields">
-                <div class="campaign-builder-field"><label>Call delay</label><div id="slideCampaignCallDelay" class="campaign-builder-value"></div></div>
-                <div class="campaign-builder-field"><label>Concurrency</label><div id="slideCampaignConcurrency" class="campaign-builder-value"></div></div>
-                <div class="campaign-builder-field"><label>Max call</label><div id="slideCampaignMaxCall" class="campaign-builder-value"></div></div>
-                <div class="campaign-builder-field"><label>Ring / Silence</label><div id="slideCampaignRingSilence" class="campaign-builder-value"></div></div>
-              </div>
-              <div class="campaign-toggle-list" style="margin-top:10px">
-                <div class="campaign-toggle">Store transcripts<span class="campaign-switch" data-campaign-toggle="campaignStoreTranscripts"></span></div>
-                <div class="campaign-toggle">Call recording<span class="campaign-switch" data-campaign-toggle="campaignCallRecording"></span></div>
-                <div class="campaign-toggle">Voicemail detection<span class="campaign-switch" data-campaign-toggle="campaignVoicemail"></span></div>
-                <div class="campaign-toggle">End-of-conversation hangup<span class="campaign-switch" data-campaign-toggle="campaignEndHangup"></span></div>
-                <div class="campaign-toggle">Silence hangup<span class="campaign-switch" data-campaign-toggle="campaignSilenceHangup"></span></div>
-                <div class="campaign-toggle">Fax detection hangup<span class="campaign-switch" data-campaign-toggle="campaignFaxHangup"></span></div>
-              </div>
-            </section>
-            <section class="campaign-builder-section">
-              <h4>Transfer to Human &amp; Call Analysis</h4>
-              <div class="campaign-toggle-list">
-                <div class="campaign-toggle">Transfer to human<span class="campaign-switch" data-campaign-toggle="campaignTransfer"></span></div>
-                <div class="campaign-toggle">Post Call Data Extraction<span class="campaign-switch" data-campaign-toggle="campaignPostCallExtraction"></span></div>
-              </div>
-            </section>
-          </div>
-        </div>
-        <div class="campaign-builder-footer"><small>Review the required fields, then schedule.</small><button class="schedule-campaign-button" type="button"><span class="schedule-campaign-icon" aria-hidden="true">🚀</span>Schedule campaign</button></div>
-      </div>
-      <div class="speaker-notes">
-        <p>Have attendees name the campaign, select the agent they just created, and select their assigned outbound number. If Studio says <strong>No deployed agent option is available yet</strong>, return to the agent and deploy it before continuing.</p>
-        <p>For the workshop, launch immediately and keep the campaign to one consented test contact. Explain timezone and call windows, then point out pacing, concurrency, call-duration limits, recording/transcript controls, voicemail detection, hangup behavior, transfer, and post-call extraction without changing every advanced default.</p>
-        <p>The finish action on this screen is <strong>Schedule campaign</strong>. Pause before pressing it until the whole room is ready, then remind attendees that outbound calling requires consent and compliance with applicable calling rules.</p>
-      </div>
-    </section>
-
-    <section class="slide centered" data-slide-id="phone-rings" data-title="Your phone rings" data-section="Agent Studio" data-cue="6:44" data-studio-controls="true">
-      <p class="eyebrow">Step 5 · Make a call</p>
-      <h2>Your first Voice AI agent is <span class="accent">calling you.</span></h2>
-      <div id="callUi" class="call-ui">
-        <div class="call-header">
-          <div class="avatar">AI</div>
-          <div class="call-meta"><h3 data-template-field="name"></h3><p id="callSubtitle">Campaign ready · 1 contact</p></div>
-          <span id="callStatus" class="call-status">READY</span>
-        </div>
-        <div class="waveform" aria-hidden="true">
-          <span style="--h:28px;--d:-.1s"></span><span style="--h:68px;--d:-.5s"></span><span style="--h:94px;--d:-.3s"></span><span style="--h:48px;--d:-.7s"></span><span style="--h:112px;--d:-.2s"></span><span style="--h:74px;--d:-.6s"></span><span style="--h:38px;--d:-.4s"></span><span style="--h:86px;--d:-.8s"></span><span style="--h:52px;--d:-.15s"></span><span style="--h:24px;--d:-.55s"></span>
-        </div>
-        <div class="call-actions"><button id="demoCallButton" class="primary-button" type="button">Start the room call</button></div>
-      </div>
-      <div class="speaker-notes">
-        <p>This visual accompanies the real campaign; it does not place the call. Press <strong>Start the room call</strong> as you launch the campaign in Studio.</p>
-        <p>Let the room experience the calls. Ask two attendees whether their dynamic details were spoken correctly. Finish Studio by 6:45.</p>
-      </div>
-    </section>
-
     <section class="slide compact" data-slide-id="two-code-paths" data-title="Two code paths" data-section="Code workshop" data-cue="6:47" data-technical="true">
-      <p class="eyebrow">Agents 02 + 03 · code</p>
-      <h2>Two code paths. <span class="accent">Two different jobs.</span></h2>
+      <p class="eyebrow">Agents 01 + 02 · code</p>
+      <h2>The CLI quickstart and <span class="accent">your own agent</span></h2>
       <div class="shared-workspace-strip">
         <div>
-          <span class="card-number" style="margin-bottom:6px">Next up · Agents 02 + 03</span>
-          <strong>You’ll build two more agents with code.</strong>
+          <span class="card-number" style="margin-bottom:6px">Next up · Agents 01 + 02</span>
+          <strong>Quickstart → Recipes → Skills</strong>
         </div>
         <button id="workspaceStartButton" class="primary-button" type="button">Start the code workshop →</button>
       </div>
       <div class="code-paths-overview">
         <article id="cliPathCard" class="code-path-card">
-          <span class="code-path-label">Path A · Agent 02</span>
-          <h3>Agora CLI: prove the baseline</h3>
-          <p>Scaffold the official quickstart, run it unchanged, then inspect the generated agent.</p>
+          <span class="code-path-label">Path A · Agent 01</span>
+          <h3>CLI: run the official quickstart</h3>
+          <p>Run the quickstart, inspect the agent, then explore recipes with the CLI.</p>
           <nav id="cliStageRail" class="code-stage-rail cli-code-rail" aria-label="Agora CLI path">
             <button class="code-stage-button active" type="button" data-code-scope="cli" data-code-stage="1" aria-current="step"><span class="code-stage-number">01</span><span><strong>Install + authenticate</strong></span></button>
             <button class="code-stage-button" type="button" data-code-scope="cli" data-code-stage="2"><span class="code-stage-number">02</span><span><strong>Scaffold quickstart</strong></span></button>
-            <button class="code-stage-button" type="button" data-code-scope="cli" data-code-stage="3"><span class="code-stage-number">03</span><span><strong>Run the baseline</strong></span></button>
+            <button class="code-stage-button" type="button" data-code-scope="cli" data-code-stage="3"><span class="code-stage-number">03</span><span><strong>Run the quickstart</strong></span></button>
             <button class="code-stage-button" type="button" data-code-scope="cli" data-code-stage="4"><span class="code-stage-number">04</span><span><strong>Inspect the agent</strong></span></button>
+            <button class="code-stage-button" type="button" data-code-scope="cli" data-code-stage="5"><span class="code-stage-number">05</span><span><strong>Explore recipes</strong></span></button>
           </nav>
         </article>
         <article id="skillsPathCard" class="code-path-card skills-path">
-          <span class="code-path-label">Path B · Agent 03</span>
-          <h3>Agora Skills: build the product</h3>
-          <p>Guide a coding agent to build a custom website SDR.</p>
+          <span class="code-path-label">Path B · Agent 02</span>
+          <h3>Skills: build your own use case</h3>
+          <p>Describe your use case; let the agent reference Agora Recipes.</p>
           <nav id="skillsStageRail" class="code-stage-rail skills-code-rail" aria-label="Agora Skills path">
             <button class="code-stage-button active" type="button" data-code-scope="skills" data-code-stage="1" aria-current="step"><span class="code-stage-number">01</span><span><strong>Install Agora Skills</strong></span></button>
-            <button class="code-stage-button" type="button" data-code-scope="skills" data-code-stage="2"><span class="code-stage-number">02</span><span><strong>Give the product brief</strong></span></button>
+            <button class="code-stage-button" type="button" data-code-scope="skills" data-code-stage="2"><span class="code-stage-number">02</span><span><strong>Describe your use case</strong></span></button>
             <button class="code-stage-button" type="button" data-code-scope="skills" data-code-stage="3"><span class="code-stage-number">03</span><span><strong>Run locally</strong></span></button>
-            <button class="code-stage-button" type="button" data-code-scope="skills" data-code-stage="4"><span class="code-stage-number">04</span><span><strong>Talk to your SDR</strong></span></button>
+            <button class="code-stage-button" type="button" data-code-scope="skills" data-code-stage="4"><span class="code-stage-number">04</span><span><strong>Test your agent</strong></span></button>
           </nav>
         </article>
       </div>
       <div class="speaker-notes">
-        <p>Do not describe this as one continuous code section. The CLI gives a known-good official baseline; Skills guide a coding agent to create a different custom product.</p>
-        <p>Use this slide to reset the room after the Studio call. Attendees will run the official agent first, inspect how it works, then build the custom SDR. Click <strong>Start the code workshop</strong> to begin setup.</p>
+        <p>Explain the roles: the CLI sets up projects, Recipes supply working examples, and Skills guide the coding agent as it adapts an example.</p>
+        <p>Introduce the two code paths. Attendees run the quickstart, inspect its code, explore and scaffold a recipe with the CLI, then use Skills and Recipes to build their own use case. Click <strong>Start the code workshop</strong> to begin setup.</p>
       </div>
     </section>
 
     <section class="slide command-highlight-slide" data-slide-id="install-cli" data-title="Install the Agora CLI" data-section="Agora CLI" data-cue="6:51" data-technical="true">
       <p class="eyebrow">Install once</p>
-      <h2>Open your terminal and <span class="accent">install the CLI.</span></h2>
+      <h2>Install the <span class="accent">Agora CLI</span></h2>
       <div class="terminal workspace-terminal install-cli-terminal">
         <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-title">Terminal</span></div>
         <div class="terminal-body">
@@ -2518,9 +2347,9 @@
       </div>
     </section>
 
-    <section class="slide" data-slide-id="authenticate-cli" data-title="Authenticate the CLI" data-section="Agora CLI" data-cue="6:53" data-technical="true">
+    <section class="slide overview-slide" data-slide-id="authenticate-cli" data-title="Authenticate the CLI" data-section="Agora CLI" data-cue="6:53" data-technical="true">
       <p class="eyebrow">Connect your individual Agora account</p>
-      <h2>Authenticate once. <span class="accent">Keep every project isolated.</span></h2>
+      <h2>Sign in with <span class="accent">the CLI</span></h2>
       <div class="terminal workspace-terminal">
         <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-title">Terminal</span></div>
         <div class="terminal-body">
@@ -2537,10 +2366,10 @@
       </div>
     </section>
 
-    <section class="slide workspace-launch-slide" data-slide-id="open-terminal" data-title="Create the project folder" data-section="Agent 02 · Setup" data-cue="6:54" data-technical="true">
+    <section class="slide workspace-launch-slide" data-slide-id="open-terminal" data-title="Create the project folder" data-section="Agent 01 · Setup" data-cue="6:54" data-technical="true">
       <div class="workspace-launch-copy">
-        <p class="eyebrow">Agent 02 · Setup</p>
-        <h2>Create the project folder.</h2>
+        <p class="eyebrow">Agent 01 · Setup</p>
+        <h2>Create the <span class="accent">workshop folder</span></h2>
       </div>
       <div class="terminal workspace-terminal">
         <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-title">Terminal</span></div>
@@ -2558,7 +2387,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
 
     <section class="slide" data-slide-id="initialize-quickstart" data-title="Initialize the quickstart" data-section="Agora CLI" data-cue="6:55" data-technical="true">
       <p class="eyebrow">Selected track · <span data-track-field="label"></span></p>
-      <h2>Ask the CLI for the <span class="accent">official quickstart.</span></h2>
+      <h2>Create the <span class="accent">official quickstart</span></h2>
       <div class="terminal">
         <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-title">Terminal</span></div>
         <div class="terminal-body"><button class="copy-button" type="button" data-copy-target="initCommand">Copy</button><pre id="initCommand"></pre></div>
@@ -2572,7 +2401,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
 
     <section class="slide" data-slide-id="run-quickstart" data-title="Run the untouched quickstart" data-section="Agora CLI" data-cue="7:00" data-technical="true">
       <p class="eyebrow">No customization yet</p>
-      <h2>Install. Run. <span class="accent">Prove the baseline.</span></h2>
+      <h2>Run the <span class="accent">quickstart</span></h2>
       <div class="command-steps quickstart-steps" role="tablist" aria-label="Quickstart commands">
         <button class="choice-button active" type="button" data-command-scope="quickstart" data-command-step="enter">1 · Enter project</button>
         <button class="choice-button" type="button" data-command-scope="quickstart" data-command-step="install">2 · Set up</button>
@@ -2590,8 +2419,8 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
     </section>
 
     <section class="slide compact" data-slide-id="open-agent-file" data-title="Open the agent file" data-section="Inside an Agora Agent" data-cue="7:07" data-technical="true">
-      <p class="eyebrow">Before Skills · understand the structure</p>
-      <h2>This file turns configuration into a <span class="accent">realtime participant.</span></h2>
+      <p class="eyebrow">Quickstart code</p>
+      <h2>Inside the <span class="accent">agent file</span></h2>
       <div class="file-tree">
         <div id="agentTree" class="tree"></div>
         <div class="code-panel"><pre id="agentCode"></pre></div>
@@ -2602,24 +2431,24 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       </div>
     </section>
 
-    <section class="slide" data-slide-id="agent-definition" data-title="The agent definition" data-section="Inside an Agora Agent" data-cue="7:12" data-technical="true">
-      <p class="eyebrow">Five ideas to recognize</p>
-      <h2>The language changes. <span class="accent">The architecture stays familiar.</span></h2>
+    <section class="slide overview-slide" data-slide-id="agent-definition" data-title="The agent definition" data-section="Inside an Agora Agent" data-cue="7:12" data-technical="true">
+      <p class="eyebrow">Agent code</p>
+      <h2>Four parts of <span class="accent">the agent code</span></h2>
       <div class="grid four">
         <article class="card"><span class="card-number">01</span><h3>Import AgentKit</h3><p>Bring the Agora agent runtime into the project.</p></article>
         <article class="card"><span class="card-number">02</span><h3>Define behavior</h3><p>Instructions, greeting, and conversation boundaries.</p></article>
         <article class="card"><span class="card-number">03</span><h3>Configure media</h3><p>Channel behavior, voice settings, and AI Noise Suppression.</p></article>
         <article class="card"><span class="card-number">04</span><h3>Start and stop</h3><p>Create the on-demand agent session and clean it up.</p></article>
       </div>
-      <p class="lede">This is the baseline you’ll compare against the Skills-generated project.</p>
+      <p class="lede">Your custom agent will use these same building blocks.</p>
       <div class="speaker-notes">
         <p>Make the comparison explicit: the CLI gave us a minimal, known-good agent. Skills will create a product around the same core concepts.</p>
       </div>
     </section>
 
-    <section class="slide" data-slide-id="install-agent-sdk" data-title="Install the Agent SDK" data-section="Inside an Agora Agent" data-cue="7:14" data-technical="true">
+    <section class="slide overview-slide" data-slide-id="install-agent-sdk" data-title="Install the Agent SDK" data-section="Inside an Agora Agent" data-cue="7:14" data-technical="true">
       <p class="eyebrow">SDK for · <span id="sdkPreviewLabel"></span></p>
-      <h2>The SDK command changes. <span class="accent">The agent lifecycle does not.</span></h2>
+      <h2>Agent SDKs for <span class="accent">Python, TypeScript, and Go</span></h2>
       <div id="sdkTrackSteps" class="command-steps quickstart-steps" role="tablist" aria-label="Agent SDK languages">
         <button class="choice-button" type="button" data-sdk-track="python">Python</button>
         <button class="choice-button" type="button" data-sdk-track="nextjs">TypeScript</button>
@@ -2641,7 +2470,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
 
     <section class="slide" data-slide-id="managed-keys-byok" data-title="Managed keys and BYOK" data-section="Inside an Agora Agent" data-cue="7:15" data-technical="true">
       <p class="eyebrow">Model credentials</p>
-      <h2>Move fast with managed keys. <span class="accent">Bring your own when you need control.</span></h2>
+      <h2>Managed keys and <span class="accent">your own API keys</span></h2>
       <div class="grid model-credential-grid">
         <article class="card selected"><span id="modelSttMode" class="card-number">STT · Managed keys</span><h3 id="modelSttProvider">Agora managed</h3><p id="modelSttDetail">Speech-to-text is ready without a separate provider account.</p></article>
         <article class="card selected"><span id="modelLlmMode" class="card-number">LLM · Managed keys</span><h3 id="modelLlmProvider">Agora managed</h3><p id="modelLlmDetail">The language model is ready without a separate provider account.</p></article>
@@ -2658,30 +2487,85 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       </div>
     </section>
 
-    <section class="slide" data-slide-id="return-workshop-root" data-title="Return to the workshop root" data-section="Agora Skills" data-cue="7:17" data-technical="true">
+    <section class="slide" data-slide-id="return-workshop-root" data-title="Return to the workshop root" data-section="Agora Recipes" data-cue="7:17" data-technical="true">
       <p class="eyebrow">Keep the projects separate</p>
-      <h2>Leave the quickstart intact. <span class="accent">Build beside it.</span></h2>
+      <h2>Return to <span class="accent">the workshop folder</span></h2>
       <div class="terminal">
         <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-title">Terminal</span></div>
         <div class="terminal-body"><button class="copy-button" type="button" data-copy-target="returnRootCommand">Copy</button><pre id="returnRootCommand">cd ..</pre></div>
       </div>
       <div class="grid two">
-        <article class="card selected"><span class="card-number">Preserve</span><h3 class="mono">agent-quickstart/</h3><p>The known-good baseline remains untouched for comparison.</p></article>
-        <article class="card"><span class="card-number">Create next</span><h3 class="mono">website-sdr/</h3><p>Agora Skills will guide the coding agent to create a separate product.</p></article>
+        <article class="card selected"><span class="card-number">Preserve</span><h3 class="mono">agent-quickstart/</h3><p>Keep the working quickstart for reference.</p></article>
+        <article class="card"><span class="card-number">Explore next</span><h3 class="mono">recipe-demo/</h3><p>Use the CLI to scaffold a recipe in a separate folder.</p></article>
       </div>
-      <div class="speaker-notes"><p>Confirm the terminal prompt is back at <strong>agora_agents_workshop</strong> before installing Skills.</p></div>
+      <div class="speaker-notes"><p>Confirm the terminal prompt is back at <strong>agora_agents_workshop</strong> before exploring recipes. Keep the terminal here after the recipe demo so Skills can create a separate project for your use case.</p></div>
     </section>
 
-    <section class="slide" data-slide-id="install-agora-skills" data-title="Install Agora Skills" data-section="Agora Skills" data-cue="7:18" data-technical="true">
-      <p class="eyebrow">Agent 03 · install intelligence at the project root</p>
-      <h2>Give your coding agent <span class="accent">Agora-specific judgment.</span></h2>
+    <section class="slide overview-slide" data-slide-id="agora-recipes" data-title="Agora Recipes" data-section="Agora Recipes" data-cue="7:18" data-technical="true">
+      <p class="eyebrow">Quickstart → Recipes → Skills</p>
+      <h2>Start with <span class="accent">a working recipe</span></h2>
+      <p class="lede">Find an example for the feature you need, then read its code and setup guide.</p>
+      <div class="grid">
+        <article class="card"><span class="card-number">Tool Calling</span><h3>Give the agent tools</h3><p>Run functions during a conversation and recall stored results.</p></article>
+        <article class="card"><span class="card-number">RAG</span><h3>Add your knowledge</h3><p>Ground answers in a knowledge base.</p></article>
+        <article class="card"><span class="card-number">Dynamic Instructions</span><h3>Update the behavior</h3><p>Change the agent’s instructions during a session.</p></article>
+      </div>
+      <div class="meta-row"><a class="primary-button" href="https://recipes.agora.io/" target="_blank" rel="noreferrer">Browse Agora Recipes ↗</a></div>
+      <div class="speaker-notes">
+        <p>Open the catalog, filter by platform, and show a recipe’s source repository, README, CLI command, and coding-agent prompt. Recipes provide working examples; Skills help a coding agent use and adapt them.</p>
+        <p>Let each developer choose a recipe from the catalog. Check its runtime and prerequisites; platform labels can refer to different parts of the app. Browsing now helps developers describe a use case; the Skills prompt will let the coding agent find relevant recipes.</p>
+        <p>Sources: <a href="https://recipes.agora.io/">Agora Recipes</a>, <a href="https://recipes.agora.io/recipes/tool-calling">Tool Calling</a>, <a href="https://recipes.agora.io/recipes/rag">RAG</a>, <a href="https://recipes.agora.io/recipes/dynamic-instructions">Dynamic Instructions</a>.</p>
+      </div>
+    </section>
+
+    <section class="slide" data-slide-id="discover-recipes" data-title="Find a recipe with the CLI" data-section="Agora Recipes" data-cue="7:19" data-technical="true">
+      <p class="eyebrow">Agora Recipes · Discover</p>
+      <h2>Find and inspect <span class="accent">a recipe</span></h2>
+      <div class="terminal">
+        <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-title">Terminal · list voice AI recipes</span></div>
+        <div class="terminal-body"><button class="copy-button" type="button" data-copy-target="recipeListCommand">Copy</button><pre id="recipeListCommand">agora recipes list --type ai</pre></div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-title">Terminal · inspect your choice</span></div>
+        <div class="terminal-body"><button class="copy-button" type="button" data-copy-target="recipeShowCommand">Copy</button><pre id="recipeShowCommand">agora recipes show RECIPE_SLUG</pre></div>
+      </div>
+      <p class="lede">Replace <code>RECIPE_SLUG</code> with the slug from the catalog. Check its runtime and setup commands.</p>
+      <div class="speaker-notes">
+        <p>Run list, then show. Explain that these commands only read the catalog; they do not create files or projects. Add --json when a coding agent needs structured metadata.</p>
+        <p>Source: <a href="https://github.com/AgoraIO/cli#recipes">Agora CLI recipe discovery</a>. Ask developers to copy the exact slug from the CLI list. The website also includes community recipes; confirm CLI initialization support in the recipe details.</p>
+      </div>
+    </section>
+
+    <section class="slide overview-slide" data-slide-id="initialize-recipe" data-title="Create a project from a recipe" data-section="Agora Recipes" data-cue="7:21" data-technical="true">
+      <p class="eyebrow">Agora Recipes · Scaffold</p>
+      <h2>Create a project <span class="accent">from the recipe</span></h2>
+      <div class="terminal">
+        <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-title">Terminal · from agora_agents_workshop/</span></div>
+        <div class="terminal-body"><button class="copy-button" type="button" data-copy-target="recipeInitCommand">Copy</button><pre id="recipeInitCommand">agora init recipe-demo --recipe RECIPE_SLUG</pre></div>
+      </div>
+      <div class="grid two">
+        <article class="card"><span class="card-number">CLI setup</span><h3>Clone and configure</h3><p>The CLI clones the recipe, binds an Agora project, and writes the recipe’s environment file.</p></article>
+        <article class="card"><span class="card-number">Recipe-specific setup</span><h3>Follow the printed next steps</h3><p>Use the recipe’s install and run commands. Its runtime may differ from your quickstart.</p></article>
+      </div>
+      <p class="lede">Next, use Skills and the recipe reference to build <span class="accent">your own version</span>.</p>
+      <div class="speaker-notes">
+        <p>Replace RECIPE_SLUG with your chosen recipe’s slug. Run init from the workshop root and select your workshop project. Use --project with the attendee’s project name or ID when explicit selection is needed. Recipe initialization does not use --template; the recipe determines its own runtime.</p>
+        <p>Show the printed next steps and README. If you enter recipe-demo to run it, stop the development server and run cd .. before continuing. Attendees do not need to finish a third app; the required builds remain the quickstart and their own Skills project.</p>
+        <p>Check that the chosen recipe has CLI initialization metadata. If it does not, use its README and repository instructions. Some recipes persist data or call external services. For the presenter’s SDR example, add simulated lead submission to the context.</p>
+        <p>Sources: <a href="https://github.com/AgoraIO/cli#init">Agora CLI init</a> and <a href="https://recipes.agora.io/">Agora Recipes catalog</a>.</p>
+      </div>
+    </section>
+
+    <section class="slide overview-slide" data-slide-id="install-agora-skills" data-title="Install Agora Skills" data-section="Agora Skills" data-cue="7:23" data-technical="true">
+      <p class="eyebrow">Agent 02 · Project setup</p>
+      <h2>Install <span class="accent">Agora Skills</span></h2>
       <div class="terminal">
         <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-title">Terminal</span></div>
         <div class="terminal-body"><button class="copy-button" type="button" data-copy-target="skillsCommand">Copy</button><pre id="skillsCommand">npx skills add agoraio/skills</pre></div>
       </div>
       <div class="grid two">
-        <article class="card"><span class="card-number">Local installation</span><h3>Skills live with the workshop project</h3><p>The coding agent launched from this root can discover the installed Agora guidance.</p></article>
-        <article class="card"><span class="card-number">Your choice of agent</span><h3>Codex, Claude Code, Gemini, OpenCode, Composer…</h3><p>The prepared product brief and desired outcome stay the same.</p></article>
+        <article class="card"><span class="card-number">Local installation</span><h3>Install in the workshop folder</h3><p>The coding agent launched from this root can discover the installed Agora guidance.</p></article>
+        <article class="card"><span class="card-number">Your choice of agent</span><h3>Use your preferred coding agent</h3><p>Open your coding agent in the workshop folder for a new demo, or in your existing app, then choose the matching prompt.</p></article>
       </div>
       <div class="speaker-notes">
         <p>Run this command from <strong>agora_agents_workshop</strong>, not from inside <strong>agent-quickstart</strong>.</p>
@@ -2689,45 +2573,48 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       </div>
     </section>
 
-    <section class="slide compact build-prompt-slide" data-slide-id="build-prompt" data-title="The build prompt" data-section="Agora Skills" data-cue="7:22" data-technical="true">
-      <p class="eyebrow">One concise brief · shared with everyone</p>
-      <h2>Describe the product. <span class="accent">Let the Skills guide the implementation.</span></h2>
+    <section class="slide compact build-prompt-slide" data-slide-id="build-prompt" data-title="The build prompt" data-section="Agora Skills" data-cue="7:25" data-technical="true">
+      <p class="eyebrow">Agent 02 · Build instructions</p>
+      <h2>Describe <span class="accent">your use case</span></h2>
+      <div class="command-steps" role="group" aria-label="Choose a prompt">
+        <button class="choice-button active" type="button" data-prompt-mode="new" aria-pressed="true">New app / demo</button>
+        <button class="choice-button" type="button" data-prompt-mode="existing" aria-pressed="false">Existing app</button>
+      </div>
       <div class="prompt-layout">
         <div class="prompt-card"><button class="copy-button" type="button" data-copy-target="buildPrompt">Copy prompt</button><pre id="buildPrompt"></pre></div>
         <aside class="acceptance">
-          <div class="acceptance-item">Creates <span class="mono">website-sdr/</span></div>
-          <div class="acceptance-item">Uses the selected <span data-track-field="label"></span> track</div>
-          <div class="acceptance-item">Collects lead details by voice</div>
-          <div class="acceptance-item">Simulates submission in the system prompt</div>
-          <div class="acceptance-item">Enables Agora AI Noise Suppression</div>
-          <button id="downloadPromptButton" class="secondary-button" type="button">Download PROMPT.md</button>
+          <span class="card-number">Make it yours</span>
+          <p>Replace <strong>[your use case]</strong> with what you want to build. The agent can find relevant <a href="https://recipes.agora.io/" target="_blank" rel="noreferrer">recipes ↗</a>.</p>
+          <p><strong>Example</strong><br>A voice agent for my website that asks visitors what they need and collects sales leads.</p>
+          <button id="downloadPromptButton" class="secondary-button" type="button">Download prompt</button>
         </aside>
       </div>
       <div class="speaker-notes">
-        <p>Attendees copy this exact prompt from the hosted deck or download it as PROMPT.md. Do not ask them to transcribe it from the projector.</p>
-        <p>The action is intentionally simulated through the system prompt. A presenter may show an enhanced hosted version with a real MCP or custom LLM integration, but that is not required for attendee success.</p>
+        <p>New app / demo is selected by default. Choose Existing app when working in an existing project, then copy or download the prompt and replace only [your use case]. The coding agent uses the Agora Recipes catalog to find relevant examples. Participants may include audience, language, or other context in their use-case description, but no other fields are required.</p>
+        <p>Use a website SDR as the presenter’s example. Participants choose their own use case. Ask the coding agent to explain which recipes it referenced, and review its local run instructions. Keep the original quickstart in its own folder.</p>
+        <p>For the presenter’s SDR demo, include simulated lead submission in your context. Do not require everyone to reproduce that demo or use every feature it includes.</p>
       </div>
     </section>
 
-    <section class="slide centered" data-slide-id="let-agent-build" data-title="Let the agent build" data-section="Agora Skills" data-cue="7:25" data-technical="true">
+    <section class="slide centered" data-slide-id="let-agent-build" data-title="Let the agent build" data-section="Agora Skills" data-cue="7:27" data-technical="true">
       <p class="eyebrow">Create from the workshop root</p>
-      <h2>Your coding agent reads the Skills and creates <span class="accent mono">website-sdr/</span>.</h2>
+      <h2>Build <span class="accent">your version</span></h2>
       <div class="flow" style="width:min(1120px,100%); text-align:left;">
-        <article class="flow-step"><span class="step-index">1</span><b>Read the brief</b><p>Understand product behavior and finish criteria.</p></article>
-        <article class="flow-step"><span class="step-index">2</span><b>Use Agora Skills</b><p>Choose the correct official architecture and APIs.</p></article>
-        <article class="flow-step"><span class="step-index">3</span><b>Create project</b><p>Build a separate website SDR in the selected track.</p></article>
+        <article class="flow-step"><span class="step-index">1</span><b>Find references</b><p>Find recipes relevant to your use case.</p></article>
+        <article class="flow-step"><span class="step-index">2</span><b>Use Agora Skills</b><p>Read the recipe guides and use Agora’s implementation guidance.</p></article>
+        <article class="flow-step"><span class="step-index">3</span><b>Adapt the example</b><p>Create your app in its own project folder.</p></article>
         <article class="flow-step"><span class="step-index">4</span><b>Verify</b><p>Install dependencies and check the project locally.</p></article>
-        <article class="flow-step"><span class="step-index">5</span><b>Hand back</b><p>Explain what was created and how to run it.</p></article>
+        <article class="flow-step"><span class="step-index">5</span><b>Test your goal</b><p>Try the conversation or action you asked for.</p></article>
       </div>
       <div class="speaker-notes">
         <p>Let attendees watch their coding agent work. Helpers focus on permissions, missing runtimes, and project-root mistakes.</p>
-        <p>The goal is one working agent. Do not add a second customization exercise.</p>
+        <p>Help participants finish one working version of their chosen idea. The presenter continues with website-sdr as the example.</p>
       </div>
     </section>
 
     <section class="slide" data-slide-id="run-website-sdr" data-title="Run website-sdr" data-section="Agora Skills" data-cue="7:34" data-technical="true">
-      <p class="eyebrow">Install and run the generated product</p>
-      <h2>One more local install. <span class="accent">One custom agent.</span></h2>
+      <p class="eyebrow">Run locally · Website SDR example</p>
+      <h2>Run and test <span class="accent">your project</span></h2>
       <div class="command-steps quickstart-steps" role="tablist" aria-label="Website SDR commands">
         <button class="choice-button active" type="button" data-command-scope="sdr" data-command-step="enter">1 · Enter project</button>
         <button class="choice-button" type="button" data-command-scope="sdr" data-command-step="install">2 · Install</button>
@@ -2737,23 +2624,23 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span id="sdrCommandLabel" class="terminal-title">Terminal</span></div>
         <div class="terminal-body"><button class="copy-button" type="button" data-copy-target="sdrCommand">Copy</button><pre id="sdrCommand" class="quickstart-command"></pre></div>
       </div>
-      <div class="meta-row"><span class="status-chip">Project tooling · <strong data-package-field="label"></strong></span><span class="status-chip success">Finish line · local conversation</span></div>
+      <div class="meta-row"><span class="status-chip">Project tooling · <strong data-package-field="label"></strong></span><span class="status-chip success">Test with a voice conversation</span></div>
       <div class="speaker-notes">
-        <p>Walk through dependency installation and the development command. Tooling follows the selected track automatically: Bun for Python, pnpm for TypeScript, and Make for Go.</p>
+        <p>These commands demonstrate website-sdr. Participants use their own project folder and the generated README’s install and run instructions. Ask each participant to test the goal they gave their coding agent.</p>
         <p>If the coding agent generated different run instructions for the selected language, follow the project’s verified README and update this configuration before the event.</p>
       </div>
     </section>
 
     <section class="slide compact" data-slide-id="speak-with-sdr" data-title="Speak with your SDR" data-section="Agora Skills" data-cue="7:39" data-technical="true">
-      <p class="eyebrow">Agent 03 · payoff</p>
+      <p class="eyebrow">Test the conversation · Website SDR example</p>
       <div class="agent-screen">
         <div class="agent-hero">
           <div>
-            <span class="status-chip success">Agora Voice AI · ready</span>
-            <h3 style="margin-top:22px">Meet your always-on Voice AI SDR.</h3>
-            <p>It qualifies prospects, understands what they want to build, and can help book appointments while you sleep.</p>
+            <span class="status-chip success">Workshop demo</span>
+            <h3 style="margin-top:22px">Test your voice agent</h3>
+            <p>Open your local app and introduce yourself. Check that the agent collects your details and summarizes your use case.</p>
           </div>
-          <div><button id="talkButton" class="talk-button" type="button">Talk</button><p id="talkState" class="microcopy" style="margin-top:18px">Click to preview the live state.</p></div>
+          <div><button id="talkButton" class="talk-button" type="button">Preview</button><p id="talkState" class="microcopy" style="margin-top:18px">Preview only. Test voice in your local app.</p></div>
         </div>
         <aside class="agent-summary">
           <span class="field-label">Lead handoff</span>
@@ -2766,16 +2653,16 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       </div>
       <div class="speaker-notes">
         <p>Everyone tests together with headphones. Agora AI Noise Suppression is enabled in the generated agent. Use staggered waves only if the room becomes unmanageable.</p>
-        <p>Completion requires a short voice conversation that collects the lead details and performs the transparent simulated submission.</p>
+        <p>For the SDR example, check lead collection and simulated submission. For another idea, test the behavior specified in the participant’s context.</p>
       </div>
     </section>
 
     <section class="slide" data-slide-id="optional-finish" data-title="Optional finish steps" data-section="Keep building" data-cue="7:45" data-technical="true">
-      <p class="eyebrow">Local success is the finish line</p>
-      <h2>Want to share it? <span class="accent">Pick one optional next step.</span></h2>
+      <p class="eyebrow">Optional · After the local test</p>
+      <h2>Share or deploy <span class="accent">your agent</span></h2>
       <div class="ship-grid">
         <article class="ship-card"><div><span class="card-number">Five-minute preview</span><h3>Cloudflare Quick Tunnel</h3><p>Create a temporary public HTTPS URL, then stop it with Ctrl+C.</p></div><button id="tunnelCommandButton" class="secondary-button" type="button">Copy tunnel command</button></article>
-        <article class="ship-card" data-provider="vercel"><div><span class="card-number">TypeScript · Next.js quickstart</span><h3>Deploy with Vercel</h3><p>Use the quick-deploy path after the Next.js starter passes rehearsal.</p></div><a class="ship-link" href="https://vercel.com/new" target="_blank" rel="noreferrer">Open Vercel ↗</a></article>
+        <article class="ship-card" data-provider="vercel"><div><span class="card-number">TypeScript · Next.js quickstart</span><h3>Deploy with Vercel</h3><p>Deploy the Next.js app after it runs locally.</p></div><a class="ship-link" href="https://vercel.com/new" target="_blank" rel="noreferrer">Open Vercel ↗</a></article>
         <article class="ship-card" data-provider="render"><div><span class="card-number">Python · Go tracks</span><h3>Deploy with Render</h3><p>Run a conventional web service with a track-specific Blueprint.</p></div><a class="ship-link" href="https://render.com/deploy" target="_blank" rel="noreferrer">Open Render ↗</a></article>
       </div>
       <div class="meta-row"><span class="status-chip warning">Use demo data only</span><span class="status-chip">A tunnel exposes your local development server</span></div>
@@ -2785,13 +2672,12 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       </div>
     </section>
 
-    <section class="slide" data-slide-id="build-clinic" data-title="Build clinic" data-section="Build clinic" data-cue="7:47">
+    <section class="slide overview-slide" data-slide-id="build-clinic" data-title="Build clinic" data-section="Build clinic" data-cue="7:47">
       <p class="eyebrow">Open support <span class="timing-fragment">through 8:15</span></p>
-      <h2>Finish your agent. Test your idea. <span class="accent">Ask the specific question.</span></h2>
-      <div class="grid">
-        <article class="card"><span class="card-number">Studio support</span><h3>Templates, variables, SIP, campaigns</h3><p>Get the first agent working or explore another Studio template.</p></article>
+      <h2>Get help with <span class="accent">your build</span></h2>
+      <div class="grid two">
         <article class="card"><span class="card-number">CLI support</span><h3>Install, initialize, run, understand</h3><p>Resolve local environment issues and inspect the starter.</p></article>
-        <article class="card"><span class="card-number">Skills support</span><h3>Prompt, generation, local conversation</h3><p>Get website-sdr to the working voice finish line.</p></article>
+        <article class="card"><span class="card-number">Skills support</span><h3>Prompt, generation, local conversation</h3><p>Resolve generation errors and test a voice conversation.</p></article>
       </div>
       <div class="meta-row timing-only" aria-label="Closing timing targets"><span class="status-chip">Formal close at 8:20</span><span class="status-chip">Cleanup begins at 8:30</span></div>
       <div class="speaker-notes">
@@ -2802,14 +2688,14 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
     <section class="slide" data-slide-id="join-community" data-title="Join the community" data-section="Close" data-cue="8:15">
       <div class="qr-layout">
         <div>
-          <p class="eyebrow">Keep building with Agora</p>
-          <h2>Join Discord. Claim your <span class="accent">live-events badge.</span></h2>
-          <p class="lede">Meet other builders, get technical help, find the sample repository, and hear about the next monthly workshop.</p>
+          <p class="eyebrow">Community and support</p>
+          <h2>Join the <span class="accent">Agora Discord</span></h2>
+          <p class="lede">Get technical help, find the sample repository, and claim your live-events badge.</p>
           <div class="meta-row" style="margin-top:24px">
             <span class="status-chip success">Monthly in SF + NYC</span>
             <span class="status-chip">More cities coming</span>
           </div>
-          <p id="discordStatus" class="microcopy" style="margin-top:20px">The production invite QR is configured before each deployment.</p>
+          <p id="discordStatus" class="microcopy" style="margin-top:20px">Scan to join the community.</p>
         </div>
         <div class="qr-card"><img src="discord-qr-code.svg" alt="Discord live-events invite QR code"></div>
       </div>
@@ -2852,10 +2738,33 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         <button id="themeButton" class="icon-button theme-button" type="button" aria-label="Theme: System. Activate for Light theme." title="Theme: System"><span id="themeIcon" aria-hidden="true">◐</span></button>
         <button class="icon-button" type="button" data-close-drawer="hostDrawer" aria-label="Close host controls">×</button>
       </div>
+      <details class="host-network-config" open>
+        <summary>Saved events <span>Share a workshop for later</span></summary>
+        <div class="saved-event-grid">
+          <div class="setting"><label for="savedEventName">Event name</label><input id="savedEventName" type="text" maxlength="120" placeholder="New York workshop"></div>
+          <div class="event-button-row"><button id="newEventButton" class="pill-button" type="button">New event code</button><button id="saveEventButton" class="pill-button" type="button" disabled>Save changes</button></div>
+          <div class="setting"><label for="savedEventSelect">Previous events</label><select id="savedEventSelect"><option value="">Choose an event</option></select></div>
+          <div class="event-button-row"><button id="openEventButton" class="pill-button" type="button">Open event</button><button id="refreshEventsButton" class="pill-button" type="button">Refresh list</button><button id="moreEventsButton" class="pill-button" type="button" hidden>Load more</button></div>
+          <div class="setting"><label for="hostEventCodeInput">Open by code</label><input id="hostEventCodeInput" type="text" inputmode="numeric" maxlength="7" placeholder="482-193"></div>
+          <div class="event-button-row"><button id="openEventCodeButton" class="pill-button" type="button">Open code</button><button id="eventGoLiveButton" class="pill-button" type="button">Use settings live</button></div>
+        </div>
+        <div id="savedEventShare" class="saved-event-share" hidden><strong id="savedEventCode"></strong><a id="savedEventLink" target="_blank" rel="noopener"></a><button id="copyEventLinkButton" class="pill-button" type="button">Copy link</button></div>
+        <p id="savedEventStatus" class="host-network-note" role="status">Create an event from the current settings, or reopen a previous event.</p>
+        <p class="host-network-note">Changes to an open event save automatically. Opening a previous event pauses live sharing. Saved links open without a host.</p>
+      </details>
       <div class="host-control-grid">
-        <div class="setting"><label for="templateSelect">Agent Studio template</label><select id="templateSelect"><option value="blank">Blank Template</option><option value="appointment">Appointment Reminder</option><option value="nps">NPS Survey</option><option value="payment">Payment Reminder</option><option value="ivr">Interactive Voice Response</option><option value="ecommerce">Customer service for e-commerce</option><option value="sales">Sales / Lead qualification</option></select></div>
         <div class="setting"><label for="trackSelect">Code track</label><select id="trackSelect"><option value="python">Python · default</option><option value="nextjs">TypeScript</option><option value="go">Go</option></select></div>
       </div>
+      <details class="host-network-config" open>
+        <summary>Event details <span>Opening slide</span></summary>
+        <div class="host-network-grid">
+          <div class="setting"><label for="eventDateInput">Workshop date</label><input id="eventDateInput" type="date"></div>
+          <div class="setting"><label for="doorsTimeInput">Doors time</label><input id="doorsTimeInput" type="time" required></div>
+          <div class="setting"><label for="workshopTimeInput">Workshop start time</label><input id="workshopTimeInput" type="time" required></div>
+          <div class="setting"><label for="joinLinkInput">Bitly join link</label><input id="joinLinkInput" type="text" inputmode="url" autocomplete="off" maxlength="2048" placeholder="https://bit.ly/4xxH6Uf" required></div>
+        </div>
+        <p class="host-network-note">Times use the venue’s local time. Clear the date to use the selected city’s default. Changes are saved on this device and shared with the audience.</p>
+      </details>
       <details class="host-network-config">
         <summary>Venue Wi-Fi <span>Opening slide · host only</span></summary>
         <div class="host-network-grid">
@@ -2865,7 +2774,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         <p class="host-network-note">Shown only on the projected host opening slide. These values are not sent through signaling or included in saved audience decks.</p>
       </details>
       <details class="host-model-config">
-        <summary>Model credentials · Slide 26 <span>Managed or BYOK</span></summary>
+        <summary>Model credentials <span>Managed or BYOK</span></summary>
         <div class="host-model-grid">
           <div class="setting"><label for="sttProviderSelect">Speech-to-text</label><select id="sttProviderSelect">
             <option value="managed">Agora managed keys · default</option>
@@ -2882,46 +2791,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         </div>
         <p class="host-model-note">Provider selection only. Keep API keys and other secrets in the project environment—never in this presentation. Custom LLM uses the same API key, base URL, and model parameters.</p>
       </details>
-      <div id="hostSipConfig" class="host-sip-config" data-sip-mode="claim">
-        <div class="host-sip-intro"><strong>Workshop phone setup</strong><span>Use the email claim API for unique attendee assignments, or enter one set of values manually.</span></div>
-        <div class="setting"><label for="sipModeInput">Setup method</label><select id="sipModeInput"><option value="claim">Email claim API</option><option value="manual">Manual details</option></select></div>
-        <div class="setting" data-sip-claim-only><label for="sipClaimEventNameInput">Claim event name</label><input id="sipClaimEventNameInput" type="text" autocomplete="off" maxlength="64" placeholder="SFWRKSHP26"></div>
-        <div class="setting" data-sip-claim-only><label for="sipClaimHostEmailInput">Host claim email</label><input id="sipClaimHostEmailInput" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="host@example.com"></div>
-        <div class="setting" data-sip-manual-only><label for="sipPhoneInput">Phone number</label><input id="sipPhoneInput" type="tel" autocomplete="off" placeholder="+14155550123"></div>
-        <div class="setting" data-sip-manual-only><label for="sipProviderInput">Vendor</label><input id="sipProviderInput" type="text" autocomplete="off" placeholder="SIP Trunk"></div>
-        <div class="setting" data-sip-manual-only><label for="sipDisplayNameInput">Display name</label><input id="sipDisplayNameInput" type="text" autocomplete="off" placeholder="Support inbound"></div>
-        <div class="setting" data-sip-manual-only><label for="sipServerInput">SIP server / trunk</label><input id="sipServerInput" type="text" autocomplete="off" placeholder="sip.example.com"></div>
-        <div class="setting" data-sip-manual-only><label for="sipTransportInput">Transport</label><select id="sipTransportInput"><option value="tcp">TCP</option><option value="udp">UDP</option><option value="tls">TLS</option></select></div>
-        <div class="setting" data-sip-manual-only><label for="sipUsernameInput">SIP username</label><input id="sipUsernameInput" type="text" autocomplete="off" placeholder="workshop-user"></div>
-        <div class="setting" data-sip-manual-only><label for="sipPasswordInput">SIP password</label><input id="sipPasswordInput" type="password" autocomplete="new-password" placeholder="Enter event password"></div>
-      </div>
-      <details class="host-campaign-config">
-        <summary>Campaign screen · Slide 15 <span>Live controls</span></summary>
-        <div class="host-campaign-grid">
-          <div class="setting wide"><label for="campaignNameInput">Campaign name</label><input id="campaignNameInput" type="text" autocomplete="off" placeholder="Uses the selected template"></div>
-          <div class="setting wide"><label for="campaignAgentInput">AI agent</label><input id="campaignAgentInput" type="text" autocomplete="off" placeholder="Uses the selected template"></div>
-          <div class="setting"><label for="campaignLaunchInput">Launch</label><select id="campaignLaunchInput"><option value="Immediately">Immediately</option><option value="Scheduled">Scheduled</option></select></div>
-          <div class="setting wide"><label for="campaignTimezoneInput">Timezone</label><input id="campaignTimezoneInput" type="text" autocomplete="off"></div>
-          <div class="setting wide"><label for="campaignCallWindowInput">Call window</label><input id="campaignCallWindowInput" type="text" autocomplete="off"></div>
-          <div class="setting"><label for="campaignCallDelayInput">Call delay · ms</label><input id="campaignCallDelayInput" type="number" min="1" step="100" inputmode="numeric"></div>
-          <div class="setting"><label for="campaignConcurrencyInput">Concurrency</label><input id="campaignConcurrencyInput" type="number" min="1" step="1" inputmode="numeric"></div>
-          <div class="setting"><label for="campaignMaxCallInput">Max call · sec</label><input id="campaignMaxCallInput" type="number" min="1" step="1" inputmode="numeric"></div>
-          <div class="setting"><label for="campaignRingInput">Ring · sec</label><input id="campaignRingInput" type="number" min="1" step="1" inputmode="numeric"></div>
-          <div class="setting"><label for="campaignSilenceInput">Silence · sec</label><input id="campaignSilenceInput" type="number" min="1" step="1" inputmode="numeric"></div>
-        </div>
-        <div class="host-toggle-grid" aria-label="Campaign call settings">
-          <label class="host-toggle"><input id="campaignStoreTranscriptsInput" type="checkbox">Store transcripts</label>
-          <label class="host-toggle"><input id="campaignCallRecordingInput" type="checkbox">Call recording</label>
-          <label class="host-toggle"><input id="campaignVoicemailInput" type="checkbox">Voicemail detection</label>
-          <label class="host-toggle"><input id="campaignEndHangupInput" type="checkbox">End-of-conversation hangup</label>
-          <label class="host-toggle"><input id="campaignSilenceHangupInput" type="checkbox">Silence hangup</label>
-          <label class="host-toggle"><input id="campaignFaxHangupInput" type="checkbox">Fax detection hangup</label>
-          <label class="host-toggle"><input id="campaignTransferInput" type="checkbox">Transfer to human</label>
-          <label class="host-toggle"><input id="campaignPostCallExtractionInput" type="checkbox">Post-call extraction</label>
-        </div>
-      </details>
-    </div>
-    <div class="host-overlay-bottom">
       <div class="host-overlay-shortcuts"><strong>Shortcuts:</strong> H controls · N notes · T timings · O terminal OS · ← → slides · F full screen · ? help. Selections stay on this device.</div>
       <div class="host-overlay-actions">
         <button id="resetButton" class="secondary-button" type="button">Reset defaults</button>
@@ -2946,17 +2815,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
     </div>
   </dialog>
 
-  <dialog id="sipClaimDialog" class="sip-claim-dialog">
-    <form id="sipClaimForm" class="sip-claim-form">
-      <div class="drawer-header"><div><p class="eyebrow">Workshop phone number</p><h2>Claim your number</h2></div><button id="sipClaimClose" class="icon-button" type="button" aria-label="Close phone number claim">×</button></div>
-      <p class="sip-claim-copy">Enter the email you registered with for this workshop. Your assigned number and SIP details will appear on slide 14.</p>
-      <label for="sipClaimEmail">Email address<input id="sipClaimEmail" type="email" inputmode="email" autocomplete="email" required maxlength="254" placeholder="attendee@example.com"></label>
-      <p id="sipClaimError" class="sip-claim-error" role="alert"></p>
-      <p class="sip-claim-privacy">Your email and returned SIP credentials are used for this claim only and are not saved in the presentation archive or browser storage.</p>
-      <div class="sip-claim-actions"><button id="sipClaimCancel" class="secondary-button" type="button">Cancel</button><button id="sipClaimSubmit" class="primary-button" type="submit">Claim number</button></div>
-    </form>
-  </dialog>
-
   <div id="toast" class="toast" role="status"></div>
 
   <script>
@@ -2973,7 +2831,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         sf: {
           shortName: "San Francisco",
           heroCity: "San Francisco",
-          date: "Wednesday · August 12, 2026",
+          date: "2026-08-12",
           venue: "Market Street · San Francisco",
           image: "assets/sanfrancisco-event-thumb.jpg",
           imageAlt: "San Francisco skyline and Bay Bridge",
@@ -2982,7 +2840,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         nyc: {
           shortName: "New York",
           heroCity: "New York City",
-          date: "Tuesday · August 18, 2026",
+          date: "2026-08-18",
           venue: "Ukrainian Village · New York City",
           image: "assets/newyork-event-thumb.jpg",
           imageAlt: "New York City skyline",
@@ -3148,7 +3006,43 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         }
       };
 
+      function normalizeJoinLink(value) {
+        try {
+          var url = new URL(/^https?:\/\//i.test(value.trim()) ? value.trim() : "https://" + value.trim());
+          if (url.protocol !== "https:" || url.hostname !== "bit.ly" || url.username || url.password || url.port || !/^\/[a-zA-Z0-9_-]+$/.test(url.pathname)) return null;
+          return url.href;
+        } catch (_) { return null; }
+      }
+
+      function validEventSetting(key, value) {
+        if (key === "joinLink") return normalizeJoinLink(value) !== null;
+        if (key === "doorsTime" || key === "workshopTime") return /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+        if (key === "eventDate") {
+          if (value === "") return true;
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || value.slice(0, 4) === "0000") return false;
+          var date = new Date(value + "T00:00:00Z");
+          return !isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+        }
+        return true;
+      }
+
+      function formatEventDate(value) {
+        var date = new Date(value + "T00:00:00Z");
+        return new Intl.DateTimeFormat("en-US", { weekday: "long", timeZone: "UTC" }).format(date) + " · " +
+          new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }).format(date);
+      }
+
+      function formatEventTime(value) {
+        var parts = value.split(":");
+        var hour = Number(parts[0]);
+        return (hour % 12 || 12) + ":" + parts[1] + (hour < 12 ? " AM" : " PM");
+      }
+
       var DEFAULTS = {
+        eventDate: "",
+        doorsTime: "17:30",
+        workshopTime: "17:45",
+        joinLink: "https://bit.ly/4xxH6Uf",
         city: "sf",
         template: "appointment",
         track: "python",
@@ -3160,16 +3054,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         terminalEnvironment: "mac",
         wifiName: "",
         wifiPassword: "",
-        sipMode: "claim",
-        sipClaimEventName: "",
-        sipClaimHostEmail: "",
-        sipPhone: "",
-        sipProvider: "SIP Trunk",
-        sipDisplayName: "Agora Demo Number",
-        sipServer: "",
-        sipTransport: "tcp",
-        sipUsername: "",
-        sipPassword: "",
         campaignName: "",
         campaignAgent: "",
         campaignLaunch: "Immediately",
@@ -3190,9 +3074,10 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         campaignPostCallExtraction: false
       };
       var SHARED_CONFIG_KEYS = [
+        "eventDate", "doorsTime", "workshopTime", "joinLink",
         "city", "template", "track", "packageManager", "sttProvider", "llmProvider", "ttsProvider",
-        "theme", "terminalEnvironment", "sipMode", "sipClaimEventName", "sipPhone", "sipProvider", "sipDisplayName", "sipServer",
-        "sipTransport", "sipUsername", "sipPassword", "campaignName", "campaignAgent", "campaignLaunch",
+        "theme", "terminalEnvironment",
+        "campaignName", "campaignAgent", "campaignLaunch",
         "campaignTimezone", "campaignCallWindow", "campaignCallDelay", "campaignConcurrency",
         "campaignMaxCall", "campaignRing", "campaignSilence", "campaignStoreTranscripts",
         "campaignCallRecording", "campaignVoicemail", "campaignEndHangup", "campaignSilenceHangup",
@@ -3208,19 +3093,18 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         ttsProvider: Object.keys(MODEL_PROVIDERS.tts),
         theme: ["auto", "light", "dark"],
         terminalEnvironment: Object.keys(TERMINAL_ENVIRONMENTS),
-        sipMode: ["claim", "manual"],
-        sipTransport: ["tcp", "udp", "tls"]
       };
       function savedBoolean(key, fallback) {
         var value = localStorage.getItem(key);
         return value == null ? fallback : value === "true";
       }
-      function savedSipDisplayName() {
-        var value = localStorage.getItem("agora-v2-sip-display-name");
-        return !value || value === "Support inbound" ? DEFAULTS.sipDisplayName : value;
-      }
+
       var savedTrack = localStorage.getItem("agora-v2-track") || DEFAULTS.track;
       var state = {
+        eventDate: isAudience ? DEFAULTS.eventDate : (localStorage.getItem("agora-v2-eventDate") || DEFAULTS.eventDate),
+        doorsTime: isAudience ? DEFAULTS.doorsTime : (localStorage.getItem("agora-v2-doorsTime") || DEFAULTS.doorsTime),
+        workshopTime: isAudience ? DEFAULTS.workshopTime : (localStorage.getItem("agora-v2-workshopTime") || DEFAULTS.workshopTime),
+        joinLink: isAudience ? DEFAULTS.joinLink : (localStorage.getItem("agora-v2-joinLink") || DEFAULTS.joinLink),
         city: localStorage.getItem("agora-v2-city") || DEFAULTS.city,
         template: localStorage.getItem("agora-v2-template") || DEFAULTS.template,
         track: savedTrack,
@@ -3232,17 +3116,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         terminalEnvironment: localStorage.getItem("agora-v2-terminal-environment") || DEFAULTS.terminalEnvironment,
         wifiName: isAudience ? DEFAULTS.wifiName : (localStorage.getItem("agora-v2-wifi-name") || DEFAULTS.wifiName),
         wifiPassword: isAudience ? DEFAULTS.wifiPassword : (sessionStorage.getItem("agora-v2-wifi-password") || DEFAULTS.wifiPassword),
-        sipMode: localStorage.getItem("agora-v2-sip-mode") || DEFAULTS.sipMode,
-        sipClaimEventName: localStorage.getItem("agora-v2-sip-claim-event-name") || DEFAULTS.sipClaimEventName,
-        sipClaimHostEmail: isAudience ? DEFAULTS.sipClaimHostEmail : (sessionStorage.getItem("agora-v2-sip-claim-host-email") || DEFAULTS.sipClaimHostEmail),
-        sipPhone: localStorage.getItem("agora-v2-sip-phone") || DEFAULTS.sipPhone,
-        sipProvider: localStorage.getItem("agora-v2-sip-provider") || DEFAULTS.sipProvider,
-        sipDisplayName: savedSipDisplayName(),
-        sipServer: localStorage.getItem("agora-v2-sip-server") || DEFAULTS.sipServer,
-        sipTransport: localStorage.getItem("agora-v2-sip-transport") || DEFAULTS.sipTransport,
-        sipUsername: localStorage.getItem("agora-v2-sip-username") || DEFAULTS.sipUsername,
-        sipPassword: sessionStorage.getItem("agora-v2-sip-password") || DEFAULTS.sipPassword,
-        sipPasswordVisible: false,
         campaignName: localStorage.getItem("agora-v2-campaign-name") || DEFAULTS.campaignName,
         campaignAgent: localStorage.getItem("agora-v2-campaign-agent") || DEFAULTS.campaignAgent,
         campaignLaunch: localStorage.getItem("agora-v2-campaign-launch") || DEFAULTS.campaignLaunch,
@@ -3276,18 +3149,13 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         state.terminalEnvironment = audienceTerminalEnvironmentOverride;
       }
 
-      var prepareContactListSlide = document.querySelector('[data-slide-id="prepare-contact-list"]');
-      var addTelephoneNumberSlide = document.querySelector('[data-slide-id="add-telephone-number"]');
-      if (prepareContactListSlide && addTelephoneNumberSlide) {
-        prepareContactListSlide.parentNode.insertBefore(prepareContactListSlide, addTelephoneNumberSlide);
-      }
       var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
       var slideIndexById = slides.reduce(function (index, slide, slideIndex) {
         index[slide.getAttribute("data-slide-id")] = slideIndex;
         return index;
       }, {});
-      var audienceHashEnabled = !isAudience;
-      var initialHash = isAudience ? "" : decodeURIComponent(location.hash.replace(/^#slide-/, ""));
+      var audienceHashEnabled = !isAudience || new URLSearchParams(location.search).has("code");
+      var initialHash = !audienceHashEnabled ? "" : decodeURIComponent(location.hash.replace(/^#slide-/, ""));
       var legacyInitial = parseInt(initialHash, 10);
       var current = Object.prototype.hasOwnProperty.call(slideIndexById, initialHash)
         ? slideIndexById[initialHash]
@@ -3297,27 +3165,17 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       var commandAnimationTimer = null;
       var sdkAnimationTimer = null;
       var stateChangeQueued = false;
-      var claimedSipAssignment = null;
 
       var hostDrawer = document.getElementById("hostDrawer");
       var notesDrawer = document.getElementById("notesDrawer");
       var notesContent = document.getElementById("notesContent");
       var helpDialog = document.getElementById("helpDialog");
-      var sipClaimDialog = document.getElementById("sipClaimDialog");
       var toast = document.getElementById("toast");
 
       function getWorkshopSnapshot() {
         var config = {};
         SHARED_CONFIG_KEYS.forEach(function (key) { config[key] = state[key]; });
-        if (state.sipMode === "claim") {
-          config.sipPhone = "";
-          config.sipProvider = DEFAULTS.sipProvider;
-          config.sipDisplayName = DEFAULTS.sipDisplayName;
-          config.sipServer = "";
-          config.sipTransport = DEFAULTS.sipTransport;
-          config.sipUsername = "";
-          config.sipPassword = "";
-        }
+
         return {
           version: 1,
           slideId: slides[current].getAttribute("data-slide-id"),
@@ -3334,8 +3192,15 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         });
       }
 
+      ["eventDate", "doorsTime", "workshopTime", "joinLink"].forEach(function (key) {
+        if (!validEventSetting(key, state[key])) state[key] = DEFAULTS[key];
+      });
+
       function persist() {
         if (isAudience) return;
+        ["eventDate", "doorsTime", "workshopTime", "joinLink"].forEach(function (key) {
+          localStorage.setItem("agora-v2-" + key, state[key]);
+        });
         localStorage.setItem("agora-v2-city", state.city);
         localStorage.setItem("agora-v2-template", state.template);
         localStorage.setItem("agora-v2-track", state.track);
@@ -3346,16 +3211,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         localStorage.setItem("agora-v2-terminal-environment", state.terminalEnvironment);
         localStorage.setItem("agora-v2-wifi-name", state.wifiName);
         if (state.wifiPassword) sessionStorage.setItem("agora-v2-wifi-password", state.wifiPassword); else sessionStorage.removeItem("agora-v2-wifi-password");
-        localStorage.setItem("agora-v2-sip-mode", state.sipMode);
-        localStorage.setItem("agora-v2-sip-claim-event-name", state.sipClaimEventName);
-        if (state.sipClaimHostEmail) sessionStorage.setItem("agora-v2-sip-claim-host-email", state.sipClaimHostEmail); else sessionStorage.removeItem("agora-v2-sip-claim-host-email");
-        localStorage.setItem("agora-v2-sip-phone", state.sipPhone);
-        localStorage.setItem("agora-v2-sip-provider", state.sipProvider);
-        localStorage.setItem("agora-v2-sip-display-name", state.sipDisplayName);
-        localStorage.setItem("agora-v2-sip-server", state.sipServer);
-        localStorage.setItem("agora-v2-sip-transport", state.sipTransport);
-        localStorage.setItem("agora-v2-sip-username", state.sipUsername);
-        if (state.sipPassword) sessionStorage.setItem("agora-v2-sip-password", state.sipPassword); else sessionStorage.removeItem("agora-v2-sip-password");
         localStorage.setItem("agora-v2-campaign-name", state.campaignName);
         localStorage.setItem("agora-v2-campaign-agent", state.campaignAgent);
         localStorage.setItem("agora-v2-campaign-launch", state.campaignLaunch);
@@ -3397,6 +3252,23 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         frontEventImage.alt = data.imageAlt;
       }
 
+      function renderEventDetails() {
+        ["eventDateInput", "doorsTimeInput", "workshopTimeInput", "joinLinkInput"].forEach(function (id) {
+          document.getElementById(id).setCustomValidity("");
+        });
+        document.getElementById("eventDateInput").value = state.eventDate;
+        document.getElementById("doorsTimeInput").value = state.doorsTime;
+        document.getElementById("workshopTimeInput").value = state.workshopTime;
+        document.getElementById("joinLinkInput").value = state.joinLink;
+        setText('[data-event-field="date"]', formatEventDate(state.eventDate || EVENTS[state.city].date));
+        setText('[data-event-field="doorsTime"]', formatEventTime(state.doorsTime));
+        setText('[data-event-field="workshopTime"]', formatEventTime(state.workshopTime));
+        var joinLink = normalizeJoinLink(state.joinLink);
+        document.getElementById("frontJoinLink").href = joinLink;
+        setText('[data-event-field="joinLink"]', joinLink.replace("https://", ""));
+        slides[0].setAttribute("data-cue", formatEventTime(state.doorsTime));
+      }
+
       function renderWifiDetails() {
         var wifiName = state.wifiName.trim();
         var wifiPassword = state.wifiPassword.trim();
@@ -3407,184 +3279,8 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         document.getElementById("frontWifiDetails").hidden = !wifiName && !wifiPassword;
       }
 
-      function renderSipTrunk() {
-        document.getElementById("hostSipConfig").setAttribute("data-sip-mode", state.sipMode);
-        document.getElementById("sipModeInput").value = state.sipMode;
-        document.getElementById("sipClaimEventNameInput").value = state.sipClaimEventName;
-        document.getElementById("sipClaimHostEmailInput").value = state.sipClaimHostEmail;
-        document.getElementById("sipPhoneInput").value = state.sipPhone;
-        document.getElementById("sipProviderInput").value = state.sipProvider;
-        document.getElementById("sipDisplayNameInput").value = state.sipDisplayName;
-        document.getElementById("sipServerInput").value = state.sipServer;
-        document.getElementById("sipTransportInput").value = state.sipTransport;
-        document.getElementById("sipUsernameInput").value = state.sipUsername;
-        document.getElementById("sipPasswordInput").value = state.sipPassword;
-        var isClaimMode = state.sipMode === "claim";
-        var assignment = isClaimMode ? claimedSipAssignment : null;
-        var claimReady = Boolean(state.sipClaimEventName.trim());
-        var values = assignment ? {
-          phone: assignment.phoneNumber,
-          provider: assignment.sip.provider,
-          displayName: assignment.sip.displayName,
-          server: assignment.sip.server,
-          transport: assignment.sip.transport,
-          credentialsRequired: assignment.sip.credentialsRequired !== false,
-          username: assignment.sip.username || (assignment.sip.credentialsRequired === false ? "Not required · FQDN" : ""),
-          password: assignment.sip.password || (assignment.sip.credentialsRequired === false ? "Not required · FQDN" : "")
-        } : {
-          phone: state.sipPhone.trim(),
-          provider: isClaimMode ? "" : (state.sipProvider.trim() || "SIP Trunk"),
-          displayName: isClaimMode ? "" : (state.sipDisplayName.trim() || DEFAULTS.sipDisplayName),
-          server: isClaimMode ? "" : (state.sipServer.trim() || "sip.example.com"),
-          transport: isClaimMode ? "" : (state.sipTransport || "tcp"),
-          credentialsRequired: true,
-          username: isClaimMode ? "" : (state.sipUsername.trim() || "event-shared-user"),
-          password: isClaimMode ? "" : (state.sipPassword || "temporary-event-password")
-        };
-        var configured = isClaimMode
-          ? Boolean(assignment)
-          : Boolean(state.sipPhone.trim() && state.sipProvider.trim() && state.sipDisplayName.trim() && state.sipServer.trim() && state.sipUsername.trim() && state.sipPassword.trim());
-        var hasManualDetails = Boolean(state.sipPhone.trim() || state.sipProvider.trim() !== DEFAULTS.sipProvider || state.sipDisplayName.trim() !== DEFAULTS.sipDisplayName || state.sipServer.trim() || state.sipUsername.trim() || state.sipPassword.trim());
-        var claimButton = document.getElementById("slideSipClaimButton");
-        var claimUnavailable = document.getElementById("slideSipClaimUnavailable");
-        var phone = document.getElementById("slideSipPhone");
-        phone.value = values.phone;
-        phone.hidden = !values.phone;
-        claimButton.hidden = !isClaimMode || !claimReady || Boolean(assignment);
-        claimUnavailable.hidden = !isClaimMode || claimReady || Boolean(assignment);
-        document.getElementById("slideSipProvider").value = values.provider;
-        document.getElementById("slideSipDisplayName").value = values.displayName;
-        document.getElementById("slideSipServer").value = values.server;
-        document.getElementById("slideSipUsername").value = values.username;
-        var password = document.getElementById("slideSipPassword");
-        var status = document.getElementById("sipConfigStatus");
-        password.value = values.password;
-        password.type = values.credentialsRequired === false || (state.sipPasswordVisible && values.password) ? "text" : "password";
-        password.title = values.credentialsRequired === false ? "No password is required for this FQDN connection" : (values.password ? "Click to reveal and copy" : "SIP password appears after a successful claim");
-        document.querySelectorAll("[data-sip-transport]").forEach(function (option) {
-          option.classList.toggle("active", option.getAttribute("data-sip-transport") === values.transport);
-        });
-        status.textContent = isClaimMode
-          ? (assignment ? "Number claimed" : (claimReady ? "Claim your number to continue" : "Claim event not configured"))
-          : (configured ? "Manual SIP configured" : (hasManualDetails ? "Manual details incomplete" : "Demo trunk details"));
-        status.classList.toggle("success", configured);
-        status.classList.toggle("warning", !configured);
-      }
-
-      function highlightVariables(text) {
-        return text.replace(/(\{\{[^}]+\}\})/g, '<span class="variable">$1</span>');
-      }
-
-      function renderTemplate() {
-        var data = TEMPLATES[state.template];
-        Object.keys(data).forEach(function (key) {
-          if (typeof data[key] === "string") setText('[data-template-field="' + key + '"]', data[key]);
-        });
-        document.getElementById("studioPrompt").innerHTML = highlightVariables(data.prompt);
-        var chips = document.getElementById("variableChips");
-        chips.innerHTML = "";
-        data.variables.forEach(function (variable) {
-          var span = document.createElement("span");
-          span.className = "meta-chip mono";
-          span.textContent = "{{" + variable + "}}";
-          chips.appendChild(span);
-        });
-        var headers = ["phone_number"].concat(data.variables);
-        document.getElementById("csvHeader").innerHTML = headers.map(function (header) { return "<th>" + header + "</th>"; }).join("");
-        document.getElementById("csvValues").innerHTML = data.csv.map(function (value) { return "<td>" + value + "</td>"; }).join("");
-        document.querySelectorAll("[data-template-choice]").forEach(function (button) {
-          var active = button.getAttribute("data-template-choice") === state.template;
-          button.classList.toggle("active", active);
-          button.setAttribute("aria-pressed", String(active));
-        });
-        document.getElementById("templateSelect").value = state.template;
-      }
-
-      function renderCampaign() {
-        var template = TEMPLATES[state.template];
-        var activePhone = state.sipMode === "claim" && claimedSipAssignment
-          ? claimedSipAssignment.phoneNumber
-          : state.sipPhone.trim();
-        var values = {
-          name: state.campaignName.trim() || template.campaignName,
-          agent: state.campaignAgent.trim() || template.name,
-          phone: activePhone || "Your claimed number",
-          launch: state.campaignLaunch || DEFAULTS.campaignLaunch,
-          timezone: state.campaignTimezone.trim() || DEFAULTS.campaignTimezone,
-          callWindow: state.campaignCallWindow.trim() || DEFAULTS.campaignCallWindow,
-          callDelay: state.campaignCallDelay.trim() || DEFAULTS.campaignCallDelay,
-          concurrency: state.campaignConcurrency.trim() || DEFAULTS.campaignConcurrency,
-          maxCall: state.campaignMaxCall.trim() || DEFAULTS.campaignMaxCall,
-          ring: state.campaignRing.trim() || DEFAULTS.campaignRing,
-          silence: state.campaignSilence.trim() || DEFAULTS.campaignSilence
-        };
-        var delayNumber = Number(values.callDelay);
-        var callRate = delayNumber > 0 ? " · " + (1000 / delayNumber).toFixed(1) + " calls/sec" : "";
-        document.getElementById("slideCampaignName").textContent = values.name;
-        document.getElementById("slideCampaignAgent").textContent = values.agent;
-        document.getElementById("slideCampaignPhone").textContent = values.phone;
-        document.getElementById("slideCampaignLaunch").textContent = values.launch;
-        document.getElementById("slideCampaignTimezone").textContent = values.timezone;
-        document.getElementById("slideCampaignCallWindow").textContent = values.callWindow;
-        document.getElementById("slideCampaignCallDelay").textContent = values.callDelay + " ms" + callRate;
-        document.getElementById("slideCampaignConcurrency").textContent = values.concurrency + " calls";
-        document.getElementById("slideCampaignMaxCall").textContent = values.maxCall + " sec";
-        document.getElementById("slideCampaignRingSilence").textContent = values.ring + " sec / " + values.silence + " sec";
-        [
-          { id: "campaignNameInput", key: "campaignName" },
-          { id: "campaignAgentInput", key: "campaignAgent" },
-          { id: "campaignLaunchInput", key: "campaignLaunch" },
-          { id: "campaignTimezoneInput", key: "campaignTimezone" },
-          { id: "campaignCallWindowInput", key: "campaignCallWindow" },
-          { id: "campaignCallDelayInput", key: "campaignCallDelay" },
-          { id: "campaignConcurrencyInput", key: "campaignConcurrency" },
-          { id: "campaignMaxCallInput", key: "campaignMaxCall" },
-          { id: "campaignRingInput", key: "campaignRing" },
-          { id: "campaignSilenceInput", key: "campaignSilence" }
-        ].forEach(function (field) {
-          document.getElementById(field.id).value = state[field.key];
-        });
-        [
-          { id: "campaignStoreTranscriptsInput", key: "campaignStoreTranscripts" },
-          { id: "campaignCallRecordingInput", key: "campaignCallRecording" },
-          { id: "campaignVoicemailInput", key: "campaignVoicemail" },
-          { id: "campaignEndHangupInput", key: "campaignEndHangup" },
-          { id: "campaignSilenceHangupInput", key: "campaignSilenceHangup" },
-          { id: "campaignFaxHangupInput", key: "campaignFaxHangup" },
-          { id: "campaignTransferInput", key: "campaignTransfer" },
-          { id: "campaignPostCallExtractionInput", key: "campaignPostCallExtraction" }
-        ].forEach(function (field) {
-          document.getElementById(field.id).checked = state[field.key];
-        });
-        document.querySelectorAll("[data-campaign-toggle]").forEach(function (toggle) {
-          toggle.classList.toggle("on", Boolean(state[toggle.getAttribute("data-campaign-toggle")]));
-        });
-      }
-
-      function buildCampaignCsv() {
-        var data = TEMPLATES[state.template];
-        var rows = [["phone_number"].concat(data.variables), data.csv];
-        return rows.map(function (row) {
-          return row.map(function (value) {
-            var text = String(value == null ? "" : value);
-            return /[",\r\n]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
-          }).join(",");
-        }).join("\r\n") + "\r\n";
-      }
-
       function providerLabel(type, key) {
         return MODEL_PROVIDERS[type][key] || MODEL_PROVIDERS[type].managed;
-      }
-
-      function modelConfigurationRequirement() {
-        var selected = [
-          "STT — " + providerLabel("stt", state.sttProvider),
-          "LLM — " + providerLabel("llm", state.llmProvider),
-          "TTS — " + providerLabel("tts", state.ttsProvider)
-        ].join("; ");
-        var instructions = "- Configure the model path selected by the host: " + selected + ". Use Agora managed keys wherever Managed is selected; use environment variables for every BYOK credential.";
-        if (state.llmProvider === "custom") instructions += " The custom LLM must use an OpenAI-compatible API key, base URL, and model.";
-        return instructions;
       }
 
       function renderModelCredentials() {
@@ -3607,33 +3303,23 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         document.getElementById("customLlmNotice").hidden = state.llmProvider !== "custom";
       }
 
+      var promptMode = "new";
+
       function buildPrompt() {
-        var track = TRACKS[state.track];
-        return [
-          "Use the Agora Skills installed in this workspace to create a new project named website-sdr.",
-          "",
-          "Build a beginner-friendly website SDR Voice AI agent. " + track.buildDetail,
-          "",
-          "Product requirements:",
-          "- A polished local website with a clear control for starting and ending a voice conversation.",
-          "- An inbound-style SDR agent that collects the visitor's name, company, role, Voice AI use case, and desired next step.",
-          "- The agent should qualify the opportunity, summarize what it learned, and help move the visitor toward an Agora Voice AI consultation.",
-          "- Simulate the final lead-submission or appointment action through the system prompt. Be transparent that this workshop version does not persist or transmit the lead.",
-          "- Integrate Agora AI Noise Suppression on the browser microphone track using Agora's documented agora-extension-ai-denoiser extension. Serve its required Wasm assets correctly, check entitlement and browser compatibility, and fall back gracefully when unsupported. Do not treat noise suppression as a system-prompt instruction.",
-          modelConfigurationRequirement(),
-          "- Keep secrets server-side and provide a safe .env.example.",
-          "- Include clear local setup and run instructions using " + PACKAGES[state.packageManager].label + ".",
-          "- Add an optional quick-deploy path for " + track.durableProvider + ", but treat local execution as the required finish line.",
-          "",
-          "Acceptance criteria:",
-          "1. The project is created under ./website-sdr without modifying ./agent-quickstart.",
-          "2. The local website loads and can start a live voice conversation with the SDR.",
-          "3. The agent gathers the required lead details and performs the transparent simulated submission.",
-          "4. Agora AI Noise Suppression is enabled.",
-          "5. The project includes verified install, run, and optional deployment instructions.",
-          "",
-          "Use the installed Agora Skills and current official Agora documentation. Explain the important files when you finish."
-        ].join("\n");
+        var goal = promptMode === "existing"
+          ? "add [your use case] to this app"
+          : "build a new app or demo for [your use case]";
+        return "Use Agora Skills and https://recipes.agora.io as references to " + goal + ". Help me run and test it locally.";
+      }
+
+      function selectPromptMode(mode) {
+        promptMode = mode === "existing" ? "existing" : "new";
+        document.querySelectorAll("[data-prompt-mode]").forEach(function (button) {
+          var active = button.getAttribute("data-prompt-mode") === promptMode;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        document.getElementById("buildPrompt").textContent = buildPrompt();
       }
 
       function renderAgentCode(track) {
@@ -3860,25 +3546,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         document.body.classList.toggle("show-timings", state.showTimings);
       }
 
-      function renderWorkshopStage() {
-        var journey = document.getElementById("workshopJourney");
-        journey.setAttribute("data-stage", String(state.workshopStage));
-        document.querySelectorAll("[data-workshop-stage]").forEach(function (button) {
-          var active = parseInt(button.getAttribute("data-workshop-stage"), 10) === state.workshopStage;
-          button.classList.toggle("active", active);
-          if (active) button.setAttribute("aria-current", "step"); else button.removeAttribute("aria-current");
-        });
-      }
-
-      function workshopStageForSlide(index) {
-        var slideId = slides[index].getAttribute("data-slide-id");
-        if (slideId === "phone-rings") return 5;
-        if (slideId === "prepare-contact-list" || slideId === "configure-campaign") return 4;
-        if (slideId === "add-telephone-number") return 3;
-        if (slideId === "customize-prompt") return 2;
-        return 1;
-      }
-
       function currentSlideId() {
         return slides[current].getAttribute("data-slide-id");
       }
@@ -3887,18 +3554,10 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         return current >= slideIndexById[firstSlideId] && current <= slideIndexById[lastSlideId];
       }
 
-      function syncWorkshopStageMenu() {
-        var journey = document.getElementById("workshopJourney");
-        var rail = document.querySelector(".workshop-stage-rail");
-        var shouldDock = currentSlideInRange("choose-template", "phone-rings");
-        if (shouldDock && rail.parentElement !== document.body) document.body.appendChild(rail);
-        if (!shouldDock && rail.parentElement !== journey) journey.appendChild(rail);
-        rail.classList.toggle("workshop-stage-menu", shouldDock);
-      }
-
       function codeStageForSlide(scope, index) {
         var slideId = slides[index].getAttribute("data-slide-id");
         if (scope === "cli") {
+          if (["return-workshop-root", "agora-recipes", "discover-recipes", "initialize-recipe"].indexOf(slideId) !== -1) return 5;
           if (["open-agent-file", "agent-definition", "install-agent-sdk"].indexOf(slideId) !== -1) return 4;
           if (slideId === "run-quickstart") return 3;
           if (slideId === "initialize-quickstart") return 2;
@@ -3913,8 +3572,8 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       function renderCodeStageMenus() {
         ["cli", "skills"].forEach(function (scope) {
           var inScope = scope === "cli"
-            ? currentSlideInRange("install-cli", "install-agent-sdk")
-            : currentSlideInRange("return-workshop-root", "speak-with-sdr");
+            ? currentSlideInRange("install-cli", "initialize-recipe")
+            : currentSlideInRange("install-agora-skills", "speak-with-sdr");
           var activeStage = inScope ? codeStageForSlide(scope, current) : 1;
           document.querySelectorAll('[data-code-scope="' + scope + '"]').forEach(function (button) {
             var active = parseInt(button.getAttribute("data-code-stage"), 10) === activeStage;
@@ -3929,8 +3588,8 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         var skillsRail = document.getElementById("skillsStageRail");
         var cliHome = document.getElementById("cliPathCard");
         var skillsHome = document.getElementById("skillsPathCard");
-        var cliActive = currentSlideInRange("install-cli", "install-agent-sdk");
-        var skillsActive = currentSlideInRange("return-workshop-root", "speak-with-sdr");
+        var cliActive = currentSlideInRange("install-cli", "initialize-recipe");
+        var skillsActive = currentSlideInRange("install-agora-skills", "speak-with-sdr");
         if (cliActive && cliRail.parentElement !== document.body) document.body.appendChild(cliRail);
         if (!cliActive && cliRail.parentElement !== cliHome) cliHome.appendChild(cliRail);
         if (skillsActive && skillsRail.parentElement !== document.body) document.body.appendChild(skillsRail);
@@ -3954,7 +3613,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
           slide.setAttribute("aria-hidden", String(index !== current));
         });
         var slide = slides[current];
-        if (current !== 11) state.sipPasswordVisible = false;
         document.body.classList.toggle("front-slide-active", current === 0);
         document.body.classList.toggle("terminal-slide-active", Boolean(slide.querySelector(".terminal")));
         document.getElementById("footerTitle").textContent = slide.getAttribute("data-title");
@@ -3963,13 +3621,8 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         document.getElementById("progressFill").style.width = ((current + 1) / slides.length * 100) + "%";
         var slideHash = "#slide-" + slide.getAttribute("data-slide-id");
         history.replaceState(null, "", audienceHashEnabled ? slideHash : location.pathname + location.search);
-        if (currentSlideId() === "studio-hands-on") state.workshopStage = 1;
-        if (currentSlideInRange("choose-template", "phone-rings")) state.workshopStage = workshopStageForSlide(current);
-        renderWorkshopStage();
-        syncWorkshopStageMenu();
         renderCodeStageMenus();
         syncCodeStageMenus();
-        renderSipTrunk();
         persist();
         renderNotes();
         syncCommandAnimation();
@@ -4018,21 +3671,17 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         history.replaceState(null, "", audienceHashEnabled ? slideHash : location.pathname + location.search);
       }
 
-      function applyWorkshopSnapshot(snapshot) {
-        if (!isAudience || !snapshot || snapshot.version !== 1 || !snapshot.config) return false;
-        var previousClaimContext = state.sipMode + ":" + state.sipClaimEventName;
+      function applyWorkshopSnapshot(snapshot, hostLoad) {
+        if ((!isAudience && !hostLoad) || !snapshot || snapshot.version !== 1 || !snapshot.config) return false;
         SHARED_CONFIG_KEYS.forEach(function (key) {
           if (!Object.prototype.hasOwnProperty.call(snapshot.config, key)) return;
           if (key === "terminalEnvironment" && audienceTerminalEnvironmentOverride) return;
           var value = snapshot.config[key];
-          if (typeof value !== typeof DEFAULTS[key]) return;
+          if (typeof value !== typeof DEFAULTS[key] || !validEventSetting(key, value)) return;
           if (SHARED_CONFIG_ENUMS[key] && SHARED_CONFIG_ENUMS[key].indexOf(value) === -1) return;
           state[key] = value;
         });
-        if (previousClaimContext !== state.sipMode + ":" + state.sipClaimEventName) {
-          claimedSipAssignment = null;
-          state.sipPasswordVisible = false;
-        }
+
         if (Object.prototype.hasOwnProperty.call(slideIndexById, snapshot.slideId)) {
           previous = current;
           current = slideIndexById[snapshot.slideId];
@@ -4041,19 +3690,15 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         return true;
       }
 
-      function applyArchivedWorkshopSnapshot(snapshot) {
-        if (!isAudience || !snapshot || snapshot.version !== 1 || !snapshot.config) return false;
+      function applyArchivedWorkshopSnapshot(snapshot, hostLoad) {
+        if ((!isAudience && !hostLoad) || !snapshot || snapshot.version !== 1 || !snapshot.config) return false;
         SHARED_CONFIG_KEYS.forEach(function (key) { state[key] = DEFAULTS[key]; });
-        claimedSipAssignment = null;
-        state.sipPasswordVisible = false;
-        return applyWorkshopSnapshot(snapshot);
+        return applyWorkshopSnapshot(snapshot, hostLoad);
       }
 
       function go(delta) {
         var next = Math.max(0, Math.min(slides.length - 1, current + delta));
-        var crossesStudioStart = (currentSlideId() === "studio-hands-on" && slides[next].getAttribute("data-slide-id") === "choose-template")
-          || (currentSlideId() === "choose-template" && slides[next].getAttribute("data-slide-id") === "studio-hands-on");
-        goToSlide(next, crossesStudioStart);
+        goToSlide(next, false);
       }
 
       function toggleDrawer(drawer, force) {
@@ -4091,14 +3736,11 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         renderTheme();
         renderTimings();
         renderCity();
+        renderEventDetails();
         renderWifiDetails();
-        renderSipTrunk();
-        renderTemplate();
-        renderCampaign();
         renderModelCredentials();
         renderTrack();
         renderTerminalEnvironment();
-        renderWorkshopStage();
         renderSlide();
       }
 
@@ -4117,81 +3759,10 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       document.getElementById("notesButton").addEventListener("click", function () { toggleDrawer(notesDrawer); });
       document.getElementById("helpButton").addEventListener("click", function () { helpDialog.showModal(); });
       document.getElementById("helpClose").addEventListener("click", function () { helpDialog.close(); });
-      function validClaimEmail(value) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-      }
-      async function requestPhoneClaim(email) {
-        var response = await fetch("/api/phone-number-claim", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ email: email, eventName: state.sipClaimEventName })
-        });
-        var payload = await response.json().catch(function () { return {}; });
-        if (!response.ok || !payload.data) throw new Error(payload.error || "Unable to claim a phone number");
-        claimedSipAssignment = payload.data;
-        state.sipPasswordVisible = false;
-        renderSipTrunk();
-        renderCampaign();
-        showToast("Phone number claimed");
-      }
-      document.getElementById("slideSipClaimButton").addEventListener("click", async function () {
-        if (state.sipMode !== "claim" || !state.sipClaimEventName.trim()) return;
-        if (!isAudience && validClaimEmail(state.sipClaimHostEmail)) {
-          var claimButton = this;
-          claimButton.disabled = true;
-          claimButton.textContent = "Claiming…";
-          try {
-            await requestPhoneClaim(state.sipClaimHostEmail);
-          } catch (error) {
-            showToast(error && error.message ? error.message : "Unable to claim a phone number");
-          } finally {
-            claimButton.disabled = false;
-            claimButton.textContent = "Claim your phone number";
-          }
-          return;
-        }
-        document.getElementById("sipClaimEmail").value = "";
-        document.getElementById("sipClaimError").textContent = "";
-        sipClaimDialog.showModal();
-        window.setTimeout(function () { document.getElementById("sipClaimEmail").focus(); }, 0);
-      });
-      function closeSipClaimDialog() {
-        if (sipClaimDialog.open) sipClaimDialog.close();
-      }
-      document.getElementById("sipClaimClose").addEventListener("click", closeSipClaimDialog);
-      document.getElementById("sipClaimCancel").addEventListener("click", closeSipClaimDialog);
-      document.getElementById("sipClaimForm").addEventListener("submit", async function (event) {
-        event.preventDefault();
-        var emailInput = document.getElementById("sipClaimEmail");
-        var errorNode = document.getElementById("sipClaimError");
-        var submitButton = document.getElementById("sipClaimSubmit");
-        if (!emailInput.reportValidity()) return;
-        errorNode.textContent = "";
-        submitButton.disabled = true;
-        submitButton.textContent = "Claiming…";
-        try {
-          await requestPhoneClaim(emailInput.value);
-          emailInput.value = "";
-          closeSipClaimDialog();
-        } catch (error) {
-          errorNode.textContent = error && error.message ? error.message : "Unable to claim a phone number";
-        } finally {
-          submitButton.disabled = false;
-          submitButton.textContent = "Claim number";
-        }
-      });
       document.querySelector(".nav-zone.prev").addEventListener("click", function () { go(-1); });
       document.querySelector(".nav-zone.next").addEventListener("click", function () { go(1); });
       document.querySelectorAll("[data-close-drawer]").forEach(function (button) {
         button.addEventListener("click", function () { toggleDrawer(document.getElementById(button.getAttribute("data-close-drawer")), false); });
-      });
-      document.querySelectorAll("[data-template-choice]").forEach(function (button) {
-        if (isAudience) button.setAttribute("aria-disabled", "true");
-        button.addEventListener("click", function () {
-          if (isAudience) return;
-          state.template = button.getAttribute("data-template-choice");
-          renderAll();
-        });
       });
       document.querySelectorAll("[data-command-scope]").forEach(function (button) {
         button.addEventListener("click", function () {
@@ -4208,20 +3779,13 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
           scheduleSdkAnimation();
         });
       });
-      document.querySelectorAll("[data-workshop-stage]").forEach(function (button) {
-        button.addEventListener("click", function () {
-          var stageNumber = parseInt(button.getAttribute("data-workshop-stage"), 10);
-          var slideTargets = { 1: "choose-template", 2: "customize-prompt", 3: "add-telephone-number", 4: "prepare-contact-list", 5: "phone-rings" };
-          goToSlideId(slideTargets[stageNumber], currentSlideId() === "studio-hands-on" && stageNumber === 1);
-        });
-      });
       document.getElementById("workspaceStartButton").addEventListener("click", function () { goToSlideId("install-cli", false); });
       document.querySelectorAll("[data-code-scope]").forEach(function (button) {
         button.addEventListener("click", function () {
           var scope = button.getAttribute("data-code-scope");
           var stageNumber = parseInt(button.getAttribute("data-code-stage"), 10);
           var slideTargets = scope === "cli"
-            ? { 1: "install-cli", 2: "initialize-quickstart", 3: "run-quickstart", 4: "open-agent-file" }
+            ? { 1: "install-cli", 2: "initialize-quickstart", 3: "run-quickstart", 4: "open-agent-file", 5: "agora-recipes" }
             : { 1: "install-agora-skills", 2: "build-prompt", 3: "run-website-sdr", 4: "speak-with-sdr" };
           goToSlideId(slideTargets[stageNumber], false);
         });
@@ -4233,7 +3797,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         });
       });
 
-      document.getElementById("templateSelect").addEventListener("change", function (event) { state.template = event.target.value; renderAll(); });
       document.getElementById("trackSelect").addEventListener("change", function (event) {
         state.track = event.target.value;
         state.packageManager = packageManagerForTrack(state.track);
@@ -4265,127 +3828,39 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
           renderWifiDetails();
         });
       });
-      document.getElementById("sipModeInput").addEventListener("change", function (event) {
-        state.sipMode = event.target.value;
-        claimedSipAssignment = null;
-        state.sipPasswordVisible = false;
-        persist();
-        renderSipTrunk();
-        renderCampaign();
-      });
       [
-        { id: "sipClaimEventNameInput", key: "sipClaimEventName" },
-        { id: "sipClaimHostEmailInput", key: "sipClaimHostEmail" },
-        { id: "sipPhoneInput", key: "sipPhone" },
-        { id: "sipProviderInput", key: "sipProvider" },
-        { id: "sipDisplayNameInput", key: "sipDisplayName" },
-        { id: "sipServerInput", key: "sipServer" },
-        { id: "sipTransportInput", key: "sipTransport" },
-        { id: "sipUsernameInput", key: "sipUsername" },
-        { id: "sipPasswordInput", key: "sipPassword" }
-      ].forEach(function (field) {
-        document.getElementById(field.id).addEventListener("input", function (event) {
-          state[field.key] = event.target.value;
-          if (field.key === "sipClaimEventName") claimedSipAssignment = null;
-          if (field.key === "sipPassword" && !state.sipPassword) state.sipPasswordVisible = false;
-          persist();
-          renderSipTrunk();
-          renderCampaign();
-        });
-      });
-      [
-        { id: "campaignNameInput", key: "campaignName" },
-        { id: "campaignAgentInput", key: "campaignAgent" },
-        { id: "campaignLaunchInput", key: "campaignLaunch" },
-        { id: "campaignTimezoneInput", key: "campaignTimezone" },
-        { id: "campaignCallWindowInput", key: "campaignCallWindow" },
-        { id: "campaignCallDelayInput", key: "campaignCallDelay" },
-        { id: "campaignConcurrencyInput", key: "campaignConcurrency" },
-        { id: "campaignMaxCallInput", key: "campaignMaxCall" },
-        { id: "campaignRingInput", key: "campaignRing" },
-        { id: "campaignSilenceInput", key: "campaignSilence" }
-      ].forEach(function (field) {
-        document.getElementById(field.id).addEventListener("input", function (event) {
-          state[field.key] = event.target.value;
-          persist();
-          renderCampaign();
-        });
-      });
-      [
-        { id: "campaignStoreTranscriptsInput", key: "campaignStoreTranscripts" },
-        { id: "campaignCallRecordingInput", key: "campaignCallRecording" },
-        { id: "campaignVoicemailInput", key: "campaignVoicemail" },
-        { id: "campaignEndHangupInput", key: "campaignEndHangup" },
-        { id: "campaignSilenceHangupInput", key: "campaignSilenceHangup" },
-        { id: "campaignFaxHangupInput", key: "campaignFaxHangup" },
-        { id: "campaignTransferInput", key: "campaignTransfer" },
-        { id: "campaignPostCallExtractionInput", key: "campaignPostCallExtraction" }
+        { id: "eventDateInput", key: "eventDate" },
+        { id: "doorsTimeInput", key: "doorsTime" },
+        { id: "workshopTimeInput", key: "workshopTime" },
+        { id: "joinLinkInput", key: "joinLink" }
       ].forEach(function (field) {
         document.getElementById(field.id).addEventListener("change", function (event) {
-          state[field.key] = event.target.checked;
-          persist();
-          renderCampaign();
+          if (isAudience) return;
+          var input = event.target;
+          input.setCustomValidity("");
+          if (!validEventSetting(field.key, input.value)) {
+            input.setCustomValidity(field.key === "joinLink" ? "Enter a valid HTTPS bit.ly link, such as https://bit.ly/4xxH6Uf." : "Enter a valid event date or time.");
+            input.reportValidity();
+            return;
+          }
+          state[field.key] = field.key === "joinLink" ? normalizeJoinLink(input.value) : input.value;
+          renderAll();
         });
-      });
-      [
-        { id: "slideSipPhone", label: "Phone number copied" },
-        { id: "slideSipProvider", label: "SIP vendor copied" },
-        { id: "slideSipDisplayName", label: "Display name copied" },
-        { id: "slideSipServer", label: "SIP trunk address copied" },
-        { id: "slideSipUsername", label: "SIP username copied" }
-      ].forEach(function (field) {
-        document.getElementById(field.id).addEventListener("click", function () {
-          if (this.value) copyText(this.value, field.label);
-        });
-      });
-      function copySipTransport() {
-        var activeTransport = document.querySelector("#slideSipTransport .telephony-protocol.active");
-        if (activeTransport) copyText(activeTransport.textContent, "SIP transport copied");
-      }
-      document.getElementById("slideSipTransport").addEventListener("click", copySipTransport);
-      document.getElementById("slideSipTransport").addEventListener("keydown", function (event) {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        copySipTransport();
-      });
-      document.getElementById("slideSipPassword").addEventListener("click", function () {
-        if (!this.value) return;
-        state.sipPasswordVisible = true;
-        renderSipTrunk();
-        copyText(this.value, "SIP password copied");
-      });
-      function obscureSipPassword() {
-        if (!state.sipPasswordVisible) return;
-        state.sipPasswordVisible = false;
-        renderSipTrunk();
-      }
-      window.addEventListener("blur", obscureSipPassword);
-      document.addEventListener("visibilitychange", function () {
-        if (document.hidden) obscureSipPassword();
       });
       document.getElementById("resetButton").addEventListener("click", function () {
         Object.keys(DEFAULTS).forEach(function (key) { state[key] = DEFAULTS[key]; });
-        claimedSipAssignment = null;
-        state.sipPasswordVisible = false;
         state.showTimings = false; state.workshopStage = 1;
         renderAll(); showToast("Workshop defaults restored");
       });
 
-      document.getElementById("downloadCampaignCsvButton").addEventListener("click", function () {
-        var blob = new Blob([buildCampaignCsv()], { type: "text/csv;charset=utf-8" });
-        var link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "agora-workshop-" + state.template + "-contacts.csv";
-        document.body.appendChild(link); link.click(); link.remove();
-        setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
-        showToast("Workshop CSV downloaded");
+      document.querySelectorAll("[data-prompt-mode]").forEach(function (button) {
+        button.addEventListener("click", function () { selectPromptMode(button.getAttribute("data-prompt-mode")); });
       });
-
       document.getElementById("downloadPromptButton").addEventListener("click", function () {
         var blob = new Blob([buildPrompt()], { type: "text/markdown;charset=utf-8" });
         var link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "PROMPT-" + state.track + ".md";
+        link.download = "PROMPT-" + (promptMode === "existing" ? "existing-app" : "new-app") + ".md";
         document.body.appendChild(link); link.click(); link.remove();
         setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
         showToast("PROMPT.md downloaded");
@@ -4395,20 +3870,11 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         copyText("npx wrangler tunnel quick-start http://localhost:" + TRACKS[state.track].port, "Tunnel command copied");
       });
 
-      document.getElementById("demoCallButton").addEventListener("click", function () {
-        var ui = document.getElementById("callUi");
-        var live = !ui.classList.contains("live");
-        ui.classList.toggle("live", live);
-        document.getElementById("callStatus").textContent = live ? "CONNECTED" : "READY";
-        document.getElementById("callSubtitle").textContent = live ? "Campaign live · personalized audio" : "Campaign ready · 1 contact";
-        this.textContent = live ? "End visual demo" : "Start the room call";
-      });
-
       document.getElementById("talkButton").addEventListener("click", function () {
         var active = this.getAttribute("aria-pressed") === "true";
         this.setAttribute("aria-pressed", String(!active));
-        this.textContent = active ? "Talk" : "End";
-        document.getElementById("talkState").textContent = active ? "Click to preview the live state." : "Listening… AI Noise Suppression on";
+        this.textContent = active ? "Preview" : "End preview";
+        document.getElementById("talkState").textContent = active ? "Preview only. Test voice in your local app." : "Listening state preview · no microphone connection";
       });
 
       function initGlobalConnectionGraphic() {
@@ -4700,6 +4166,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         getSnapshot: getWorkshopSnapshot,
         applySnapshot: applyWorkshopSnapshot,
         applyArchivedSnapshot: applyArchivedWorkshopSnapshot,
+        loadSavedEvent: function (snapshot) { return applyArchivedWorkshopSnapshot(snapshot, !isAudience); },
         goToSlideId: goToSlideId,
         setAudienceHashEnabled: setAudienceHashEnabled
       });

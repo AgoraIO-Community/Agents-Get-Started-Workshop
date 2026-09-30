@@ -1,6 +1,6 @@
 # Agora Voice AI Workshop - V2 presentation
 
-This is a static-first, Vercel-ready presentation website. The host and audience share one canonical HTML deck; a small browser bundle adds Agora Signaling, and one serverless function mints short-lived RTM tokens.
+This is a static-first, Vercel-ready presentation website. The host and audience share one canonical HTML deck; a small browser bundle adds Agora Signaling, and Vercel API functions mint RTM tokens and store saved events in Vercel Blob.
 
 ## Local setup
 
@@ -17,14 +17,14 @@ The host route requires the password `AgoraWorkshop2026` by default. `WORKSHOP_H
 
 ## Presenting
 
-Participants open the root URL. The audience automatically derives the local calendar date, such as `2026-08-12`, and connects to the RTM message channel with that exact name.
+Participants open the root URL and choose **Join active**, or enter a six-digit event code. Join active derives the local calendar date, such as `2026-08-12`, and connects to the RTM message channel with that exact name. Code links load saved settings without connecting to RTM.
 
 The presenter opens `/host`, enters the workshop password, and then connects as the trusted host for the same channel. Presenter controls remain covered until authentication succeeds.
 
 If two workshops share a date or device dates disagree, override the channel in both URLs:
 
 ```text
-Audience: /?channel=sf-rehearsal
+Audience: /?join=active&channel=sf-rehearsal
 Host:     /host?channel=sf-rehearsal
 ```
 
@@ -40,7 +40,7 @@ Overrides are normalized to lowercase URL-safe names; spaces become hyphens. Nam
 
 ## Audience view
 
-Participants normally use `/`, or `/?channel=...` when the host supplies an override. Their browser resolves the channel, reuses a browser-scoped string UID from local storage, subscribes with messages and presence, and requests the current snapshot. The server validates the audience-only UID format and mints every reload or renewal token for that exact subject. Before the first trusted host snapshot arrives, a dedicated waiting screen explains that the session has not started without exposing signaling details. The deck appears automatically when the authenticated host connects. `/audience` remains as a compatibility alias.
+Participants use `/` to choose a workshop, or `/?join=active&channel=...` for a live workshop with a channel override. After choosing Join active, their browser resolves the channel, reuses a browser-scoped string UID from local storage, subscribes with messages and presence, and requests the current snapshot. The server validates the audience-only UID format and mints every reload or renewal token for that exact subject. Before the first trusted host snapshot arrives, a dedicated waiting screen explains that the session has not started without exposing signaling details. The deck appears automatically when the authenticated host connects. `/audience` remains as a compatibility alias.
 
 - Host controls, presenter notes, timing cues, and their keyboard shortcuts are unavailable.
 - Slides, links, copy/download actions, and visual content come from the same `index.html` used by the host.
@@ -48,11 +48,25 @@ Participants normally use `/`, or `/?channel=...` when the host supplies an over
 - While following, host-controlled navigation is locked but links, copy buttons, and downloads remain usable.
 - **Following host** switches to independent browsing; **Return to live** applies the newest host snapshot.
 - Late arrivals request the current snapshot, and host presence events provide an additional recovery path.
-- After the first trusted host snapshot, the audience browser saves a safe local copy of the workshop choices. On a later visit with no active host, the waiting screen still shows the inactive session and offers **View presentation** for the last workshop.
+- After the first trusted host snapshot, the audience browser saves a safe local copy of the workshop choices. On a later visit, the join screen also offers **View presentation** for that device’s last workshop.
 
-The presentation exposes a transport-neutral API at `window.workshopPresentation`. `src/signaling.js` publishes host snapshots from `workshop:statechange` and dispatches validated remote snapshots to the audience view. Email-claim snapshots contain only the claim mode and event name. Manual mode shares the host-entered phone and SIP fields, including the password, with the live audience; those operational values are never added to saved audience decks.
+The presentation exposes a transport-neutral API at `window.workshopPresentation`. `src/signaling.js` publishes host snapshots from `workshop:statechange` and dispatches validated remote snapshots to the audience view. The demo has no SIP options.
 
-The saved audience copy records the channel, venue, template, code track, its derived project tooling, model-provider selections, theme, and terminal environment. It does not retain SIP settings, campaign data, credentials, or secrets. Audience fragments such as `#slide-install-cli` are cleared while waiting or following the host. Opening the saved copy starts at the welcome slide, enables slide fragments and independent navigation, and continues checking for a live session.
+Saved events and local audience copies retain the event date and times, Bitly join link, venue, template, code track, derived project tooling, model-provider selections, theme, and terminal environment. They exclude Wi-Fi passwords, operational credentials, and host keys. Live slide fragments are cleared while waiting or following the host. Saved-event URLs retain the code and slide fragment for reloads and independent navigation.
+
+## Saved event codes
+
+In host controls, open **Saved events**. Enter an event name and choose **New event code** to create a saved copy of the current settings. The server generates a random six-digit code, such as `482-193`, with collision retries. Share `/?code=482-193`. Attendees can also enter `482193` or `482-193` on the join screen; submitting redirects to the code URL.
+
+Choose a previous code from the paginated list, or open it by code, to view and edit its settings. Opening a previous event disconnects live sharing first. **Use settings live** explicitly connects those settings to the current date/channel. Host URLs also retain the code, so a reload reopens that event after authentication without connecting to RTM.
+
+After creating or opening an event, changes save automatically after 700 ms. **Save changes** retries a failed save. Slide navigation does not trigger writes. A stale version returns a conflict and requires reopening the event; unsaved local settings stay visible. Leaving with pending changes triggers the browser’s unsaved-changes prompt. **New event code** creates another record from the current settings; it does not reuse the old code.
+
+`GET /api/events?code=482-193` loads the replay JSON without host authentication. A bare `GET /api/events` lists event codes for an authenticated host (with an optional `cursor`). `POST /api/events` creates an event; `PUT /api/events?code=482-193` overwrites that event. Host requests send the workshop password in `x-workshop-host-key`. Updates must include the ETag returned by the latest read or write.
+
+Connect a **private Vercel Blob store** and provide its `BLOB_READ_WRITE_TOKEN` in Vercel and `.env.local` for local development. Each event is exactly `<code>.json` at the store root. No random filename suffix is added. Creates refuse overwrites; updates use `allowOverwrite` and `ifMatch`. Reads use `get(..., { useCache: false })`, and API responses use `Cache-Control: no-store`, so reopening an event reads its latest saved settings. See the [Vercel Blob SDK documentation](https://vercel.com/docs/vercel-blob/using-blob-sdk).
+
+Code links are shareable workshop content, not passwords. Missing, invalid, or unavailable codes display an error and do not fall back to RTM. **Join active** explicitly removes the code and restores the live flow. Saved settings replay with the current deployed deck; they are not a frozen copy of historical slide HTML.
 
 ## Verification
 
@@ -65,11 +79,11 @@ The tests mock the Agora SDK boundary and cover local-date session validation, R
 
 The selected `Testing` project currently reports token enforcement as disabled in Agora Console. The app still uses server-generated tokens and never exposes the App Certificate, but token enforcement must be enabled on the project before treating a public deployment as authenticated.
 
-Host choices are stored only in that browser:
+Host choices stay in that browser until the host creates or opens a saved event. Replay-safe choices then also save to that event:
 
+- Workshop date, doors time, workshop start time, and Bitly join link (under **Event details** in host controls; times use venue local time)
 - Venue Wi-Fi name and session-only password for the projected opening slide
 - San Francisco or New York
-- One Agent Studio template for the room
 - Python, Next.js, or Go
 - Track-derived tooling: Bun for Python, pnpm for TypeScript, or Make for Go
 - Light, dark, or system theme
@@ -88,22 +102,6 @@ python3 scripts/generate-discord-qr.py workshop-config.json discord-qr.svg
 
 This requires the Python `reportlab` package. Scan the generated QR from a second device before publishing.
 
-### Workshop phone-number claims
-
-Slide 14 supports two host-selected setup methods:
-
-- **Email claim API**: enter the allocator’s event name, such as `SFWRKSHP26`, in host controls. The optional host claim email lets the presenter claim directly without the overlay; it stays in session storage and is not signaled. Each attendee still enters their own email so they receive their unique phone number and SIP details.
-- **Manual details**: enter a phone number plus the SIP vendor, display name, server, transport, username, and password in host controls. These values are shared over the trusted live signaling session.
-
-Configure the allocator token only on the server:
-
-```sh
-PHONE_CLAIM_API_URL=https://carrot-seven.vercel.app/api/event-number-claims
-PHONE_CLAIM_API_TOKEN=replace-with-the-allocator-token
-```
-
-The browser posts only `{ email, eventName }` to `/api/phone-number-claim`; the server adds authorization and returns an allowlisted response. FQDN connections use `sip_subdomain` as the trunk address and show that username/password credentials are not required. Attendee emails and returned SIP assignments remain in memory for the current tab only. Neither setup method’s operational values are retained in the audience’s saved workshop copy. Test the flow from a participant device before doors open, limit the allocator to the event pool, and disable claims before revoking the pool and trunk credentials after the event.
-
 ## Deployment
 
 Import this directory as a new Vercel project or run the Vercel CLI from this directory. `vercel.json` supplies the static-site settings and basic response headers.
@@ -121,31 +119,30 @@ The provider links in the deck currently open the provider's deployment entry po
 
 ## Clean-machine rehearsal
 
-Rehearse the selected Studio template, code track, derived tooling, and venue network end to end. Python uses Bun, TypeScript uses pnpm, and Go uses Make.
+Rehearse the selected code track, derived tooling, and venue network end to end. Python uses Bun, TypeScript uses pnpm, and Go uses Make.
 
-1. Confirm the Studio template labels and dynamic-variable behavior.
-2. Upload a one-row CSV with `phone_number` first and E.164 data.
-3. Configure the claim event name (or manual SIP details) in host controls, claim one temporary number from a participant device, launch a campaign, and verify the full shutdown and revocation procedure.
-4. Run `agora quickstart list` and confirm `python`, `nextjs`, and `go` remain current template IDs.
-5. Run the selected quickstart from a clean machine.
-6. For Go, verify whether the explicit environment-write step is still required.
-7. Run `npx skills add agoraio/skills` from the workshop root, choose project/workspace scope if prompted, and confirm the presenter's coding agent loads the Agora Skill.
-8. Generate `website-sdr` with the distributed prompt.
-9. Verify AI Noise Suppression entitlement, Wasm asset serving, browser support, and graceful fallback.
-10. Test the selected durable deploy button and the Cloudflare tunnel against the generated app.
-11. Run `agora project doctor --deep` before doors open.
-12. Scan the Discord QR from iOS and Android.
+1. Run `agora quickstart list` and confirm `python`, `nextjs`, and `go` remain current template IDs.
+2. Run the selected quickstart from a clean machine.
+3. For Go, verify whether the explicit environment-write step is still required.
+4. Browse [Agora Recipes](https://recipes.agora.io/), choose an example, and inspect it with `agora recipes list --type ai` and `agora recipes show RECIPE_SLUG` (replace the placeholder with its slug).
+5. Demonstrate `agora init recipe-demo --recipe RECIPE_SLUG` from the workshop root. Check CLI support, runtime, prerequisites, and the printed setup commands. Return to the workshop root afterward.
+6. Run `npx skills add agoraio/skills` from the workshop root, choose project/workspace scope if prompted, and confirm the presenter's coding agent loads the Agora Skill.
+7. Choose **New app / demo** (default) or **Existing app**, then replace only `[your use case]` in the short prompt. The coding agent uses Agora Skills and https://recipes.agora.io as references. Participants choose their goal; `website-sdr` is the presenter’s example. The slide’s copy/download actions use the selected version; `PROMPT.md` contains both. These choices are local to each participant and do not change the host’s settings. Neither prompt appends implementation requirements.
+8. Test each generated app against its stated goal. For the presenter’s SDR example, verify simulated lead submission and any requested AI Noise Suppression integration.
+9. Test the selected durable deploy button and the Cloudflare tunnel against the generated app.
+10. Run `agora project doctor --deep` before doors open.
+11. Scan the Discord QR from iOS and Android.
 
 ## First-party command references
 
 - [Voice Agent quickstart](https://docs.agora.io/en/ai/get-started/quickstart)
 - [Agora CLI](https://github.com/AgoraIO/cli)
+- [Agora Recipes catalog](https://recipes.agora.io/)
+- [Recipe discovery with the CLI](https://github.com/AgoraIO/cli#recipes)
 - [Python quickstart](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-python)
 - [Next.js quickstart](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs)
 - [Go quickstart](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-go)
 - [Integrate with Agora Skills](https://docs.agora.io/en/ai/get-started/skills-integrate)
-- [Prompt template variables](https://docs.agora.io/en/ai/studio/build/prompt-design#template-variables)
-- [Campaign contact-list format](https://docs.agora.io/en/ai/studio/deploy/campaign#contact-list-format)
 - [Start and stop an agent](https://docs.agora.io/en/ai/build/start-stop-agent)
 - [Managed mode](https://docs.agora.io/en/ai/build/custom-model-integration/managed-mode)
 - [Web AI Noise Suppression](https://docs.agora.io/en/realtime-media/voice/build/enhance-the-audio-experience/ai-noise-suppression/web)
