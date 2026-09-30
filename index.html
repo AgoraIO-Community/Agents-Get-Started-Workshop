@@ -954,8 +954,8 @@
       .voice-channel { align-items: flex-start; flex-direction: column; }
     }
 
-    /* Illustrative realtime flow: 120 ms per stage, with every delay on the same clock. */
-    .cascade-slide { --flow-duration: 1200ms; --flow-step: 120ms; }
+    /* Illustrative realtime flow: 200 ms per step, with every delay on the same clock. */
+    .cascade-slide { --flow-step: 200ms; --flow-duration: calc(var(--flow-step) * 10); }
     .cascade-node { --flow-color: var(--cascade-audio); --flow-delay: 0s; }
     .cascade-node.asr { --flow-delay: calc(var(--flow-step) * 2); }
     .cascade-node.llm { --flow-color: var(--cascade-text); --flow-delay: calc(var(--flow-step) * 4); }
