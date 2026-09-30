@@ -26,7 +26,10 @@ If two workshops share a date or device dates disagree, override the channel in 
 ```text
 Audience: /?channel=sf-rehearsal
 Host:     /host?channel=sf-rehearsal
+Notes:    /host-notes?channel=sf-rehearsal
 ```
+
+For mobile presenter notes, open `/host-notes` on a phone and enter the same workshop password. The phone must use the same channel as `/host`. It receives the current slide’s notes and scripted desktop-demo steps through RTM without slide controls. Notes continue following the presenter while audience sync is paused. Returning to the phone page reconnects and requests the current slide; a Reconnect button is also available.
 
 Overrides are normalized to lowercase URL-safe names; spaces become hyphens. Names must start with a letter or number, contain only letters, numbers, `_`, and `-`, and be no longer than 48 characters. An invalid override is never allowed to silently fall back to the date channel.
 
@@ -37,6 +40,8 @@ Overrides are normalized to lowercase URL-safe names; spaces become hyphens. Nam
 - `T` toggles light and dark themes.
 - `?` shows all shortcuts.
 - The city bubble displays only the current city and switches when clicked.
+
+The understated desktop-demo cue marks a scripted switch to the terminal, browser, editor, or app. Its full **Show / Say / Checkpoint / Return** script appears in presenter notes and the mobile companion. Edit these shared scripts in [`src/presenter-cues.js`](src/presenter-cues.js). See [`HOST-GUIDE.md`](HOST-GUIDE.md) for the rundown and rehearsal checks.
 
 ## Audience view
 
@@ -52,7 +57,7 @@ Participants normally use `/`, or `/?channel=...` when the host supplies an over
 
 The presentation exposes a transport-neutral API at `window.workshopPresentation`. `src/signaling.js` publishes host snapshots from `workshop:statechange` and dispatches validated remote snapshots to the audience view. Email-claim snapshots contain only the claim mode and event name. Manual mode shares the host-entered phone and SIP fields, including the password, with the live audience; those operational values are never added to saved audience decks.
 
-The saved audience copy records the channel, venue, template, code track, its derived project tooling, model-provider selections, theme, and terminal environment. It does not retain SIP settings, campaign data, credentials, or secrets. Audience fragments such as `#slide-install-cli` are cleared while waiting or following the host. Opening the saved copy starts at the welcome slide, enables slide fragments and independent navigation, and continues checking for a live session.
+The saved audience copy records the channel, event date and times, Bitly join link, venue, template, code track, its derived project tooling, model-provider selections, theme, and terminal environment. It does not retain SIP settings, campaign data, credentials, or secrets. Audience fragments such as `#slide-install-cli` are cleared while waiting or following the host. Opening the saved copy starts at the welcome slide, enables slide fragments and independent navigation, and continues checking for a live session.
 
 ## Verification
 
@@ -67,9 +72,9 @@ The selected `Testing` project currently reports token enforcement as disabled i
 
 Host choices are stored only in that browser:
 
+- Workshop date, doors time, workshop start time, and Bitly join link (under **Event details** in host controls; times use venue local time)
 - Venue Wi-Fi name and session-only password for the projected opening slide
 - San Francisco or New York
-- One Agent Studio template for the room
 - Python, Next.js, or Go
 - Track-derived tooling: Bun for Python, pnpm for TypeScript, or Make for Go
 - Light, dark, or system theme
@@ -88,22 +93,6 @@ python3 scripts/generate-discord-qr.py workshop-config.json discord-qr.svg
 
 This requires the Python `reportlab` package. Scan the generated QR from a second device before publishing.
 
-### Workshop phone-number claims
-
-Slide 14 supports two host-selected setup methods:
-
-- **Email claim API**: enter the allocator’s event name, such as `SFWRKSHP26`, in host controls. The optional host claim email lets the presenter claim directly without the overlay; it stays in session storage and is not signaled. Each attendee still enters their own email so they receive their unique phone number and SIP details.
-- **Manual details**: enter a phone number plus the SIP vendor, display name, server, transport, username, and password in host controls. These values are shared over the trusted live signaling session.
-
-Configure the allocator token only on the server:
-
-```sh
-PHONE_CLAIM_API_URL=https://carrot-seven.vercel.app/api/event-number-claims
-PHONE_CLAIM_API_TOKEN=replace-with-the-allocator-token
-```
-
-The browser posts only `{ email, eventName }` to `/api/phone-number-claim`; the server adds authorization and returns an allowlisted response. FQDN connections use `sip_subdomain` as the trunk address and show that username/password credentials are not required. Attendee emails and returned SIP assignments remain in memory for the current tab only. Neither setup method’s operational values are retained in the audience’s saved workshop copy. Test the flow from a participant device before doors open, limit the allocator to the event pool, and disable claims before revoking the pool and trunk credentials after the event.
-
 ## Deployment
 
 Import this directory as a new Vercel project or run the Vercel CLI from this directory. `vercel.json` supplies the static-site settings and basic response headers.
@@ -121,31 +110,33 @@ The provider links in the deck currently open the provider's deployment entry po
 
 ## Clean-machine rehearsal
 
-Rehearse the selected Studio template, code track, derived tooling, and venue network end to end. Python uses Bun, TypeScript uses pnpm, and Go uses Make.
+Rehearse the selected code track, derived tooling, and venue network end to end. Python uses Bun, TypeScript uses pnpm, and Go uses Make.
 
-1. Confirm the Studio template labels and dynamic-variable behavior.
-2. Upload a one-row CSV with `phone_number` first and E.164 data.
-3. Configure the claim event name (or manual SIP details) in host controls, claim one temporary number from a participant device, launch a campaign, and verify the full shutdown and revocation procedure.
-4. Run `agora quickstart list` and confirm `python`, `nextjs`, and `go` remain current template IDs.
-5. Run the selected quickstart from a clean machine.
-6. For Go, verify whether the explicit environment-write step is still required.
-7. Run `npx skills add agoraio/skills` from the workshop root, choose project/workspace scope if prompted, and confirm the presenter's coding agent loads the Agora Skill.
-8. Generate `website-sdr` with the distributed prompt.
-9. Verify AI Noise Suppression entitlement, Wasm asset serving, browser support, and graceful fallback.
-10. Test the selected durable deploy button and the Cloudflare tunnel against the generated app.
-11. Run `agora project doctor --deep` before doors open.
-12. Scan the Discord QR from iOS and Android.
+1. Run `agora quickstart list` and confirm `python`, `nextjs`, and `go` remain current template IDs.
+2. Run the selected quickstart from a clean machine.
+3. For Go, verify whether the explicit environment-write step is still required.
+4. Browse [Agora Recipes](https://recipes.agora.io/), use [Tool Calling](https://recipes.agora.io/recipes/tool-calling) as the worked example, and inspect it with `agora recipes list --type ai` and `agora recipes show tool-calling`. Participants may substitute another catalog slug.
+5. Demonstrate `agora init recipe-demo --recipe tool-calling` from the workshop root. Tool Calling uses Python and Bun: inside `recipe-demo`, run `bun run setup` then `bun run dev`. Other recipes have their own runtime, prerequisites, and setup commands. Return to the workshop root afterward.
+6. Run `npx skills add agoraio/skills` from the workshop root, choose project/workspace scope if prompted, and confirm the presenter's coding agent loads the Agora Skill.
+7. Choose **New** (default) or **Update**, then replace only `[your use case]` in the short prompt. The coding assistant uses Agora Skills and the Agora CLI to find and adapt a suitable recipe from https://recipes.agora.io. Participants choose their own goal. The slide’s copy/download actions use the selected version; `PROMPT.md` contains both. These choices are local to each participant and do not change the host’s settings. Neither prompt appends implementation requirements.
+8. Choose one conversation before building, then test each generated app against that goal. Inspect any tool result or saved output. If an action is simulated, confirm the app says so.
+9. Test the selected durable deploy button and the Cloudflare tunnel against the generated app.
+10. Run `agora project doctor --deep` before doors open.
+11. Scan the Discord QR from iOS and Android.
+12. Open `/host-notes` on a phone using the presenter’s channel and password. Confirm notes and demo scripts follow slide changes. Rehearse each switch to the desktop and return to the named slide.
+
+The event schedule still has an unassigned 6:00–6:45 interval. Resolve it with the event team and reconcile demo durations before rehearsal; the current times in the deck and host guide are preserved.
 
 ## First-party command references
 
 - [Voice Agent quickstart](https://docs.agora.io/en/ai/get-started/quickstart)
 - [Agora CLI](https://github.com/AgoraIO/cli)
+- [Agora Recipes catalog](https://recipes.agora.io/)
+- [Recipe discovery with the CLI](https://github.com/AgoraIO/cli#recipes)
 - [Python quickstart](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-python)
 - [Next.js quickstart](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs)
 - [Go quickstart](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-go)
 - [Integrate with Agora Skills](https://docs.agora.io/en/ai/get-started/skills-integrate)
-- [Prompt template variables](https://docs.agora.io/en/ai/studio/build/prompt-design#template-variables)
-- [Campaign contact-list format](https://docs.agora.io/en/ai/studio/deploy/campaign#contact-list-format)
 - [Start and stop an agent](https://docs.agora.io/en/ai/build/start-stop-agent)
 - [Managed mode](https://docs.agora.io/en/ai/build/custom-model-integration/managed-mode)
 - [Web AI Noise Suppression](https://docs.agora.io/en/realtime-media/voice/build/enhance-the-audio-experience/ai-noise-suppression/web)

@@ -29,6 +29,7 @@ function fakeClient({ loginError, subscribeError } = {}) {
     addEventListener: vi.fn((name, handler) => { handlers[name] = handler; }),
     login: vi.fn(async (value) => { calls.push(["login", value]); if (loginError) throw loginError; }),
     subscribe: vi.fn(async (...args) => { calls.push(["subscribe", ...args]); if (subscribeError) throw subscribeError; }),
+    renewToken: vi.fn(async () => {}),
     publish: vi.fn(async (...args) => { calls.push(["publish", ...args]); }),
     unsubscribe: vi.fn(async (...args) => { calls.push(["unsubscribe", ...args]); }),
     logout: vi.fn(async () => { calls.push(["logout"]); })
@@ -148,7 +149,7 @@ describe("WorkshopSignaling", () => {
     const signaling = new WorkshopSignaling({ presentation: presentation(), eventTarget: events, fetchImpl, createClient: () => client });
     await signaling.connect({ sessionId: "2026-08-12", role: "audience" });
 
-    await client.handlers.status({ state: "TOKEN_EXPIRED", reason: "token expired" });
+    await client.handlers.linkState({ state: "TOKEN_EXPIRED", reason: "token expired" });
 
     expect(fetchImpl).toHaveBeenCalledTimes(2);
     expect(client.login).toHaveBeenLastCalledWith({ token: "token-2" });
@@ -166,5 +167,50 @@ describe("WorkshopSignaling", () => {
     await signaling.disconnect();
 
     expect(client.calls).toEqual([["unsubscribe", "2026-08-12"], ["logout"]]);
+  });
+});
+
+describe('presenter notes', () => {
+  it('follows host changes and handles late join requests while audience sync is paused', async () => {
+    vi.useFakeTimers();
+    const client = fakeClient();
+    const events = new EventTarget();
+    const deck = { ...presentation(), getPresenterSnapshot: () => ({ version: 1, slideId: 'install-cli', notesHtml: '<p>Show terminal</p>' }) };
+    const signaling = new WorkshopSignaling({ presentation: deck, eventTarget: events,
+      fetchImpl: async () => response(credentials({ userId: 'host-2026-08-12' })), createClient: () => client });
+    await signaling.connect({ sessionId: '2026-08-12', role: 'host' });
+    signaling.setBroadcasting(false);
+    client.publish.mockClear();
+    events.dispatchEvent(new Event(deck.stateChangeEvent));
+    await vi.advanceTimersByTimeAsync(100);
+    await client.handlers.message({ channelName: '2026-08-12', customType: MESSAGE_TYPES.notesRequest,
+      message: JSON.stringify({ type: MESSAGE_TYPES.notesRequest, version: 1 }) });
+    expect(client.publish).toHaveBeenCalledTimes(2);
+    for (const call of client.publish.mock.calls) expect(JSON.parse(call[1]).type).toBe(MESSAGE_TYPES.notesSnapshot);
+    await signaling.disconnect();
+    vi.useRealTimers();
+  });
+
+  it('requests notes, rejects forged packets, and renews the separate identity', async () => {
+    const client = fakeClient();
+    const events = new EventTarget();
+    const fetchImpl = vi.fn(async () => response(credentials({ userId: 'notes-123456781234123412341234' })));
+    const signaling = new WorkshopSignaling({ presentation: null, eventTarget: events, fetchImpl, createClient: () => client });
+    const received = vi.fn();
+    events.addEventListener('workshop:presentersnapshot', received);
+    await signaling.connect({ sessionId: '2026-08-12', role: 'notes', hostKey: 'key' });
+    expect(JSON.parse(client.publish.mock.calls[0][1]).type).toBe(MESSAGE_TYPES.notesRequest);
+    const packet = { channelName: '2026-08-12', customType: MESSAGE_TYPES.notesSnapshot,
+      message: JSON.stringify({ type: MESSAGE_TYPES.notesSnapshot, version: 1, snapshot: { slideId: 'welcome' } }) };
+    await client.handlers.message({ ...packet, publisher: 'audience-forged' });
+    await client.handlers.message({ ...packet, publisher: 'host-2026-08-12', channelName: 'other' });
+    expect(received).not.toHaveBeenCalled();
+    await client.handlers.message({ ...packet, publisher: 'host-2026-08-12' });
+    expect(received).toHaveBeenCalledTimes(1);
+    await signaling.renewToken();
+    expect(client.renewToken).toHaveBeenCalledWith('token-1');
+    await client.handlers.linkState({ currentState: 'FAILED', reasonCode: 'TOKEN_EXPIRED' });
+    expect(JSON.parse(fetchImpl.mock.calls[1][1].body)).toMatchObject({ role: 'notes', userId: 'notes-123456781234123412341234', hostKey: 'key' });
+    await signaling.disconnect();
   });
 });

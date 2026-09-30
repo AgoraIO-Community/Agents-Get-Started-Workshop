@@ -2,6 +2,8 @@ import AgoraRTM from "agora-rtm";
 import { channelNameForSession, normalizeSessionId } from "./session.js";
 
 export const MESSAGE_TYPES = Object.freeze({
+  notesRequest: "workshop.notes.request",
+  notesSnapshot: "workshop.notes.snapshot",
   request: "workshop.state.request",
   snapshot: "workshop.state.snapshot"
 });
@@ -51,7 +53,7 @@ export class WorkshopSignaling {
   async connect({ sessionId, role, hostKey = "", userId = "" }) {
     const normalized = normalizeSessionId(sessionId);
     if (!normalized) throw new Error("Invalid workshop session");
-    if (role !== "host" && role !== "audience") throw new Error("Invalid workshop role");
+    if (role !== "host" && role !== "audience" && role !== "notes") throw new Error("Invalid workshop role");
     if (this.client) await this.disconnect();
 
     this.onStatus("connecting");
@@ -69,7 +71,10 @@ export class WorkshopSignaling {
     this.connection = { ...credentials, sessionId: normalized, role, hostKey, userId: credentials.userId };
     client.addEventListener("message", (event) => this.handleMessage(event));
     client.addEventListener("presence", (event) => this.handlePresence(event));
-    client.addEventListener("status", (event) => this.handleStatus(event));
+    client.addEventListener("linkState", (event) => this.handleStatus(event));
+    client.addEventListener("token", (event) => {
+      if (event.eventType === "WILL_EXPIRE") void this.renewToken();
+    });
 
     let loggedIn = false;
     let subscribeAttempted = false;
@@ -91,12 +96,11 @@ export class WorkshopSignaling {
     this.broadcasting = true;
     this.onStatus("connected");
     if (role === "host") {
-      this.eventTarget.addEventListener(this.presentation.stateChangeEvent, this.stateChangeHandler);
+      this.eventTarget.addEventListener(this.presentation?.stateChangeEvent || "workshop:statechange", this.stateChangeHandler);
       await this.publishSnapshot();
+      await this.publishNotesSnapshot();
     } else {
-      await client.publish(credentials.channelName, JSON.stringify({ type: MESSAGE_TYPES.request, version: 1 }), {
-        customType: MESSAGE_TYPES.request
-      });
+      await this.requestSnapshot();
     }
     return credentials;
   }
@@ -108,47 +112,93 @@ export class WorkshopSignaling {
 
     let payload;
     try { payload = JSON.parse(message); } catch { return; }
+    if (!payload || typeof payload !== "object") return;
 
-    if (this.connection.role === "audience") {
-      if (event.publisher !== this.connection.hostUserId || event.customType !== MESSAGE_TYPES.snapshot) return;
-      if (payload.type !== MESSAGE_TYPES.snapshot || payload.version !== 1) return;
-      this.eventTarget.dispatchEvent(new CustomEvent("workshop:remotesnapshot", { detail: payload.snapshot }));
+    if (this.connection.role === "audience" || this.connection.role === "notes") {
+      const notes = this.connection.role === "notes";
+      const type = notes ? MESSAGE_TYPES.notesSnapshot : MESSAGE_TYPES.snapshot;
+      if (event.publisher !== this.connection.hostUserId || event.customType !== type) return;
+      if (payload.type !== type || payload.version !== 1) return;
+      this.eventTarget.dispatchEvent(new CustomEvent(notes ? "workshop:presentersnapshot" : "workshop:remotesnapshot", { detail: payload.snapshot }));
       return;
     }
-
-    if (this.broadcasting && event.customType === MESSAGE_TYPES.request && payload.type === MESSAGE_TYPES.request) {
+    if (payload.version !== 1) return;
+    if (event.customType === MESSAGE_TYPES.notesRequest && payload.type === MESSAGE_TYPES.notesRequest) {
+      await this.publishNotesSnapshot();
+    } else if (this.broadcasting && event.customType === MESSAGE_TYPES.request && payload.type === MESSAGE_TYPES.request) {
       await this.publishSnapshot();
     }
+  }
+
+  async requestSnapshot() {
+    if (!this.connected || this.connection?.role === "host") return;
+    const type = this.connection.role === "notes" ? MESSAGE_TYPES.notesRequest : MESSAGE_TYPES.request;
+    await this.client.publish(this.connection.channelName, JSON.stringify({ type, version: 1 }), { customType: type });
+  }
+
+  async publishNotesSnapshot() {
+    if (!this.connected || this.connection?.role !== "host" || !this.presentation?.getPresenterSnapshot) return;
+    await this.client.publish(this.connection.channelName, JSON.stringify({
+      type: MESSAGE_TYPES.notesSnapshot, version: 1, snapshot: this.presentation.getPresenterSnapshot()
+    }), { customType: MESSAGE_TYPES.notesSnapshot });
   }
 
   async handlePresence(event) {
-    if (!this.connected || !this.broadcasting || this.connection?.role !== "host") return;
+    if (!this.connected || this.connection?.role !== "host") return;
     if (event.eventType === "JOIN" || (event.eventType === "INTERVAL" && event.joinedUsers?.length)) {
       await this.publishSnapshot();
+      await this.publishNotesSnapshot();
     }
   }
 
+  async renewToken() {
+    if (!this.connection || !this.client || this.renewing) return;
+    this.renewing = true;
+    const client = this.client;
+    const connection = this.connection;
+    try {
+      const credentials = await this.fetchCredentials(connection);
+      if (client !== this.client) return;
+      if (credentials.userId !== connection.userId || credentials.hostUserId !== connection.hostUserId || credentials.channelName !== connection.channelName) {
+        throw new Error("Token renewal did not match the workshop session");
+      }
+      await client.renewToken(credentials.token);
+      this.connection = { ...connection, ...credentials };
+    } catch (error) { this.onStatus("error", error); }
+    finally { this.renewing = false; }
+  }
+
   async handleStatus(event) {
-    const state = String(event?.state || "");
-    const reason = String(event?.reason || "").toLowerCase();
-    if (state === "TOKEN_EXPIRED" || reason.includes("token expired")) {
+    const state = String(event?.currentState || event?.state || "");
+    const reason = String(event?.reasonCode || event?.reason || "").toLowerCase();
+    if (state === "TOKEN_EXPIRED" || reason.includes("token expired") || reason === "token_expired") {
       try {
         const credentials = await this.fetchCredentials(this.connection);
+        if (credentials.userId !== this.connection.userId || credentials.hostUserId !== this.connection.hostUserId || credentials.channelName !== this.connection.channelName) {
+          throw new Error("Token renewal did not match the workshop session");
+        }
         this.connection = { ...this.connection, ...credentials };
         await this.client.login({ token: credentials.token });
         this.onStatus("connected");
+        await this.requestSnapshot();
       } catch (error) {
         this.onStatus("error", error);
       }
       return;
     }
     this.onStatus(state.toLowerCase(), event);
+    if (state.toLowerCase() === "connected" && this.connected) {
+      if (event.unrestoredChannels?.includes(this.connection?.channelName)) {
+        await this.client.subscribe(this.connection.channelName, { withMessage: true, withPresence: true });
+      }
+      await this.requestSnapshot();
+    }
   }
 
   queueSnapshot() {
-    if (!this.connected || !this.broadcasting || this.connection?.role !== "host") return;
+    if (!this.connected || this.connection?.role !== "host") return;
     clearTimeout(this.snapshotTimer);
-    this.snapshotTimer = setTimeout(() => this.publishSnapshot().catch((error) => this.onStatus("error", error)), 80);
+    this.snapshotTimer = setTimeout(() => Promise.all([this.publishSnapshot(), this.publishNotesSnapshot()]).catch((error) => this.onStatus("error", error)), 80);
   }
 
   async publishSnapshot() {
@@ -168,18 +218,12 @@ export class WorkshopSignaling {
     if (this.broadcasting === next) return;
     this.broadcasting = next;
     if (this.connection?.role !== "host") return;
-    if (next) {
-      this.eventTarget.addEventListener(this.presentation.stateChangeEvent, this.stateChangeHandler);
-      void this.publishSnapshot();
-    } else {
-      clearTimeout(this.snapshotTimer);
-      this.eventTarget.removeEventListener(this.presentation.stateChangeEvent, this.stateChangeHandler);
-    }
+    if (next) void this.publishSnapshot();
   }
 
   async disconnect() {
     clearTimeout(this.snapshotTimer);
-    this.eventTarget?.removeEventListener(this.presentation.stateChangeEvent, this.stateChangeHandler);
+    this.eventTarget?.removeEventListener(this.presentation?.stateChangeEvent || "workshop:statechange", this.stateChangeHandler);
     const client = this.client;
     const channelName = this.connection?.channelName;
     this.connected = false;

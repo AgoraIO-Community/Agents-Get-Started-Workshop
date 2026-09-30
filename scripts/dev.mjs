@@ -50,6 +50,7 @@ async function staticRequest(request, response) {
   if (pathname === "/") pathname = "/index.html";
   if (pathname === "/audience" || pathname === "/audience/") pathname = "/audience.html";
   if (pathname === "/host" || pathname === "/host/") pathname = "/host.html";
+  if (pathname === "/host-notes" || pathname === "/host-notes/") pathname = "/host-notes.html";
   const relative = normalize(pathname).replace(/^[/\\]+/, "");
   const path = join(root, relative);
   if (!path.startsWith(root)) return sendJson(response, 403, { error: "Forbidden" });

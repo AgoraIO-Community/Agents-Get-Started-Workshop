@@ -7,6 +7,7 @@ import {
 import { getOrCreateAudienceUserId } from "./identity.js";
 import { resolveSessionId } from "./session.js";
 import { WorkshopSignaling } from "./signaling.js";
+import { PRESENTER_CUES, createCueSection } from "./presenter-cues.js";
 
 const presentation = window.workshopPresentation;
 const controls = document.getElementById("sessionControls");
@@ -29,6 +30,39 @@ let sessionStarted = false;
 let archiveOpen = false;
 let hostBroadcasting = true;
 const activeSessionId = resolveSessionId(location.search);
+const demoCue = document.getElementById("demoCue");
+const demoCueLabel = document.getElementById("demoCueLabel");
+presentation.setPresenterNotesDecorator((slideId, notesContent) => {
+  const cue = PRESENTER_CUES[slideId];
+  demoCue.hidden = isAudience || !cue;
+  if (!cue || isAudience) return;
+  demoCueLabel.textContent = `Demo · ${cue.label}`;
+  demoCue.title = `Desktop demo: ${cue.label} · Open presenter notes`;
+  demoCue.setAttribute("aria-label", demoCue.title);
+  notesContent.prepend(createCueSection(cue, document));
+});
+demoCue.addEventListener("click", () => {
+  if (isAudience) return;
+  const drawer = document.getElementById("notesDrawer");
+  if (drawer.getAttribute("aria-hidden") === "true") document.getElementById("notesButton").click();
+});
+
+if (!isAudience && activeSessionId) {
+  const notesUrl = new URL("/host-notes", location.origin);
+  notesUrl.searchParams.set("channel", activeSessionId);
+  const notesLink = document.getElementById("hostNotesLink");
+  notesLink.href = notesUrl.href;
+  notesLink.textContent = notesUrl.href;
+  const copyNotesLink = document.getElementById("copyHostNotesLink");
+  copyNotesLink.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(notesUrl.href);
+      copyNotesLink.textContent = "Link copied";
+    } catch {
+      copyNotesLink.textContent = "Select and copy the link above";
+    }
+  });
+}
 
 function setStatus(value, error) {
   controls.dataset.connection = value;
