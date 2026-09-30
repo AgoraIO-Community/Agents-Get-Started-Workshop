@@ -144,6 +144,23 @@ export class WorkshopSignaling {
   }
 
   async handlePresence(event) {
+    if (this.connected && this.connection?.role === "notes") {
+      if (event.channelName !== this.connection.channelName) return;
+      const host = this.connection.hostUserId;
+      const remoteHost = event.publisher === host;
+      const interval = event.eventType === "INTERVAL" ? event.interval : null;
+      const absent = (remoteHost && ["REMOTE_LEAVE", "REMOTE_TIMEOUT"].includes(event.eventType))
+        || interval?.leave?.users?.includes(host) || interval?.timeout?.users?.includes(host)
+        || (event.eventType === "SNAPSHOT" && Array.isArray(event.snapshot) && !event.snapshot.some(user => user.userId === host));
+      const joined = (remoteHost && event.eventType === "REMOTE_JOIN") || interval?.join?.users?.includes(host)
+        || (event.eventType === "SNAPSHOT" && event.snapshot?.some(user => user.userId === host));
+      if (absent) this.onStatus("waiting-for-host");
+      if (joined) {
+        this.onStatus("waiting-for-slide");
+        await this.requestSnapshot();
+      }
+      return;
+    }
     if (!this.connected || this.connection?.role !== "host") return;
     if (event.eventType === "JOIN" || (event.eventType === "INTERVAL" && event.joinedUsers?.length)) {
       await this.publishSnapshot();

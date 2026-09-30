@@ -1,3 +1,4 @@
+import { validHostKey } from "../server/host-auth.js";
 import crypto from "node:crypto";
 import AgoraToken from "agora-token";
 import { createAudienceUserId, isAudienceUserId, createNotesUserId, isNotesUserId } from "../src/identity.js";
@@ -5,14 +6,6 @@ import { channelNameForSession, normalizeSessionId } from "../src/session.js";
 
 const { RtmTokenBuilder } = AgoraToken;
 const TOKEN_TTL_SECONDS = 60 * 60;
-const DEFAULT_HOST_KEY = "AgoraWorkshop2026";
-
-function secureEqual(left, right) {
-  const leftBuffer = Buffer.from(String(left || ""));
-  const rightBuffer = Buffer.from(String(right || ""));
-  return leftBuffer.length === rightBuffer.length && crypto.timingSafeEqual(leftBuffer, rightBuffer);
-}
-
 export function createTokenResponse({ sessionId, role, hostKey, userId: requestedUserId }, env = process.env, randomUUID = crypto.randomUUID) {
   const normalized = normalizeSessionId(sessionId);
   if (!normalized) return { status: 400, body: { error: "Invalid workshop session" } };
@@ -23,8 +16,7 @@ export function createTokenResponse({ sessionId, role, hostKey, userId: requeste
   if (!appId || !appCertificate) return { status: 503, body: { error: "Agora environment is not configured" } };
 
   if (role === "host" || role === "notes") {
-    const configuredHostKey = env.WORKSHOP_HOST_KEY || DEFAULT_HOST_KEY;
-    if (!secureEqual(hostKey, configuredHostKey)) {
+    if (!validHostKey(hostKey, env)) {
       return { status: 401, body: { error: "Invalid host key" } };
     }
   } else if (requestedUserId && !isAudienceUserId(requestedUserId)) {

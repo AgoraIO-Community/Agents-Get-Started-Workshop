@@ -1150,95 +1150,6 @@
     th { background: color-mix(in srgb, var(--panel-soft) 75%, transparent); color: var(--accent); font-family: ui-monospace, monospace; font-size: 12px; }
     td { color: var(--muted); }
 
-    .telephony-form {
-      width: min(920px, 100%);
-      padding: clamp(22px, 3vw, 30px);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--card-glass);
-      box-shadow: var(--shadow-float);
-    }
-    .telephony-form-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
-    .telephony-form-head strong { font-size: 18px; }
-    .telephony-assignment { color: var(--accent); font-family: ui-monospace, monospace; font-size: 13px; font-weight: 850; }
-    .telephony-source { color: var(--muted); font-size: 10px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
-    .telephony-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 11px 14px; margin-top: 16px; }
-    .telephony-field { display: grid; gap: 7px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-align: left; text-transform: uppercase; }
-    .telephony-field input {
-      width: 100%;
-      min-height: 46px;
-      padding: 10px 12px;
-      border: 1px solid var(--input);
-      border-radius: 10px;
-      background: color-mix(in srgb, var(--panel) 82%, var(--bg-soft));
-      color: var(--ink);
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 14px;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-    .telephony-claim-button,
-    .telephony-claim-unavailable {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      min-height: 46px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 850;
-      letter-spacing: 0;
-      text-align: center;
-      text-transform: none;
-    }
-    .telephony-claim-button { border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); text-decoration: none; }
-    .telephony-claim-button:hover { filter: brightness(1.04); }
-    .telephony-claim-button:disabled { cursor: progress; opacity: .68; }
-    .telephony-claim-button[hidden] { display: none; }
-    .telephony-claim-unavailable { border: 1px dashed var(--input); background: color-mix(in srgb, var(--panel) 82%, var(--bg-soft)); color: var(--muted); }
-    .telephony-claim-unavailable[hidden] { display: none; }
-    .telephony-field-wide { grid-column: 1 / -1; }
-    .telephony-shared-label { display: flex; align-items: center; gap: 9px; grid-column: 1 / -1; margin-top: 2px; color: var(--accent); font-size: 10px; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
-    .telephony-shared-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-    .telephony-password-wrap { position: relative; }
-    .telephony-protocols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .telephony-protocol {
-      display: grid;
-      min-height: 42px;
-      place-items: center;
-      border: 1px solid var(--input);
-      border-radius: 10px;
-      background: color-mix(in srgb, var(--panel) 82%, var(--bg-soft));
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 850;
-      letter-spacing: .04em;
-    }
-    .telephony-protocol.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-    .telephony-form-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 18px; }
-    [data-slide-id="add-telephone-number"] { gap: 6px; }
-    [data-slide-id="add-telephone-number"] h2 { max-width: 920px; font-size: clamp(30px, 3.5vw, 48px); }
-    [data-slide-id="add-telephone-number"] .microcopy { font-size: 12px; line-height: 1.4; }
-    [data-slide-id="add-telephone-number"] .telephony-form { padding: 12px 16px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-head { padding-bottom: 6px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-head strong { font-size: 16px; }
-    [data-slide-id="add-telephone-number"] .telephony-fields { gap: 5px 12px; margin-top: 8px; }
-    [data-slide-id="add-telephone-number"] .telephony-field { gap: 3px; font-size: 10px; }
-    [data-slide-id="add-telephone-number"] .telephony-field input,
-    [data-slide-id="add-telephone-number"] .telephony-claim-button,
-    [data-slide-id="add-telephone-number"] .telephony-claim-unavailable { min-height: 32px; padding: 5px 9px; font-size: 12px; }
-    [data-slide-id="add-telephone-number"] .telephony-protocol { min-height: 30px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-footer { margin-top: 8px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-footer .status-chip { min-height: 26px; padding: 3px 8px; font-size: 10px; }
-    [data-slide-id="add-telephone-number"] .telephony-form-footer .primary-button { min-height: 32px; padding-block: 5px; }
-    [data-slide-id="add-telephone-number"] input[readonly],
-    [data-slide-id="add-telephone-number"] .telephony-protocols { cursor: copy; }
-    [data-slide-id="add-telephone-number"] input[readonly]:hover,
-    [data-slide-id="add-telephone-number"] input[readonly]:focus-visible,
-    [data-slide-id="add-telephone-number"] .telephony-protocols:hover .telephony-protocol.active,
-    [data-slide-id="add-telephone-number"] .telephony-protocols:focus-visible .telephony-protocol.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-
     .campaign-ui {
       display: grid;
       grid-template-columns: .85fr 1.15fr;
@@ -1761,27 +1672,6 @@
       color: var(--ink);
       -webkit-text-fill-color: var(--ink);
     }
-    .host-sip-config {
-      display: grid;
-      grid-template-columns: .9fr .85fr 1.25fr .85fr .72fr .76fr 1fr .58fr .82fr 1fr;
-      gap: 10px;
-      align-items: end;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--line);
-    }
-    .host-sip-intro { align-self: center; min-width: 0; }
-    .host-sip-intro strong { display: block; margin-bottom: 3px; font-size: 13px; }
-    .host-sip-intro span { display: block; color: var(--muted); font-size: 11px; line-height: 1.35; }
-    .host-sip-config[data-sip-mode="manual"] [data-sip-claim-only],
-    .host-sip-config[data-sip-mode="claim"] [data-sip-manual-only] { display: none; }
-    .host-sip-config[data-sip-mode="claim"] {
-      grid-template-columns: minmax(170px, .8fr) minmax(190px, .9fr) minmax(210px, 1fr) minmax(260px, 1.25fr);
-    }
-    #sipModeInput,
-    #sipClaimHostEmailInput { min-width: 0; }
-    .host-network-config,
-    .host-campaign-config,
     .host-model-config {
       margin-top: 12px;
       padding-top: 12px;
@@ -1903,15 +1793,6 @@
       box-shadow: var(--shadow-float);
     }
     dialog::backdrop { background: rgba(0,0,0,.48); backdrop-filter: blur(4px); }
-    .sip-claim-dialog { width: min(500px, 92vw); padding: 0; }
-    .sip-claim-form { display: grid; gap: 18px; padding: 24px; }
-    .sip-claim-form .drawer-header { margin-bottom: 0; }
-    .sip-claim-copy { margin: -8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
-    .sip-claim-form label { display: grid; gap: 7px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-    .sip-claim-form input { min-height: 46px; padding: 10px 12px; border: 1px solid var(--input); border-radius: 10px; background: var(--panel-soft); color: var(--ink); font-size: 15px; }
-    .sip-claim-error { min-height: 18px; margin: -6px 0 0; color: var(--danger); font-size: 12px; }
-    .sip-claim-actions { display: flex; justify-content: flex-end; gap: 9px; }
-    .sip-claim-privacy { margin: -8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
     .help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
     .help-grid p { display: flex; justify-content: space-between; margin: 0; padding: 10px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
     kbd { min-width: 28px; padding: 3px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; background: var(--panel-soft); color: var(--ink); text-align: center; }
@@ -1959,6 +1840,22 @@
     .host-auth-form input { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--input); color: var(--ink); }
     .host-auth-form button { min-height: 42px; border: 0; border-radius: 9px; background: var(--accent); color: var(--accent-ink); font-weight: 850; }
     .host-auth-error { min-height: 18px; margin: 2px 0 0; color: var(--danger); font-size: 12px; }
+    #audienceJoinChoices[hidden], #joinActiveButton[hidden], #followHostButton[hidden], #moreEventsButton[hidden] { display: none; }
+    .event-join-choices { display: grid; gap: 22px; margin: 26px auto 0; max-width: 490px; }
+    .event-code-form { display: grid; gap: 8px; text-align: left; }
+    .event-code-form label { font-size: 14px; font-weight: 800; }
+    .event-code-row { display: flex; gap: 10px; }
+    .event-code-row input { width: 150px; min-width: 0; flex: 1; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); padding: 12px; font: inherit; letter-spacing: .1em; }
+    .event-code-row button { white-space: nowrap; }
+    .audience-waiting .event-error { margin: 0; color: var(--danger); font-size: 14px; }
+    .saved-event-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 16px 0 8px; }
+    .event-button-row { display: flex; gap: 8px; align-items: end; flex-wrap: wrap; }
+    .saved-event-share { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+    .saved-event-share[hidden] { display: none; }
+    .saved-event-share a { color: var(--accent); overflow-wrap: anywhere; }
+    #savedEventStatus[data-error="true"] { color: var(--danger); }
+    @media (max-width: 600px) { .saved-event-grid { grid-template-columns: 1fr; } .event-code-row { flex-wrap: wrap; } }
+
     .audience-waiting { display: none; }
     body.view-audience:not(.session-started):not(.archive-open) .audience-waiting {
       position: fixed;
@@ -2000,9 +1897,6 @@
       .slide.active .cascade-connector-line::after { animation-name: cascade-forward-vertical; }
       .cascade-connector-label { top: 50%; left: calc(50% + 14px); width: auto; transform: translateY(-50%); white-space: nowrap; }
       .host-control-grid { grid-template-columns: 2fr 1fr; }
-      .host-sip-config { grid-template-columns: 1fr 1fr 1fr; }
-      .host-sip-config[data-sip-mode="claim"] { grid-template-columns: 1fr 1fr; }
-      .host-sip-intro { grid-column: 1 / -1; }
       .host-campaign-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .host-model-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .host-toggle-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -2018,16 +1912,11 @@
       .slide { padding: 24px 18px; }
       .grid, .grid.two, .grid.four, .grid.seven, .template-picker, .ship-grid { grid-template-columns: 1fr; }
       .number-line { grid-template-columns: 62px 1fr; gap: 14px; }
-      .telephony-fields { grid-template-columns: 1fr; }
-      .telephony-form-footer { align-items: stretch; flex-direction: column; }
       .help-grid { grid-template-columns: 1fr; }
       .footer-title { display: none; }
       .session-status { display: none; }
       .connection-annotations { top: 8px; right: 8px; bottom: auto; left: auto; justify-content: flex-end; }
       .host-control-grid { grid-template-columns: 1fr 1fr; }
-      .host-sip-config,
-      .host-sip-config[data-sip-mode="claim"] { grid-template-columns: 1fr; }
-      .host-sip-intro { grid-column: auto; }
       .host-network-grid { grid-template-columns: 1fr; }
       .host-campaign-grid { grid-template-columns: 1fr 1fr; }
       .host-model-grid { grid-template-columns: 1fr; }
@@ -2110,8 +1999,16 @@
     <div class="audience-waiting-card">
       <img class="audience-waiting-logo" src="assets/agora-logo-rgb-blue.svg" alt="Agora">
       <p class="eyebrow">Workshop audience</p>
-      <h1 id="audienceWaitingTitle">The session hasn’t started yet.</h1>
-      <p id="audienceWaitingMessage">You’re in the right place. Keep this page open and the workshop will appear automatically when the host connects.</p>
+      <h1 id="audienceWaitingTitle">Join a workshop</h1>
+      <p id="audienceWaitingMessage">Follow the live host or enter an event code to work through a saved workshop at your own pace.</p>
+      <div id="audienceJoinChoices" class="event-join-choices">
+        <button id="joinActiveButton" class="primary-button" type="button">Join active</button>
+        <form id="eventCodeForm" class="event-code-form">
+          <label for="eventCodeInput">Event code</label>
+          <div class="event-code-row"><input id="eventCodeInput" name="code" type="text" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="482-193" pattern="[0-9]{3}-?[0-9]{3}" required aria-describedby="eventCodeError"><button class="secondary-button" type="submit">Open workshop</button></div>
+          <p id="eventCodeError" class="event-error" role="alert"></p>
+        </form>
+      </div>
       <div id="lastWorkshopPanel" class="audience-last-workshop" hidden>
         <span class="audience-last-workshop-label">Your last workshop</span>
         <strong id="lastWorkshopSummary" class="audience-last-workshop-summary"></strong>
@@ -2338,7 +2235,7 @@
       <div class="grid four">
         <article class="card"><span class="card-number">01</span><h3>Behavior</h3><p>System prompt, greeting, boundaries, and conversation style.</p></article>
         <article class="card"><span class="card-number">02</span><h3>Models</h3><p>Speech recognition, language models, and speech synthesis.</p></article>
-        <article class="card"><span class="card-number">03</span><h3>Media</h3><p>Channel, telephony, voice activity, and noise handling.</p></article>
+        <article class="card"><span class="card-number">03</span><h3>Media</h3><p>Channel, voice activity, and noise handling.</p></article>
         <article class="card"><span class="card-number">04</span><h3>Lifecycle</h3><p>Start on demand, observe events, and stop when the session is done.</p></article>
       </div>
       <div class="speaker-notes">
@@ -2863,6 +2760,20 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         <button id="themeButton" class="icon-button theme-button" type="button" aria-label="Theme: System. Activate for Light theme." title="Theme: System"><span id="themeIcon" aria-hidden="true">◐</span></button>
         <button class="icon-button" type="button" data-close-drawer="hostDrawer" aria-label="Close host controls">×</button>
       </div>
+      <details class="host-network-config" open>
+        <summary>Saved events <span>Share a workshop for later</span></summary>
+        <div class="saved-event-grid">
+          <div class="setting"><label for="savedEventName">Event name</label><input id="savedEventName" type="text" maxlength="120" placeholder="New York workshop"></div>
+          <div class="event-button-row"><button id="newEventButton" class="pill-button" type="button">New event code</button><button id="saveEventButton" class="pill-button" type="button" disabled>Save changes</button></div>
+          <div class="setting"><label for="savedEventSelect">Previous events</label><select id="savedEventSelect"><option value="">Choose an event</option></select></div>
+          <div class="event-button-row"><button id="openEventButton" class="pill-button" type="button">Open event</button><button id="refreshEventsButton" class="pill-button" type="button">Refresh list</button><button id="moreEventsButton" class="pill-button" type="button" hidden>Load more</button></div>
+          <div class="setting"><label for="hostEventCodeInput">Open by code</label><input id="hostEventCodeInput" type="text" inputmode="numeric" maxlength="7" placeholder="482-193"></div>
+          <div class="event-button-row"><button id="openEventCodeButton" class="pill-button" type="button">Open code</button><button id="eventGoLiveButton" class="pill-button" type="button">Use settings live</button></div>
+        </div>
+        <div id="savedEventShare" class="saved-event-share" hidden><strong id="savedEventCode"></strong><a id="savedEventLink" target="_blank" rel="noopener"></a><button id="copyEventLinkButton" class="pill-button" type="button">Copy link</button></div>
+        <p id="savedEventStatus" class="host-network-note" role="status">Create an event from the current settings, or reopen a previous event.</p>
+        <p class="host-network-note">Changes to an open event save automatically. Opening a previous event pauses live sharing. Saved links open without a host.</p>
+      </details>
       <div class="host-control-grid">
         <div class="setting"><label for="trackSelect">Code track</label><select id="trackSelect"><option value="python">Python · default</option><option value="nextjs">TypeScript</option><option value="go">Go</option></select></div>
       </div>
@@ -3171,16 +3082,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         terminalEnvironment: "mac",
         wifiName: "",
         wifiPassword: "",
-        sipMode: "claim",
-        sipClaimEventName: "",
-        sipClaimHostEmail: "",
-        sipPhone: "",
-        sipProvider: "SIP Trunk",
-        sipDisplayName: "Agora Demo Number",
-        sipServer: "",
-        sipTransport: "tcp",
-        sipUsername: "",
-        sipPassword: "",
         campaignName: "",
         campaignAgent: "",
         campaignLaunch: "Immediately",
@@ -3203,8 +3104,8 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       var SHARED_CONFIG_KEYS = [
         "eventDate", "doorsTime", "workshopTime", "joinLink",
         "city", "template", "track", "packageManager", "sttProvider", "llmProvider", "ttsProvider",
-        "theme", "terminalEnvironment", "sipMode", "sipClaimEventName", "sipPhone", "sipProvider", "sipDisplayName", "sipServer",
-        "sipTransport", "sipUsername", "sipPassword", "campaignName", "campaignAgent", "campaignLaunch",
+        "theme", "terminalEnvironment",
+        "campaignName", "campaignAgent", "campaignLaunch",
         "campaignTimezone", "campaignCallWindow", "campaignCallDelay", "campaignConcurrency",
         "campaignMaxCall", "campaignRing", "campaignSilence", "campaignStoreTranscripts",
         "campaignCallRecording", "campaignVoicemail", "campaignEndHangup", "campaignSilenceHangup",
@@ -3220,17 +3121,12 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         ttsProvider: Object.keys(MODEL_PROVIDERS.tts),
         theme: ["auto", "light", "dark"],
         terminalEnvironment: Object.keys(TERMINAL_ENVIRONMENTS),
-        sipMode: ["claim", "manual"],
-        sipTransport: ["tcp", "udp", "tls"]
       };
       function savedBoolean(key, fallback) {
         var value = localStorage.getItem(key);
         return value == null ? fallback : value === "true";
       }
-      function savedSipDisplayName() {
-        var value = localStorage.getItem("agora-v2-sip-display-name");
-        return !value || value === "Support inbound" ? DEFAULTS.sipDisplayName : value;
-      }
+
       var savedTrack = localStorage.getItem("agora-v2-track") || DEFAULTS.track;
       var state = {
         eventDate: isAudience ? DEFAULTS.eventDate : (localStorage.getItem("agora-v2-eventDate") || DEFAULTS.eventDate),
@@ -3248,17 +3144,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         terminalEnvironment: localStorage.getItem("agora-v2-terminal-environment") || DEFAULTS.terminalEnvironment,
         wifiName: isAudience ? DEFAULTS.wifiName : (localStorage.getItem("agora-v2-wifi-name") || DEFAULTS.wifiName),
         wifiPassword: isAudience ? DEFAULTS.wifiPassword : (sessionStorage.getItem("agora-v2-wifi-password") || DEFAULTS.wifiPassword),
-        sipMode: localStorage.getItem("agora-v2-sip-mode") || DEFAULTS.sipMode,
-        sipClaimEventName: localStorage.getItem("agora-v2-sip-claim-event-name") || DEFAULTS.sipClaimEventName,
-        sipClaimHostEmail: isAudience ? DEFAULTS.sipClaimHostEmail : (sessionStorage.getItem("agora-v2-sip-claim-host-email") || DEFAULTS.sipClaimHostEmail),
-        sipPhone: localStorage.getItem("agora-v2-sip-phone") || DEFAULTS.sipPhone,
-        sipProvider: localStorage.getItem("agora-v2-sip-provider") || DEFAULTS.sipProvider,
-        sipDisplayName: savedSipDisplayName(),
-        sipServer: localStorage.getItem("agora-v2-sip-server") || DEFAULTS.sipServer,
-        sipTransport: localStorage.getItem("agora-v2-sip-transport") || DEFAULTS.sipTransport,
-        sipUsername: localStorage.getItem("agora-v2-sip-username") || DEFAULTS.sipUsername,
-        sipPassword: sessionStorage.getItem("agora-v2-sip-password") || DEFAULTS.sipPassword,
-        sipPasswordVisible: false,
         campaignName: localStorage.getItem("agora-v2-campaign-name") || DEFAULTS.campaignName,
         campaignAgent: localStorage.getItem("agora-v2-campaign-agent") || DEFAULTS.campaignAgent,
         campaignLaunch: localStorage.getItem("agora-v2-campaign-launch") || DEFAULTS.campaignLaunch,
@@ -3296,8 +3181,8 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         index[slide.getAttribute("data-slide-id")] = slideIndex;
         return index;
       }, {});
-      var audienceHashEnabled = !isAudience;
-      var initialHash = isAudience ? "" : decodeURIComponent(location.hash.replace(/^#slide-/, ""));
+      var audienceHashEnabled = !isAudience || new URLSearchParams(location.search).has("code");
+      var initialHash = !audienceHashEnabled ? "" : decodeURIComponent(location.hash.replace(/^#slide-/, ""));
       var legacyInitial = parseInt(initialHash, 10);
       var current = Object.prototype.hasOwnProperty.call(slideIndexById, initialHash)
         ? slideIndexById[initialHash]
@@ -3307,7 +3192,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       var commandAnimationTimer = null;
       var sdkAnimationTimer = null;
       var stateChangeQueued = false;
-      var claimedSipAssignment = null;
 
       var hostDrawer = document.getElementById("hostDrawer");
       var notesDrawer = document.getElementById("notesDrawer");
@@ -3318,15 +3202,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       function getWorkshopSnapshot() {
         var config = {};
         SHARED_CONFIG_KEYS.forEach(function (key) { config[key] = state[key]; });
-        if (state.sipMode === "claim") {
-          config.sipPhone = "";
-          config.sipProvider = DEFAULTS.sipProvider;
-          config.sipDisplayName = DEFAULTS.sipDisplayName;
-          config.sipServer = "";
-          config.sipTransport = DEFAULTS.sipTransport;
-          config.sipUsername = "";
-          config.sipPassword = "";
-        }
+
         return {
           version: 1,
           slideId: slides[current].getAttribute("data-slide-id"),
@@ -3362,16 +3238,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         localStorage.setItem("agora-v2-terminal-environment", state.terminalEnvironment);
         localStorage.setItem("agora-v2-wifi-name", state.wifiName);
         if (state.wifiPassword) sessionStorage.setItem("agora-v2-wifi-password", state.wifiPassword); else sessionStorage.removeItem("agora-v2-wifi-password");
-        localStorage.setItem("agora-v2-sip-mode", state.sipMode);
-        localStorage.setItem("agora-v2-sip-claim-event-name", state.sipClaimEventName);
-        if (state.sipClaimHostEmail) sessionStorage.setItem("agora-v2-sip-claim-host-email", state.sipClaimHostEmail); else sessionStorage.removeItem("agora-v2-sip-claim-host-email");
-        localStorage.setItem("agora-v2-sip-phone", state.sipPhone);
-        localStorage.setItem("agora-v2-sip-provider", state.sipProvider);
-        localStorage.setItem("agora-v2-sip-display-name", state.sipDisplayName);
-        localStorage.setItem("agora-v2-sip-server", state.sipServer);
-        localStorage.setItem("agora-v2-sip-transport", state.sipTransport);
-        localStorage.setItem("agora-v2-sip-username", state.sipUsername);
-        if (state.sipPassword) sessionStorage.setItem("agora-v2-sip-password", state.sipPassword); else sessionStorage.removeItem("agora-v2-sip-password");
         localStorage.setItem("agora-v2-campaign-name", state.campaignName);
         localStorage.setItem("agora-v2-campaign-agent", state.campaignAgent);
         localStorage.setItem("agora-v2-campaign-launch", state.campaignLaunch);
@@ -3800,7 +3666,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
           slide.setAttribute("aria-hidden", String(index !== current));
         });
         var slide = slides[current];
-        if (current !== 11) state.sipPasswordVisible = false;
         document.body.classList.toggle("front-slide-active", current === 0);
         document.body.classList.toggle("terminal-slide-active", Boolean(slide.querySelector(".terminal")));
         document.getElementById("footerTitle").textContent = slide.getAttribute("data-title");
@@ -3859,9 +3724,8 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         history.replaceState(null, "", audienceHashEnabled ? slideHash : location.pathname + location.search);
       }
 
-      function applyWorkshopSnapshot(snapshot) {
-        if (!isAudience || !snapshot || snapshot.version !== 1 || !snapshot.config) return false;
-        var previousClaimContext = state.sipMode + ":" + state.sipClaimEventName;
+      function applyWorkshopSnapshot(snapshot, hostLoad) {
+        if ((!isAudience && !hostLoad) || !snapshot || snapshot.version !== 1 || !snapshot.config) return false;
         SHARED_CONFIG_KEYS.forEach(function (key) {
           if (!Object.prototype.hasOwnProperty.call(snapshot.config, key)) return;
           if (key === "terminalEnvironment" && audienceTerminalEnvironmentOverride) return;
@@ -3870,10 +3734,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
           if (SHARED_CONFIG_ENUMS[key] && SHARED_CONFIG_ENUMS[key].indexOf(value) === -1) return;
           state[key] = value;
         });
-        if (previousClaimContext !== state.sipMode + ":" + state.sipClaimEventName) {
-          claimedSipAssignment = null;
-          state.sipPasswordVisible = false;
-        }
+
         if (Object.prototype.hasOwnProperty.call(slideIndexById, snapshot.slideId)) {
           previous = current;
           current = slideIndexById[snapshot.slideId];
@@ -3882,12 +3743,10 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         return true;
       }
 
-      function applyArchivedWorkshopSnapshot(snapshot) {
-        if (!isAudience || !snapshot || snapshot.version !== 1 || !snapshot.config) return false;
+      function applyArchivedWorkshopSnapshot(snapshot, hostLoad) {
+        if ((!isAudience && !hostLoad) || !snapshot || snapshot.version !== 1 || !snapshot.config) return false;
         SHARED_CONFIG_KEYS.forEach(function (key) { state[key] = DEFAULTS[key]; });
-        claimedSipAssignment = null;
-        state.sipPasswordVisible = false;
-        return applyWorkshopSnapshot(snapshot);
+        return applyWorkshopSnapshot(snapshot, hostLoad);
       }
 
       function go(delta) {
@@ -4043,8 +3902,6 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
       });
       document.getElementById("resetButton").addEventListener("click", function () {
         Object.keys(DEFAULTS).forEach(function (key) { state[key] = DEFAULTS[key]; });
-        claimedSipAssignment = null;
-        state.sipPasswordVisible = false;
         state.showTimings = false; state.workshopStage = 1;
         renderAll(); showToast("Workshop defaults restored");
       });
@@ -4357,6 +4214,7 @@ cd agora_agents_workshop</pre><span class="workspace-command-cursor" aria-hidden
         setPresenterNotesDecorator: setPresenterNotesDecorator,
         applySnapshot: applyWorkshopSnapshot,
         applyArchivedSnapshot: applyArchivedWorkshopSnapshot,
+        loadSavedEvent: function (snapshot) { return applyArchivedWorkshopSnapshot(snapshot, !isAudience); },
         goToSlideId: goToSlideId,
         setAudienceHashEnabled: setAudienceHashEnabled
       });

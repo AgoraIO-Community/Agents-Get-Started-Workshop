@@ -18,11 +18,11 @@ The current schedule leaves 6:00–6:45 unassigned. Confirm that interval before
 
 ## Host configuration
 
-Participants open the root workshop URL. The presenter opens `/host` and enters the default password `AgoraWorkshop2026`; presenter controls remain covered until authentication succeeds. Both views use the local date as the Agora RTM channel, for example `2026-08-12`.
+Participants open the root workshop URL and choose **Join active** for the live session, or enter an event code for a saved workshop. The presenter opens `/host` and enters the default password `AgoraWorkshop2026`; presenter controls remain covered until authentication succeeds. Both views use the local date as the Agora RTM channel, for example `2026-08-12`.
 
-For same-day conflicts or mismatched device dates, add the same override to both URLs: `/host?channel=sf-rehearsal` for the presenter and `/?channel=sf-rehearsal` for participants.
+For same-day conflicts or mismatched device dates, add the same override to both URLs: `/host?channel=sf-rehearsal` for the presenter and `/?join=active&channel=sf-rehearsal` for participants.
 
-Before the host connects, participants see a waiting screen confirming that they are in the right place. Once the first host snapshot arrives, the deck appears automatically. They can choose **Following host** to browse independently and **Return to live** to catch up. Links and copy/download actions remain available while slide navigation is host-controlled.
+After choosing Join active and before the host connects, participants see a waiting screen confirming that they are in the right place. Once the first host snapshot arrives, the deck appears automatically. They can choose **Following host** to browse independently and **Return to live** to catch up. Links and copy/download actions remain available while slide navigation is host-controlled.
 
 Press `H` from any slide and select:
 
@@ -55,6 +55,16 @@ The small desktop-demo cue marks a planned switch away from the slides. Keep the
 Before each switch, say what attendees should watch for. Complete the checkpoint, then return to the named slide. Leave the build sequence visible while participants work. The opening example should take about a minute; show its result and save the setup explanation for the recipe section.
 
 Before doors open, prepare the demo app, relevant docs tabs, terminal, code editor, and coding assistant. Rehearse the exact conversation and a short fallback recording in case the live demo fails. Confirm the phone follows slide changes before starting.
+
+## Saved events
+
+1. Press `H`, enter an event name under **Saved events**, and click **New event code**. This saves the current workshop settings and generates a code such as `482-193`.
+2. Copy the event link and share it with attendees. They can return after the workshop ends, with no host or live connection required.
+3. Changes to the selected event save automatically. Wait for **Saved** before closing the tab. Use **Save changes** to retry an unsuccessful save.
+4. To edit an earlier workshop, choose it under **Previous events** and click **Open event**, or enter its code and click **Open code**. This pauses live sharing. Click **Use settings live** only when you want the room to follow those settings.
+5. To create another workshop, click **New event code** before renaming or editing the newly selected copy. The previous event keeps its code and saved settings.
+
+A private Vercel Blob store must be connected before saving events. Wi-Fi credentials remain local to the presenter. SIP is not part of this demo. Saved links use the current deck with the selected event’s settings.
 
 ## Staffing
 

@@ -214,3 +214,32 @@ describe('presenter notes', () => {
     await signaling.disconnect();
   });
 });
+
+describe('notes host presence', () => {
+  it('marks notes stale when the trusted host leaves and requests fresh notes when it rejoins', async () => {
+    const client = fakeClient();
+    const onStatus = vi.fn();
+    const signaling = new WorkshopSignaling({ presentation: null, eventTarget: new EventTarget(), onStatus,
+      fetchImpl: async () => response(credentials({ userId: 'notes-123456781234123412341234' })), createClient: () => client });
+    await signaling.connect({ sessionId: '2026-08-12', role: 'notes', hostKey: 'key' });
+    onStatus.mockClear();
+    client.publish.mockClear();
+    const host = { publisher: 'host-2026-08-12', channelName: '2026-08-12' };
+    await client.handlers.presence({ ...host, channelName: 'another-channel', eventType: 'REMOTE_LEAVE' });
+    await client.handlers.presence({ ...host, publisher: 'audience-other', eventType: 'REMOTE_TIMEOUT' });
+    expect(onStatus).not.toHaveBeenCalled();
+    await client.handlers.presence({ ...host, eventType: 'REMOTE_LEAVE' });
+    expect(onStatus).toHaveBeenLastCalledWith('waiting-for-host');
+    await client.handlers.presence({ ...host, eventType: 'REMOTE_JOIN' });
+    expect(onStatus).toHaveBeenLastCalledWith('waiting-for-slide');
+    expect(JSON.parse(client.publish.mock.calls[0][1]).type).toBe(MESSAGE_TYPES.notesRequest);
+    await client.handlers.presence({ ...host, eventType: 'REMOTE_TIMEOUT' });
+    expect(onStatus).toHaveBeenLastCalledWith('waiting-for-host');
+    await client.handlers.presence({ ...host, eventType: 'INTERVAL', interval: { join: { users: [host.publisher] } } });
+    expect(onStatus).toHaveBeenLastCalledWith('waiting-for-slide');
+    expect(client.publish).toHaveBeenCalledTimes(2);
+    await client.handlers.presence({ ...host, eventType: 'SNAPSHOT', snapshot: [] });
+    expect(onStatus).toHaveBeenLastCalledWith('waiting-for-host');
+    await signaling.disconnect();
+  });
+});

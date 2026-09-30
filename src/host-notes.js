@@ -16,7 +16,7 @@ const signaling = new WorkshopSignaling({
       el('error').textContent = 'Enter the host password again to reconnect.';
       connection = null;
     }
-    const labels = { connecting: 'Connecting…', connected: 'Connected · waiting for current slide', disconnected: 'Disconnected · notes may be out of date', reconnecting: 'Reconnecting… · notes may be out of date' };
+    const labels = { 'waiting-for-host': currentSlide ? 'Host is offline · showing last received notes' : 'Waiting for the host to connect', 'waiting-for-slide': 'Host reconnected · waiting for current notes', connecting: 'Connecting…', connected: 'Connected · waiting for current slide', disconnected: 'Disconnected · notes may be out of date', reconnecting: 'Reconnecting… · notes may be out of date' };
     el('status').textContent = labels[status] || (status === 'error' ? `Connection error: ${error?.message || 'Reconnect to try again'} · notes may be out of date` : `${status} · notes may be out of date`);
   }
 });

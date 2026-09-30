@@ -1,3 +1,5 @@
+import { eventStore } from "../server/event-store.js";
+import { handleEvents } from "../server/events.js";
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
@@ -16,6 +18,24 @@ const contentTypes = {
 function sendJson(response, status, body) {
   response.writeHead(status, { "cache-control": "no-store", "content-type": "application/json; charset=utf-8" });
   response.end(JSON.stringify(body));
+}
+
+async function eventRequest(request, response) {
+  let raw = "";
+  for await (const chunk of request) {
+    raw += chunk;
+    if (Buffer.byteLength(raw) > 32_768) return sendJson(response, 413, { error: "Event is too large" });
+  }
+  let body;
+  if (raw) {
+    try { body = JSON.parse(raw); } catch { return sendJson(response, 400, { error: "Invalid JSON" }); }
+  }
+  const result = await handleEvents({
+    method: request.method,
+    query: new URL(request.url, "http://localhost").searchParams,
+    hostKey: request.headers["x-workshop-host-key"], body
+  }, { store: eventStore });
+  sendJson(response, result.status, result.body);
 }
 
 async function tokenRequest(request, response) {
@@ -65,7 +85,9 @@ async function staticRequest(request, response) {
 }
 
 createServer((request, response) => {
-  const task = request.url?.startsWith("/api/rtm-token")
+  const task = request.url?.split("?")[0] === "/api/events"
+    ? eventRequest(request, response)
+    : request.url?.startsWith("/api/rtm-token")
     ? tokenRequest(request, response)
     : (request.url?.startsWith("/api/phone-number-claim") ? phoneClaimRequest(request, response) : staticRequest(request, response));
   Promise.resolve(task).catch((error) => sendJson(response, 500, { error: error.message }));

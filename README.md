@@ -1,6 +1,6 @@
 # Agora Voice AI Workshop - V2 presentation
 
-This is a static-first, Vercel-ready presentation website. The host and audience share one canonical HTML deck; a small browser bundle adds Agora Signaling, and one serverless function mints short-lived RTM tokens.
+This is a static-first, Vercel-ready presentation website. The host and audience share one canonical HTML deck; a small browser bundle adds Agora Signaling, and Vercel API functions mint RTM tokens and store saved events in Vercel Blob.
 
 ## Local setup
 
@@ -17,19 +17,19 @@ The host route requires the password `AgoraWorkshop2026` by default. `WORKSHOP_H
 
 ## Presenting
 
-Participants open the root URL. The audience automatically derives the local calendar date, such as `2026-08-12`, and connects to the RTM message channel with that exact name.
+Participants open the root URL and choose **Join active**, or enter a six-digit event code. Join active derives the local calendar date, such as `2026-08-12`, and connects to the RTM message channel with that exact name. Code links load saved settings without connecting to RTM.
 
 The presenter opens `/host`, enters the workshop password, and then connects as the trusted host for the same channel. Presenter controls remain covered until authentication succeeds.
 
 If two workshops share a date or device dates disagree, override the channel in both URLs:
 
 ```text
-Audience: /?channel=sf-rehearsal
+Audience: /?join=active&channel=sf-rehearsal
 Host:     /host?channel=sf-rehearsal
 Notes:    /host-notes?channel=sf-rehearsal
 ```
 
-For mobile presenter notes, open `/host-notes` on a phone and enter the same workshop password. The phone must use the same channel as `/host`. It receives the current slide’s notes and scripted desktop-demo steps through RTM without slide controls. Notes continue following the presenter while audience sync is paused. Returning to the phone page reconnects and requests the current slide; a Reconnect button is also available.
+For mobile presenter notes, open `/host-notes` on a phone and enter the same workshop password. The phone must use the same channel as `/host`. It receives the current slide’s notes and scripted desktop-demo steps through RTM without slide controls. Notes continue following the presenter while audience sync is paused. Returning to the phone page reconnects and requests the current slide; a Reconnect button is also available. Reloading the notes page requires the password again. Use the live channel for notes, not a saved event code.
 
 Overrides are normalized to lowercase URL-safe names; spaces become hyphens. Names must start with a letter or number, contain only letters, numbers, `_`, and `-`, and be no longer than 48 characters. An invalid override is never allowed to silently fall back to the date channel.
 
@@ -45,7 +45,7 @@ The understated desktop-demo cue marks a scripted switch to the terminal, browse
 
 ## Audience view
 
-Participants normally use `/`, or `/?channel=...` when the host supplies an override. Their browser resolves the channel, reuses a browser-scoped string UID from local storage, subscribes with messages and presence, and requests the current snapshot. The server validates the audience-only UID format and mints every reload or renewal token for that exact subject. Before the first trusted host snapshot arrives, a dedicated waiting screen explains that the session has not started without exposing signaling details. The deck appears automatically when the authenticated host connects. `/audience` remains as a compatibility alias.
+Participants use `/` to choose a workshop, or `/?join=active&channel=...` for a live workshop with a channel override. After choosing Join active, their browser resolves the channel, reuses a browser-scoped string UID from local storage, subscribes with messages and presence, and requests the current snapshot. The server validates the audience-only UID format and mints every reload or renewal token for that exact subject. Before the first trusted host snapshot arrives, a dedicated waiting screen explains that the session has not started without exposing signaling details. The deck appears automatically when the authenticated host connects. `/audience` remains as a compatibility alias.
 
 - Host controls, presenter notes, timing cues, and their keyboard shortcuts are unavailable.
 - Slides, links, copy/download actions, and visual content come from the same `index.html` used by the host.
@@ -53,11 +53,25 @@ Participants normally use `/`, or `/?channel=...` when the host supplies an over
 - While following, host-controlled navigation is locked but links, copy buttons, and downloads remain usable.
 - **Following host** switches to independent browsing; **Return to live** applies the newest host snapshot.
 - Late arrivals request the current snapshot, and host presence events provide an additional recovery path.
-- After the first trusted host snapshot, the audience browser saves a safe local copy of the workshop choices. On a later visit with no active host, the waiting screen still shows the inactive session and offers **View presentation** for the last workshop.
+- After the first trusted host snapshot, the audience browser saves a safe local copy of the workshop choices. On a later visit, the join screen also offers **View presentation** for that device’s last workshop.
 
-The presentation exposes a transport-neutral API at `window.workshopPresentation`. `src/signaling.js` publishes host snapshots from `workshop:statechange` and dispatches validated remote snapshots to the audience view. Email-claim snapshots contain only the claim mode and event name. Manual mode shares the host-entered phone and SIP fields, including the password, with the live audience; those operational values are never added to saved audience decks.
+The presentation exposes a transport-neutral API at `window.workshopPresentation`. `src/signaling.js` publishes host snapshots from `workshop:statechange` and dispatches validated remote snapshots to the audience view. The demo has no SIP options.
 
-The saved audience copy records the channel, event date and times, Bitly join link, venue, template, code track, its derived project tooling, model-provider selections, theme, and terminal environment. It does not retain SIP settings, campaign data, credentials, or secrets. Audience fragments such as `#slide-install-cli` are cleared while waiting or following the host. Opening the saved copy starts at the welcome slide, enables slide fragments and independent navigation, and continues checking for a live session.
+Saved events and local audience copies retain the event date and times, Bitly join link, venue, template, code track, derived project tooling, model-provider selections, theme, and terminal environment. They exclude Wi-Fi passwords, operational credentials, and host keys. Live slide fragments are cleared while waiting or following the host. Saved-event URLs retain the code and slide fragment for reloads and independent navigation.
+
+## Saved event codes
+
+In host controls, open **Saved events**. Enter an event name and choose **New event code** to create a saved copy of the current settings. The server generates a random six-digit code, such as `482-193`, with collision retries. Share `/?code=482-193`. Attendees can also enter `482193` or `482-193` on the join screen; submitting redirects to the code URL.
+
+Choose a previous code from the paginated list, or open it by code, to view and edit its settings. Opening a previous event disconnects live sharing first. **Use settings live** explicitly connects those settings to the current date/channel. Host URLs also retain the code, so a reload reopens that event after authentication without connecting to RTM.
+
+After creating or opening an event, changes save automatically after 700 ms. **Save changes** retries a failed save. Slide navigation does not trigger writes. A stale version returns a conflict and requires reopening the event; unsaved local settings stay visible. Leaving with pending changes triggers the browser’s unsaved-changes prompt. **New event code** creates another record from the current settings; it does not reuse the old code.
+
+`GET /api/events?code=482-193` loads the replay JSON without host authentication. A bare `GET /api/events` lists event codes for an authenticated host (with an optional `cursor`). `POST /api/events` creates an event; `PUT /api/events?code=482-193` overwrites that event. Host requests send the workshop password in `x-workshop-host-key`. Updates must include the ETag returned by the latest read or write.
+
+Connect a **private Vercel Blob store** and provide its `BLOB_READ_WRITE_TOKEN` in Vercel and `.env.local` for local development. Each event is exactly `<code>.json` at the store root. No random filename suffix is added. Creates refuse overwrites; updates use `allowOverwrite` and `ifMatch`. Reads use `get(..., { useCache: false })`, and API responses use `Cache-Control: no-store`, so reopening an event reads its latest saved settings. See the [Vercel Blob SDK documentation](https://vercel.com/docs/vercel-blob/using-blob-sdk).
+
+Code links are shareable workshop content, not passwords. Missing, invalid, or unavailable codes display an error and do not fall back to RTM. **Join active** explicitly removes the code and restores the live flow. Saved settings replay with the current deployed deck; they are not a frozen copy of historical slide HTML.
 
 ## Verification
 
@@ -70,7 +84,7 @@ The tests mock the Agora SDK boundary and cover local-date session validation, R
 
 The selected `Testing` project currently reports token enforcement as disabled in Agora Console. The app still uses server-generated tokens and never exposes the App Certificate, but token enforcement must be enabled on the project before treating a public deployment as authenticated.
 
-Host choices are stored only in that browser:
+Host choices stay in that browser until the host creates or opens a saved event. Replay-safe choices then also save to that event:
 
 - Workshop date, doors time, workshop start time, and Bitly join link (under **Event details** in host controls; times use venue local time)
 - Venue Wi-Fi name and session-only password for the projected opening slide
@@ -123,7 +137,8 @@ Rehearse the selected code track, derived tooling, and venue network end to end.
 9. Test the selected durable deploy button and the Cloudflare tunnel against the generated app.
 10. Run `agora project doctor --deep` before doors open.
 11. Scan the Discord QR from iOS and Android.
-12. Open `/host-notes` on a phone using the presenter’s channel and password. Confirm notes and demo scripts follow slide changes. Rehearse each switch to the desktop and return to the named slide.
+12. Open `/host-notes` on a phone using the presenter’s channel and password. Confirm notes and demo scripts follow slide changes, including while audience sync is paused. Rehearse each switch to the desktop and return to the named slide.
+13. Create a saved event code, reopen its link on another device, and confirm the settings load without a live host. Edit and save the event, then reload the attendee link to check the update.
 
 The event schedule still has an unassigned 6:00–6:45 interval. Resolve it with the event team and reconcile demo durations before rehearsal; the current times in the deck and host guide are preserved.
 
