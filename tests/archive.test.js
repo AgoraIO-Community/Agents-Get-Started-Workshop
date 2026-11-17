@@ -70,6 +70,13 @@ describe("audience workshop archive", () => {
     expect(archive.snapshot.config).not.toHaveProperty("campaignName");
   });
 
+  it("retains public event details in the saved audience copy", () => {
+    const event = { eventDate: "2026-09-30", doorsTime: "18:00", workshopTime: "18:15", joinLink: "https://bit.ly/workshop" };
+    const archive = createWorkshopArchive("rehearsal", snapshot(event));
+    expect(archive.snapshot.config).toMatchObject(event);
+    expect(loadWorkshopArchive({ getItem: () => JSON.stringify(archive) }).snapshot.config).toMatchObject(event);
+  });
+
   it("removes SIP details from tampered local data when it is loaded", () => {
     const archive = createWorkshopArchive("2026-08-12", snapshot());
     archive.snapshot.config = {

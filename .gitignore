@@ -16,3 +16,6 @@ assets/workshop-session.js
 assets/workshop-session.js.map
 coverage/
 .vercel
+
+assets/host-notes.js
+assets/host-notes.js.map

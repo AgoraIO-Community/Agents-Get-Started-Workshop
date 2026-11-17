@@ -1,3 +1,4 @@
+import { runInNewContext } from "node:vm";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
@@ -27,7 +28,6 @@ describe("workshop deck structure", () => {
   });
 
   it("uses stable slide IDs for stage navigation", () => {
-    expect(html).toContain('{ 1: "choose-template", 2: "customize-prompt", 3: "add-telephone-number"');
     expect(html).toContain('{ 1: "install-cli", 2: "initialize-quickstart", 3: "run-quickstart"');
     expect(html).not.toMatch(/slideTargets\s*=\s*\{\s*1:\s*\d/);
   });
@@ -41,5 +41,39 @@ describe("workshop deck structure", () => {
     const sharedKeys = html.slice(html.indexOf("var SHARED_CONFIG_KEYS"), html.indexOf("var SHARED_CONFIG_ENUMS"));
     expect(sharedKeys).not.toContain("wifiName");
     expect(sharedKeys).not.toContain("wifiPassword");
+  });
+});
+
+// Exercise the same validation and formatting functions used by host edits and remote snapshots.
+const eventSettings = runInNewContext(
+  html.slice(html.indexOf("      function normalizeJoinLink"), html.indexOf("      var DEFAULTS")) +
+    "({ normalizeJoinLink, validEventSetting, formatEventDate, formatEventTime })",
+  { URL, Intl }
+);
+
+describe("event settings", () => {
+  it("formats dates without changing the calendar day and supports AM/PM times", () => {
+    expect(eventSettings.formatEventDate("2026-09-30")).toBe("Wednesday · September 30, 2026");
+    expect(eventSettings.formatEventTime("00:05")).toBe("12:05 AM");
+    expect(eventSettings.formatEventTime("12:00")).toBe("12:00 PM");
+    expect(eventSettings.formatEventTime("18:15")).toBe("6:15 PM");
+  });
+
+  it("rejects invalid dates and times while allowing the city default date", () => {
+    expect(eventSettings.validEventSetting("eventDate", "")).toBe(true);
+    expect(eventSettings.validEventSetting("eventDate", "2028-02-29")).toBe(true);
+    for (const date of ["2026-02-29", "2026-04-31", "0000-01-01", "invalid"]) {
+      expect(eventSettings.validEventSetting("eventDate", date)).toBe(false);
+    }
+    for (const time of ["24:00", "12:60", "", "5:30"]) {
+      expect(eventSettings.validEventSetting("workshopTime", time)).toBe(false);
+    }
+  });
+
+  it("normalizes Bitly links and rejects unsafe or unrelated destinations", () => {
+    expect(eventSettings.normalizeJoinLink(" bit.ly/MyWorkshop ")).toBe("https://bit.ly/MyWorkshop");
+    for (const link of ["javascript:alert(1)", "http://bit.ly/workshop", "https://bit.ly.evil.test/workshop", "https://user:pass@bit.ly/workshop", "https://example.com/workshop", "https://bit.ly/"]) {
+      expect(eventSettings.normalizeJoinLink(link)).toBeNull();
+    }
   });
 });

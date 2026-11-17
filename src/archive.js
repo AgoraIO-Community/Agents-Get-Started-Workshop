@@ -2,6 +2,10 @@ export const WORKSHOP_ARCHIVE_KEY = "agora-workshop-last-session-v1";
 
 const ARCHIVE_VERSION = 1;
 const SAFE_CONFIG_KEYS = Object.freeze([
+  "eventDate",
+  "doorsTime",
+  "workshopTime",
+  "joinLink",
   "city",
   "template",
   "track",

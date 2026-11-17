@@ -62,3 +62,17 @@ describe("RTM token endpoint", () => {
     expect(result.body.hostUserId).toBe("host-sf-rehearsal");
   });
 });
+
+describe('notes companion identities', () => {
+  it('requires the host password and issues a distinct notes identity', () => {
+    expect(createTokenResponse({ sessionId: 'demo', role: 'notes' }, env).status).toBe(401);
+    const result = createTokenResponse({ sessionId: 'demo', role: 'notes', hostKey: env.WORKSHOP_HOST_KEY }, env);
+    expect(result.status).toBe(200);
+    expect(result.body.userId).toMatch(/^notes-[a-f0-9]{24}$/);
+    expect(result.body.userId).not.toBe(result.body.hostUserId);
+    expect(createTokenResponse({ sessionId: 'demo', role: 'notes', hostKey: env.WORKSHOP_HOST_KEY, userId: result.body.userId }, env).body.userId).toBe(result.body.userId);
+  });
+  it('cannot mint the desktop host identity through the notes role', () => {
+    expect(createTokenResponse({ sessionId: 'demo', role: 'notes', hostKey: env.WORKSHOP_HOST_KEY, userId: 'host-demo' }, env).status).toBe(400);
+  });
+});

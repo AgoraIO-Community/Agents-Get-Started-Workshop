@@ -23,3 +23,11 @@ export function getOrCreateAudienceUserId(storage, randomUUID) {
   try { storage.setItem(AUDIENCE_USER_ID_KEY, userId); } catch {}
   return userId;
 }
+
+export function isNotesUserId(value) {
+  return typeof value === "string" && /^notes-[a-f0-9]{24}$/.test(value);
+}
+
+export function createNotesUserId(randomUUID = () => globalThis.crypto.randomUUID()) {
+  return createAudienceUserId(randomUUID).replace("audience-", "notes-");
+}
